@@ -1,4 +1,5 @@
-# Descoped Web Server
+# Descoped Embedded Server
 
-1. Build `descoped-parent`
-2. Build `descoped-server`
+[![Build Status](https://travis-ci.org/descoped/descoped-server.svg?branch=master)](https://travis-ci.org/descoped/descoped-server)
+
+The Descoped Embedded Server is a tiny web server that bootstraps Weld Cdi Container, Undertow and adds basic support for making a web application.
