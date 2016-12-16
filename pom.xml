@@ -27,11 +27,24 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <repository>
+            <id>descoped</id>
+            <name>Descoped Releases</name>
+            <url>https://repository.musific.com/nexus/content/repositories/descoped/</url>
+        </repository>
+        <snapshotRepository>
+            <id>descoped-snapshots</id>
+            <name>Descoped Snapshots</name>
+            <url>https://repository.musific.com/nexus/content/repositories/descoped-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <scm>
-        <developerConnection>scm:git:ssh://git@bitbucket.org:oranheim/descoped-server.git</developerConnection>
-        <connection>scm:git:https://bitbucket.org/oranheim/descoped-server.git</connection>
         <url>http://www.descoped.io</url>
-        <tag>descoped-0.1</tag>
+        <connection>scm:git:git://github.com/descoped/descoped-server.git</connection>
+        <developerConnection>scm:git:git@github.com:descoped/descoped-server.git</developerConnection>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
