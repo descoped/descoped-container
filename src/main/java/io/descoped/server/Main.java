@@ -1,5 +1,6 @@
 package io.descoped.server;
 
+import io.descoped.server.container.ApplicationStartupEvent;
 import io.descoped.server.container.GrizzlyContainer;
 import io.descoped.server.container.ServerContainer;
 import io.descoped.server.container.UndertowContainer;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import javax.enterprise.inject.spi.CDI;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
@@ -35,6 +37,7 @@ public class Main extends ServerContainer {
                 }
             });
             server.start();
+
         }
     }
 
@@ -63,6 +66,7 @@ public class Main extends ServerContainer {
         CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
         try {
             cdiContainer.boot();
+            CDI.current().getBeanManager().fireEvent(new ApplicationStartupEvent());
             Main main = new Main();
             try {
                 main.start();
