@@ -13,6 +13,9 @@ import org.glassfish.jersey.servlet.ServletProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.CDI;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
@@ -107,6 +110,7 @@ public class UndertowContainer extends ServerContainer {
     public void start() {
         if (!isRunning() && isStopped()) {
             try {
+                CDI.current().getBeanManager().fireEvent(new ApplicationStartupEvent());
                 server = createHttpServer();
                 server.start();
             } catch (ServletException e) {

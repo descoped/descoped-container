@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.CDI;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -80,7 +81,7 @@ public class Main extends ServerContainer {
         CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
         try {
             cdiContainer.boot();
-            CDI.current().getBeanManager().fireEvent(new ApplicationStartupEvent());
+            cdiContainer.getContextControl().startContext(ApplicationScoped.class);
             Main main = new Main();
             try {
                 main.start();

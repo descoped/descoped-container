@@ -1,8 +1,6 @@
 package io.descoped.server.container;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
 import java.util.UUID;
 
 /**
@@ -10,7 +8,7 @@ import java.util.UUID;
  */
 @ApplicationScoped
 @DeploymentEvent
-public class UndertowComponent implements Dep {
+public class UndertowComponent2 implements Dep {
 
     @Override
     public String val() {
