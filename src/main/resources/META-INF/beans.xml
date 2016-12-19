@@ -10,7 +10,7 @@
 
         <weld:exclude name="java.security.**" />
         <weld:exclude name="javax.el.**" />
-        <weld:exclude name="javax.validation.**" />
+        <!--<weld:exclude name="javax.validation.**" />-->
 
         <weld:exclude name="org.apache.commons.configuration.**" />
 

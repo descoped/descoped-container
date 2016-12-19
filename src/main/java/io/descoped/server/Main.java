@@ -1,7 +1,6 @@
 package io.descoped.server;
 
 import io.descoped.server.container.ApplicationStartupEvent;
-import io.descoped.server.container.GrizzlyContainer;
 import io.descoped.server.container.ServerContainer;
 import io.descoped.server.container.UndertowContainer;
 import io.descoped.server.support.ContainerType;
@@ -24,9 +23,24 @@ public class Main extends ServerContainer {
     public Main() {
     }
 
+    public ServerContainer createContainer(String className) {
+        try {
+            Class<?> clazz = Class.forName(className);
+            Object instance = clazz.newInstance();
+            return (ServerContainer) instance;
+        } catch (ClassNotFoundException e) {
+            log.error("Unable to load '{}'!", e);
+        } catch (IllegalAccessException e) {
+            log.error("Unable to load '{}'!", e);
+        } catch (InstantiationException e) {
+            log.error("Unable to load '{}'!", e);
+        }
+        return null;
+    }
+
     public void start() {
         if (server == null) {
-            server = (containerType.equals(ContainerType.UNDERTOW) ? new UndertowContainer(this) : new GrizzlyContainer(this));
+            server = (containerType.equals(ContainerType.UNDERTOW) ? new UndertowContainer(this) : createContainer("io.descoped.server.containerGrizzlyContainer") );
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
                     log.debug("ShutdownHook triggered..");
