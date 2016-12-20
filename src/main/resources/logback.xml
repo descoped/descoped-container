@@ -27,6 +27,7 @@
 
     <logger name="io.descoped" level="TRACE"/>
     <logger name="org.jboss.weld" level="INFO"/>
+    <logger name="org.glassfish.jersey.internal.Errors" level="TRACE"/>
 
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
