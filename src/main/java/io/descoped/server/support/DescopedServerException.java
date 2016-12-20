@@ -1,4 +1,4 @@
-package io.descoped.server.container;
+package io.descoped.server.support;
 
 /**
  * Created by oranheim on 13/12/2016.

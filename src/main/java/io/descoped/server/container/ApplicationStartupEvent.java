@@ -26,4 +26,23 @@ import javax.enterprise.inject.Vetoed;
  */
 @Vetoed
 public class ApplicationStartupEvent {
+
+    private ServerContainer container;
+
+    public ApplicationStartupEvent() {
+        throw new UnsupportedOperationException();
+    }
+
+    public ApplicationStartupEvent(ServerContainer container) {
+        this.container = container;
+    }
+
+    public ServerContainer container() {
+        return container;
+    }
+
+    public void setContainer(ServerContainer container) {
+        this.container = container;
+    }
+
 }
