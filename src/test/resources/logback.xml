@@ -25,10 +25,11 @@
     </appender>
 
 
+    <logger name="org.jboss.weld" level="INFO"/>
     <logger name="io.descoped" level="TRACE"/>
     <!--<logger name="org.xnio" level="TRACE"/>-->
 
-    <root level="INFO">
+    <root level="TRACE">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
