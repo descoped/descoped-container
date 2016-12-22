@@ -1,16 +1,26 @@
 package io.descoped.server.container;
 
+import org.apache.deltaspike.core.api.config.ConfigResolver;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by oranheim on 12/12/2016.
  */
 abstract public class ServerContainer {
 
-    private String host = "0.0.0.0";
-    private int port = 8080;
-    private static String contextPath = "/";
-    private String[] jaxRsPackages = {"io.descoped"};
+    private String host;
+    private int port;
+    private static String contextPath;
+    private String[] jaxRsPackages;
+    private List<Deployment> deployments = new ArrayList<>();
 
     public ServerContainer() {
+        host = ConfigResolver.getPropertyValue("descoped.server.host", "0.0.0.0");
+        port = Integer.valueOf(ConfigResolver.getPropertyValue("descoped.server.port", "8080"));
+        contextPath = ConfigResolver.getPropertyValue("descoped.server.contextPath", "/");
+        jaxRsPackages = ConfigResolver.getPropertyValue("descoped.server.jaxRsPackages", "io.descoped").split(",");
     }
 
     public ServerContainer(ServerContainer owner) {
@@ -47,6 +57,20 @@ abstract public class ServerContainer {
 
     public void setJaxRsPackages(String... jaxRsPackages) {
         this.jaxRsPackages = jaxRsPackages;
+    }
+
+    public List<Deployment> getDeployments() {
+        return deployments;
+    }
+
+    public void deploy(Deployment deployment) {
+        deployment.deploy(this);
+        this.deployments.add(deployment);
+    }
+
+    public void undeploy(Deployment deployment) {
+        deployment.undeploy(this);
+        this.deployments.remove(deployment);
     }
 
     abstract public void start();

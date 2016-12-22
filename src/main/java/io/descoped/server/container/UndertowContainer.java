@@ -41,14 +41,19 @@ public class UndertowContainer extends ServerContainer {
 
     public void deployJaxRsResourceConfig() {
         RestDeployment deployment = new RestDeployment();
-        deployment.deploy(this);
+        deploy(deployment);
     }
-
 
     @Override
     public void start() {
         if (!isRunning() && isStopped()) {
             CDI.current().getBeanManager().fireEvent(new ApplicationStartupEvent(this));
+
+            if (getDeployments().isEmpty()) {
+                log.error("\n\n\t-----> Unable to start Descoped Server because no Deployment has been registered! <-----\n");
+                System.exit(-1);
+            }
+
             server = builder.build();
 
 //        if (getMaxWorkers() > 0) {

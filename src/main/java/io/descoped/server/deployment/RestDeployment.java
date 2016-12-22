@@ -10,6 +10,7 @@ import io.undertow.server.handlers.PathHandler;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
 import io.undertow.servlet.util.ImmediateInstanceFactory;
+import org.apache.deltaspike.cdise.servlet.CdiServletRequestListener;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.servlet.ServletProperties;
 
@@ -54,11 +55,11 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
     }
 
     private DeploymentInfo getDeployment() {
-//        ListenerInfo listenerInfo = Servlets.listener(CdiServletRequestListener.class);
+        ListenerInfo listenerInfo = Servlets.listener(CdiServletRequestListener.class);
 
         DeploymentInfo webapp = Servlets.deployment()
 //                .setClassIntrospecter(getClassIntrospecter())
-//                .addListener(listenerInfo)
+                .addListener(listenerInfo)
 //                .addServletContainerInitalizers(getServletContainerInitializers())
                 .setClassLoader(ClassLoader.getSystemClassLoader())
                 .setContextPath(getContextPath())
