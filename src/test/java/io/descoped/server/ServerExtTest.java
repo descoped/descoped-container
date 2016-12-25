@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+
 /**
  * Created by oranheim on 22/12/2016.
  */
@@ -19,12 +21,13 @@ public class ServerExtTest {
 
     private static final Logger log = LoggerFactory.getLogger(ServerExtTest.class);
 
+    @Inject
     @WebServer
     UndertowContainer server;
 
     @Test
     public void testServer() throws Exception {
-        log.trace("Server: {}", server);
+        log.trace("Server [{}]: {}", this, server);
     }
 
 }

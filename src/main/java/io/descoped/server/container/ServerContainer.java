@@ -79,6 +79,7 @@ abstract public class ServerContainer {
     abstract public boolean isStopped();
 
     public void copyConfiguration(ServerContainer that) {
+        if (that == null) return;
         this.setHost(that.getHost());
         this.setPort(that.getPort());
         this.setContextPath(that.getContextPath());

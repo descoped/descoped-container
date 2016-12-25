@@ -1,1 +1,3 @@
-io.descoped.server.extension.ServerExtension
+io.descoped.server.extension.FooExtension
+#io.descoped.server.extension.ServerExtension
+#io.descoped.server.props.PropertyExtension
