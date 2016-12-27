@@ -80,7 +80,13 @@ abstract public class ServerContainer implements Serializable {
     abstract public boolean isStopped();
 
     public void copyConfiguration(ServerContainer that) {
-        if (that == null) return;
+        if (that == null) {
+            host = ConfigResolver.getPropertyValue("descoped.server.host", "0.0.0.0");
+            port = Integer.valueOf(ConfigResolver.getPropertyValue("descoped.server.port", "8080"));
+            contextPath = ConfigResolver.getPropertyValue("descoped.server.contextPath", "/");
+            jaxRsPackages = ConfigResolver.getPropertyValue("descoped.server.jaxRsPackages", "io.descoped").split(",");
+            return;
+        }
         this.setHost(that.getHost());
         this.setPort(that.getPort());
         this.setContextPath(that.getContextPath());

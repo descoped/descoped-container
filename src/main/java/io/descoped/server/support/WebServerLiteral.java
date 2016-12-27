@@ -7,6 +7,17 @@ import javax.enterprise.util.AnnotationLiteral;
  */
 public class WebServerLiteral extends AnnotationLiteral<WebServer> implements WebServer {
 
-    private static final long serialVersionUID = -8702546749474134989L;
+    private static final long serialVersionUID = 7656638611807582998L;
+
+    private String id;
+
+    public WebServerLiteral(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String id() {        
+        return id;
+    }
 
 }

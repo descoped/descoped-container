@@ -16,4 +16,7 @@ import static java.lang.annotation.ElementType.*;
 @Qualifier
 @Documented
 public @interface WebServer {
+    
+    String id() default "default";
+
 }

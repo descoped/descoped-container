@@ -80,7 +80,7 @@ public class FooExtension<R> implements Deactivatable, Extension {
                     .name(javaClazz.getName())
                     .types(javaClazz, UndertowContainer.class, Object.class, Serializable.class)
                     .scope(ApplicationScoped.class)
-                    .qualifiers(new WebServerLiteral(), new AnyLiteral())
+                    .qualifiers(new WebServerLiteral("default"), new AnyLiteral())
                     .beanLifecycle(new ContextualFactory());
 
             log.trace("-----> BeanBuilder: {} => {}", beanBuilder.getName(), javaClazz);
