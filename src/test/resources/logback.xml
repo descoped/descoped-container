@@ -27,6 +27,7 @@
 
     <logger name="org.jboss.weld" level="INFO"/>
     <logger name="org.xnio" level="INFO"/>
+    <logger name="org.apache.http" level="INFO"/>
     <logger name="io.descoped" level="TRACE"/>
 
     <root level="TRACE">

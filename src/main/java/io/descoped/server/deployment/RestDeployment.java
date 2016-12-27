@@ -4,6 +4,7 @@ import io.descoped.server.Main;
 import io.descoped.server.container.CDIClassIntrospecter;
 import io.descoped.server.container.ServerContainer;
 import io.descoped.server.container.UndertowContainer;
+import io.descoped.server.extension.ClassLoaders;
 import io.descoped.server.support.DescopedServerException;
 import io.undertow.Handlers;
 import io.undertow.server.handlers.PathHandler;
@@ -61,7 +62,7 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
 //                .setClassIntrospecter(getClassIntrospecter())
                 .addListener(listenerInfo)
 //                .addServletContainerInitalizers(getServletContainerInitializers())
-                .setClassLoader(ClassLoader.getSystemClassLoader())
+                .setClassLoader(ClassLoaders.tccl())
                 .setContextPath(getContextPath())
                 .setDefaultEncoding(StandardCharsets.UTF_8.displayName())
                 .setDeploymentName(Main.class.getSimpleName())

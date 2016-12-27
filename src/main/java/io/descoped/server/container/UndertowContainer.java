@@ -6,17 +6,23 @@ import io.undertow.server.handlers.PathHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.inject.Vetoed;
 import javax.enterprise.inject.spi.CDI;
 
 /**
  * Created by oranheim on 12/12/2016.
  */
+@Vetoed
 public class UndertowContainer extends ServerContainer {
 
     private static final Logger log = LoggerFactory.getLogger(UndertowContainer.class);
     private static PathHandler path;
     private Undertow server;
     private Undertow.Builder builder;
+
+    public UndertowContainer() {
+        super();
+    }
 
     public UndertowContainer(ServerContainer owner) {
         super(owner);
