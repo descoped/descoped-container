@@ -2,13 +2,14 @@ package io.descoped.server.container;
 
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by oranheim on 12/12/2016.
  */
-abstract public class ServerContainer {
+abstract public class ServerContainer implements Serializable {
 
     private String host;
     private int port;

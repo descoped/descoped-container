@@ -2,8 +2,8 @@ package io.descoped.server.extension;
 
 import io.descoped.server.container.UndertowContainer;
 import io.descoped.server.support.WebServer;
+import io.descoped.server.support.WebServerLiteral;
 import org.apache.deltaspike.core.api.literal.AnyLiteral;
-import org.apache.deltaspike.core.api.literal.DefaultLiteral;
 import org.apache.deltaspike.core.spi.activation.Deactivatable;
 import org.apache.deltaspike.core.util.ClassDeactivationUtils;
 import org.apache.deltaspike.core.util.bean.BeanBuilder;
@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -45,7 +47,7 @@ public class FooExtension<R> implements Deactivatable, Extension {
             if (field.isAnnotationPresent(WebServer.class)) {
                 if (validateInjectionPoint(field.getJavaMember().getType())) {
                     log.trace("-----> annotatedType={}", annotatedType);
-                    webServerTypes.add(annotatedType);
+//                    webServerTypes.add(annotatedType);
                 }
             }
         }
@@ -63,27 +65,49 @@ public class FooExtension<R> implements Deactivatable, Extension {
             return;
         }
 
-        serverContainer = new UndertowContainer(null);
-        Class<UndertowContainer> clazz = UndertowContainer.class;
+//        serverContainer = new UndertowContainer(null);
+//        Class<UndertowContainer> clazz = UndertowContainer.class;
+
+
 
         for (AnnotatedType<?> annotatedType : webServerTypes) {
+            final Class<?> javaClazz = annotatedType.getJavaClass();
             final BeanBuilder<UndertowContainer> beanBuilder = new BeanBuilder<>(bm);
             beanBuilder
-                    .passivationCapable(false)
-                    .beanClass(clazz)
-                    .name(clazz.getName())
-                    .types(annotatedType.getJavaClass(), UndertowContainer.class, Object.class)
+                    .id("DescopedWebServer#" + javaClazz.getName())
+                    .passivationCapable(true)
+                    .beanClass(annotatedType.getJavaClass())
+                    .name(javaClazz.getName())
+                    .types(javaClazz, UndertowContainer.class, Object.class, Serializable.class)
                     .scope(ApplicationScoped.class)
-                    .qualifiers(new DefaultLiteral(), new AnyLiteral())
-//                    .addQualifier(new DefaultLiteral())
-                    .beanLifecycle(new ContextualFactory<UndertowContainer>());
-            log.trace("-----> BeanBuilder: {}", beanBuilder.getName());
-//            beanBuilder.qualifiers(WebServer.class);
+                    .qualifiers(new WebServerLiteral(), new AnyLiteral())
+                    .beanLifecycle(new ContextualFactory());
 
+            log.trace("-----> BeanBuilder: {} => {}", beanBuilder.getName(), javaClazz);
             abd.addBean(beanBuilder.create());
+        }
+    }
+
+    public void findDynamicProducer(@Observes ProcessBean<DynamicProducerBean> processBean) {
+        log.trace("-----> ProcessBean: {}", processBean.getBean());
+    }
+
+    @ApplicationScoped
+    @Typed(DynamicProducerBean.class)
+    static class DynamicProducerBean {
+
+//        @Produces
+//        @WebServer
+        public UndertowContainer produceUndertowContainer(final InjectionPoint ip) {
+            log.trace("-----> IP: {}", ip.getBean());
+            return new UndertowContainer(null);
         }
 
     }
 
+    public void findDynamicConfigurationBeans(@Observes ProcessAnnotatedType<UndertowContainer> pat) {
+//        log.trace("=======> pat: {}", pat.getAnnotatedType().getJavaClass());
+//        webServerTypes.add(pat.getAnnotatedType());
+    }
 
 }

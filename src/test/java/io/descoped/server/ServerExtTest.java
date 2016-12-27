@@ -27,7 +27,7 @@ public class ServerExtTest {
 
     @Test
     public void testServer() throws Exception {
-        log.trace("Server [{}]: {}", this, server);
+        log.trace("---------> Server [{}]: {}", this, server);
     }
 
 }

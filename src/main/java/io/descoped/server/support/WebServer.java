@@ -11,9 +11,9 @@ import static java.lang.annotation.ElementType.*;
 /**
  * Created by oranheim on 11/12/2016.
  */
-@Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target( { TYPE, METHOD, PARAMETER, FIELD })
 @Qualifier
+@Documented
 public @interface WebServer {
 }

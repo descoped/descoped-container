@@ -1,34 +1,32 @@
 package io.descoped.server.extension;
 
-import io.descoped.server.container.ServerContainer;
 import io.descoped.server.container.UndertowContainer;
-import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
 import org.apache.deltaspike.core.util.metadata.builder.ContextualLifecycle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 
-public class ContextualFactory<T> implements ContextualLifecycle<T> {
+public class ContextualFactory implements ContextualLifecycle<UndertowContainer> {
 
-    private ServerContainer server;
-    private Object webServerInstance;
+    private static final Logger log = LoggerFactory.getLogger(ContextualFactory.class);
+
+    private UndertowContainer server;
 
     public ContextualFactory() {
-
     }
 
     @Override
-    public T create(final Bean<T> bean, final CreationalContext<T> creationalContext) {
-        final BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-        webServerInstance = beanManager.getReference(bean, UndertowContainer.class, creationalContext);
-        return (T) webServerInstance;
+    public UndertowContainer create(Bean<UndertowContainer> bean, CreationalContext<UndertowContainer> creationalContext) {
+        if (server == null) {
+            server = new UndertowContainer(null);
+        }
+        return server;
     }
 
     @Override
-    public void destroy(final Bean<T> bean, final T instance, final CreationalContext<T> creationalContext) {
-        bean.destroy(instance, creationalContext);
-        webServerInstance = null;
-        server = null;
+    public void destroy(Bean<UndertowContainer> bean, UndertowContainer instance, CreationalContext<UndertowContainer> creationalContext) {
+        creationalContext.release();
     }
 }
