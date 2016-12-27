@@ -12,18 +12,19 @@ public class ContextualFactory implements ContextualLifecycle<UndertowContainer>
 
     private static final Logger log = LoggerFactory.getLogger(ContextualFactory.class);
 
+    private final String id;
+
     private UndertowContainer server;
 
-    public ContextualFactory() {
-        log.trace("-------> Create ContextualFactory");
+    public ContextualFactory(String id) {
+        log.trace("-------> Create ContextualFactory: {}", id);
+        this.id = id;
+        log.trace("-------> Create singleton instance");
+        server = new UndertowContainer(null);
     }
 
     @Override
     public UndertowContainer create(Bean<UndertowContainer> bean, CreationalContext<UndertowContainer> creationalContext) {
-        if (server == null) {
-            server = new UndertowContainer(null);
-            log.trace("-------> Create new Container instance");
-        }
         log.trace("-------> Use singleton instance");
         return server;
     }
