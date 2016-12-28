@@ -34,7 +34,7 @@ public class UndertowTest {
         DeploymentManager deploymentManager = Servlets.defaultContainer().addDeployment(di);
         deploymentManager.deploy();
         server = Undertow.builder()
-                .addHttpListener(8080, "localhost")
+                .addHttpListener(9000, "localhost")
                 .setHandler(deploymentManager.start())
                 .build();
 

@@ -1,10 +1,13 @@
 package io.descoped.server.container;
 
 import org.apache.deltaspike.core.api.config.ConfigResolver;
+import org.apache.deltaspike.core.api.projectstage.ProjectStage;
+import org.apache.deltaspike.core.util.ProjectStageProducer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by oranheim on 12/12/2016.
@@ -19,9 +22,18 @@ abstract public class ServerContainer implements Serializable {
 
     public ServerContainer() {
         host = ConfigResolver.getPropertyValue("descoped.server.host", "0.0.0.0");
-        port = Integer.valueOf(ConfigResolver.getPropertyValue("descoped.server.port", "8080"));
+        port = (isTestProjectStage() ?
+                new Random().nextInt(150) + 1 + 9000 :
+                Integer.valueOf(ConfigResolver.getPropertyValue("descoped.server.port", "8080"))
+        );
         contextPath = ConfigResolver.getPropertyValue("descoped.server.contextPath", "/");
         jaxRsPackages = ConfigResolver.getPropertyValue("descoped.server.jaxRsPackages", "io.descoped").split(",");
+    }
+    
+    private static boolean isTestProjectStage() {
+        ProjectStage stage = ProjectStageProducer.getInstance().getProjectStage();
+        return ProjectStage.UnitTest.equals(stage)
+                || ProjectStage.IntegrationTest.equals(stage);
     }
 
     public ServerContainer(ServerContainer owner) {
@@ -71,7 +83,7 @@ abstract public class ServerContainer implements Serializable {
 
     public void undeploy(Deployment deployment) {
         deployment.undeploy(this);
-        this.deployments.remove(deployment);
+//        this.deployments.remove(deployment);
     }
 
     abstract public void start();
@@ -82,7 +94,10 @@ abstract public class ServerContainer implements Serializable {
     public void copyConfiguration(ServerContainer that) {
         if (that == null) {
             host = ConfigResolver.getPropertyValue("descoped.server.host", "0.0.0.0");
-            port = Integer.valueOf(ConfigResolver.getPropertyValue("descoped.server.port", "8080"));
+            port = (isTestProjectStage() ?
+                    new Random().nextInt(150) + 1 + 9000 :
+                    Integer.valueOf(ConfigResolver.getPropertyValue("descoped.server.port", "8080"))
+            );
             contextPath = ConfigResolver.getPropertyValue("descoped.server.contextPath", "/");
             jaxRsPackages = ConfigResolver.getPropertyValue("descoped.server.jaxRsPackages", "io.descoped").split(",");
             return;

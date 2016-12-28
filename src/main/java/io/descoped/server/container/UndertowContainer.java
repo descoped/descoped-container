@@ -21,7 +21,7 @@ public class UndertowContainer extends ServerContainer {
     private Undertow.Builder builder;
 
     public UndertowContainer() {
-        super();
+        throw new UnsupportedOperationException();
     }
 
     public UndertowContainer(ServerContainer owner) {
@@ -73,6 +73,10 @@ public class UndertowContainer extends ServerContainer {
     @Override
     public void shutdown() {
         if (isRunning() && !isStopped()) {
+            for (Deployment deployment : getDeployments()) {
+                undeploy(deployment);
+            }
+            getDeployments().clear();
             server.stop();
 //            for(String dep : Servlets.defaultContainer().listDeployments()) {
 //                DeploymentManager di = Servlets.defaultContainer().getDeployment(dep);

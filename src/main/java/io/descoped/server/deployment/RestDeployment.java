@@ -31,6 +31,8 @@ import static io.descoped.server.container.ServerContainer.getContextPath;
 public class RestDeployment implements io.descoped.server.container.Deployment {
 
     private static PathHandler path;
+    private ListenerInfo listenerInfo;
+    private DeploymentInfo webapp;
 
     public RestDeployment() {
     }
@@ -56,9 +58,9 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
     }
 
     private DeploymentInfo getDeployment() {
-        ListenerInfo listenerInfo = Servlets.listener(CdiServletRequestListener.class);
+        listenerInfo = Servlets.listener(CdiServletRequestListener.class);
 
-        DeploymentInfo webapp = Servlets.deployment()
+        webapp = Servlets.deployment()
 //                .setClassIntrospecter(getClassIntrospecter())
                 .addListener(listenerInfo)
 //                .addServletContainerInitalizers(getServletContainerInitializers())

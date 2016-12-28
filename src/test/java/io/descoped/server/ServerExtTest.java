@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.net.HttpURLConnection;
 
@@ -37,28 +38,31 @@ public class ServerExtTest {
 
     @Inject
     @WebServer(id = "other")
-    ServerContainer server2;
+    Instance<ServerContainer> server2;
 
     @Before
     public void setUp() throws Exception {
-        server.start();
-        server.deploy(new RestDeployment());
+//        server.deploy(new RestDeployment());
+//        server.start();
         log.trace("---------> Server [{}]: {}", this, server);
-
     }
 
     @After
     public void tearDown() throws Exception {
-        server.shutdown();
+//        server.shutdown();
     }
 
     @Test
     public void testServer() throws Exception {
+        log.trace("----------------------> PORT: {}", server.getPort());
+        server.deploy(new RestDeployment());
+        server.start();
         log.trace("------> server: {}={} {}", server.hashCode(), server2.hashCode(), (server.hashCode() == server2.hashCode()));
         log.trace("------> server2: {}", server2);
         assertNotEquals(server2, server);
 
         given()
+                .port(server.getPort())
                 .contentType(ContentType.XML.withCharset("UTF-8"))
                     .log().everything()
                 .expect()
@@ -67,23 +71,27 @@ public class ServerExtTest {
                 .when()
                     .get("/test/")
         ;
+        server.shutdown();
     }
 
-//    @Test
-//    public void testServer2() throws Exception {
-//        server.start();
-//        server.deploy(new RestDeployment());
-//        log.trace("---------> Server [{}]: {}", this, server);
-//        given()
-//                .contentType(ContentType.XML.withCharset("UTF-8"))
-//                    .log().everything()
-//                .expect()
-//                    .statusCode(HttpURLConnection.HTTP_OK)
-//                    .log().everything()
-//                .when()
-//                    .get("/test/")
-//        ;
-//        server.shutdown();
-//    }
+    @Test
+    public void testServer2() throws Exception {
+//        ServerContainer server2Instance = server2.get();
+        ServerContainer server2Instance = server;
+        server2Instance.deploy(new RestDeployment());
+        server2Instance.start();
+        log.trace("---------> Server [{}]: {}", this, server);
+        given()
+                .port(server2Instance.getPort())
+                .contentType(ContentType.XML.withCharset("UTF-8"))
+                    .log().everything()
+                .expect()
+                    .statusCode(HttpURLConnection.HTTP_OK)
+                    .log().everything()
+                .when()
+                    .get("/test/")
+        ;
+        server2Instance.shutdown();
+    }
 
 }

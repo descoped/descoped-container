@@ -39,6 +39,7 @@ public class MainTest {
     @Test
     public void testRestTest() throws Exception {
         given()
+            .port(server.getPort())
             .contentType(ContentType.XML.withCharset("UTF-8"))
                 .log().everything()
             .expect()
