@@ -10,18 +10,14 @@ import io.undertow.Handlers;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
-import io.undertow.servlet.util.ImmediateInstanceFactory;
 import org.apache.deltaspike.cdise.servlet.CdiServletRequestListener;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.servlet.ServletProperties;
 
 import javax.enterprise.inject.spi.CDI;
-import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
 import javax.ws.rs.core.Application;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
 
 import static io.descoped.server.container.ServerContainer.getContextPath;
 
@@ -30,9 +26,10 @@ import static io.descoped.server.container.ServerContainer.getContextPath;
  */
 public class RestDeployment implements io.descoped.server.container.Deployment {
 
-    private static PathHandler path;
+    private PathHandler path;
     private ListenerInfo listenerInfo;
     private DeploymentInfo webapp;
+    private DeploymentManager manager;
 
     public RestDeployment() {
     }
@@ -45,25 +42,12 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
         return CDI.current().select(CDIClassIntrospecter.class).get();
     }
 
-    private List<ServletContainerInitializerInfo> getServletContainerInitializers() {
-        List<ServletContainerInitializerInfo> infos = new ArrayList<>();
-        for (ServletContainerInitializer initializer : ServiceLoader.load(ServletContainerInitializer.class)) {
-            HandlesTypes types = initializer.getClass().getAnnotation(HandlesTypes.class);
-            infos.add(new ServletContainerInitializerInfo(
-                    initializer.getClass(),
-                    new ImmediateInstanceFactory<>(initializer),
-                    types == null ? Collections.emptySet() : new LinkedHashSet<>(Arrays.asList(types.value()))));
-        }
-        return infos;
-    }
-
     private DeploymentInfo getDeployment() {
         listenerInfo = Servlets.listener(CdiServletRequestListener.class);
 
         webapp = Servlets.deployment()
 //                .setClassIntrospecter(getClassIntrospecter())
                 .addListener(listenerInfo)
-//                .addServletContainerInitalizers(getServletContainerInitializers())
                 .setClassLoader(ClassLoaders.tccl())
                 .setContextPath(getContextPath())
                 .setDefaultEncoding(StandardCharsets.UTF_8.displayName())
@@ -88,7 +72,7 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
 
     // this is necessary because of the registration of Servlets.listener(CdiServletRequestListener.class)
     // todo: need to find a way to unregister CdiServletRequestListener in Jersey
-    private boolean isAlreadyDeployed() {
+    private boolean isNotDeployed() {
         return path == null;
 //        return false;
     }
@@ -97,9 +81,9 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
     public void deploy(ServerContainer container) {
         try {
             UndertowContainer server = (UndertowContainer) container;
-            if (isAlreadyDeployed()) {
+            if (isNotDeployed()) {
                 DeploymentInfo webapp = getDeployment();
-                DeploymentManager manager = Servlets.defaultContainer().addDeployment(webapp);
+                manager = Servlets.defaultContainer().addDeployment(webapp);
                 manager.deploy();
                 path = Handlers.path(Handlers.redirect(server.getContextPath())).addPrefixPath(container.getContextPath(), manager.start());
             }
@@ -111,7 +95,19 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
 
     @Override
     public void undeploy(ServerContainer container) {
-        // do nothing
+        try {
+            manager.stop();
+            manager.undeploy();
+
+            path = null;
+        } catch (ServletException e) {
+            throw new DescopedServerException(e);
+        }
+
+
+        // do something
+//        Container.instance().cleanup();
+//        Container.instance().setState(ContainerState.DISCOVERED);
     }
 
 }

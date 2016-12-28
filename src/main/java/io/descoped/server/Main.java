@@ -62,6 +62,11 @@ public class Main extends ServerContainer {
     }
 
     public void shutdown() {
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            System.exit(-1);
+        }
         if (server != null) server.shutdown();
         server = null;
     }

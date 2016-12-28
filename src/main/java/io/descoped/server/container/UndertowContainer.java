@@ -72,6 +72,11 @@ public class UndertowContainer extends ServerContainer {
 
     @Override
     public void shutdown() {
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            System.exit(-1);
+        }
         if (isRunning() && !isStopped()) {
             for (Deployment deployment : getDeployments()) {
                 undeploy(deployment);

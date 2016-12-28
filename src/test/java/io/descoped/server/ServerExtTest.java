@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.net.HttpURLConnection;
@@ -27,13 +26,12 @@ import static org.junit.Assert.assertNotEquals;
  */
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
-@ApplicationScoped
 public class ServerExtTest {
 
     private static final Logger log = LoggerFactory.getLogger(ServerExtTest.class);
 
     @Inject
-    @WebServer
+    @WebServer(id = "first")
     ServerContainer server;
 
     @Inject
