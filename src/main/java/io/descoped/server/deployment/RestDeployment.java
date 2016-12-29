@@ -26,16 +26,10 @@ import static io.descoped.server.container.ServerContainer.getContextPath;
  */
 public class RestDeployment implements io.descoped.server.container.Deployment {
 
-    private PathHandler path;
-    private ListenerInfo listenerInfo;
-    private DeploymentInfo webapp;
     private DeploymentManager manager;
+    private PathHandler path;
 
     public RestDeployment() {
-    }
-
-    public static RestDeployment newInstance() {
-        return new RestDeployment();
     }
 
     private ClassIntrospecter getClassIntrospecter() {
@@ -43,9 +37,9 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
     }
 
     private DeploymentInfo getDeployment() {
-        listenerInfo = Servlets.listener(CdiServletRequestListener.class);
+        ListenerInfo listenerInfo = Servlets.listener(CdiServletRequestListener.class);
 
-        webapp = Servlets.deployment()
+        DeploymentInfo webapp = Servlets.deployment()
 //                .setClassIntrospecter(getClassIntrospecter())
                 .addListener(listenerInfo)
                 .setClassLoader(ClassLoaders.tccl())
@@ -99,15 +93,11 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
             manager.stop();
             manager.undeploy();
 
+            manager = null;
             path = null;
         } catch (ServletException e) {
             throw new DescopedServerException(e);
         }
-
-
-        // do something
-//        Container.instance().cleanup();
-//        Container.instance().setState(ContainerState.DISCOVERED);
     }
 
 }

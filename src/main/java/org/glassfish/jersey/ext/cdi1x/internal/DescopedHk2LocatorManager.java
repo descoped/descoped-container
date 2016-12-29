@@ -19,7 +19,7 @@ public class DescopedHk2LocatorManager implements Hk2LocatorManager {
     @Override
     public void registerLocator(ServiceLocator locator) {
         log.trace("DescopedHk2LocatorManager::registerLocator: {}", locator);
-        if (locator != null) {
+        if (this.locator == null || locator != null) {
             this.locator = locator;
         } else if (this.locator != locator) {
             throw new WebApplicationException(LocalizationMessages.CDI_MULTIPLE_LOCATORS_INTO_SIMPLE_APP());
