@@ -87,7 +87,16 @@ public class MyTest {
 
     @Test
     public void first_run() throws Exception {
-        // do something
+        given()
+            .port(server.getPort())
+            .contentType(ContentType.XML.withCharset("UTF-8"))
+                .log().everything()
+            .expect()
+                .statusCode(HttpURLConnection.HTTP_OK)
+                .log().everything()
+            .when()
+                .get("/test/")
+            ;
     }        
 }
 ```
@@ -109,3 +118,9 @@ Deployment can also be handled when the event observers are fired.
         // do something
     }
 ```
+
+# Todo
+
+* Provide more details on the CDI Extension
+* more documentation of test control
+* explain the config system
