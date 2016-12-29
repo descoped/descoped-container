@@ -3,7 +3,7 @@ package io.descoped.server.deployment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import org.apache.deltaspike.core.api.config.ConfigResolver;
+import io.descoped.server.config.ContainerConfig;
 import org.glassfish.jersey.server.ResourceConfig;
 
 /**
@@ -12,8 +12,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class RestResourceConfig extends ResourceConfig {
 
     public RestResourceConfig() {
-        String scanPackagesConfig = ConfigResolver.getPropertyValue("scanPackages", "io.descoped");
-        String[] scanPackages = scanPackagesConfig.split(",");
+        String[] scanPackages = ContainerConfig.getScanJaxRsPackages();;
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
@@ -24,4 +23,5 @@ public class RestResourceConfig extends ResourceConfig {
 
         packages(scanPackages);
     }
+
 }

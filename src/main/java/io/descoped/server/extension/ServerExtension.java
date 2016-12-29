@@ -29,18 +29,18 @@ public class ServerExtension implements Extension {
         for (InjectionPoint ip : pit.getInjectionTarget().getInjectionPoints()) {
             WebServer webServer = ip.getAnnotated().getAnnotation(WebServer.class);
             if (webServer != null) {
-                log.trace("--> IP: {}", ip);
+                log.trace("Processed InjectionPoint: {} => {}", ip, webServer.id());
                 injectionPoints.put(ip, webServer.id());
             }
         }
     }
 
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
-        log.trace("--------> Size: {}", injectionPoints.size());
+        Integer n = 0;
         for (Map.Entry<InjectionPoint, String> entry : injectionPoints.entrySet()) {
             InjectionPoint injectionPoint = entry.getKey();
             String id = entry.getValue();
-            String name = injectionPoint.getMember().getName();
+            String name = injectionPoint.getMember().getName(); //  + "_" + n.toString()
 
             BeanBuilder<UndertowContainer> beanBuilder = new BeanBuilder<UndertowContainer>(bm)
                     .id("DescopedWebServer#" + name)
@@ -51,8 +51,9 @@ public class ServerExtension implements Extension {
                     .scope(Dependent.class)
                     .beanLifecycle(new ContextualFactory(id));
             Bean<?> bean = beanBuilder.create();
-            log.trace("--< IP: {} ==> {} <= {}", entry, name, bean.getName());
+            log.trace("Register Bean for InjectionPoint: {} => {}", id, name);
             abd.addBean(bean);
+            n++;
         }
     }
 

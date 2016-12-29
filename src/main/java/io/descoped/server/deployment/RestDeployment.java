@@ -19,8 +19,6 @@ import javax.servlet.ServletException;
 import javax.ws.rs.core.Application;
 import java.nio.charset.StandardCharsets;
 
-import static io.descoped.server.container.ServerContainer.getContextPath;
-
 /**
  * Created by oranheim on 20/12/2016.
  */
@@ -36,14 +34,14 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
         return CDI.current().select(CDIClassIntrospecter.class).get();
     }
 
-    private DeploymentInfo getDeployment() {
+    private DeploymentInfo getDeployment(String contextPath) {
         ListenerInfo listenerInfo = Servlets.listener(CdiServletRequestListener.class);
 
         DeploymentInfo webapp = Servlets.deployment()
 //                .setClassIntrospecter(getClassIntrospecter())
                 .addListener(listenerInfo)
                 .setClassLoader(ClassLoaders.tccl())
-                .setContextPath(getContextPath())
+                .setContextPath(contextPath)
                 .setDefaultEncoding(StandardCharsets.UTF_8.displayName())
                 .setDeploymentName(Main.class.getSimpleName())
                 .setDisplayName(Main.class.getSimpleName())
@@ -64,23 +62,14 @@ public class RestDeployment implements io.descoped.server.container.Deployment {
         return webapp;
     }
 
-    // this is necessary because of the registration of Servlets.listener(CdiServletRequestListener.class)
-    // todo: need to find a way to unregister CdiServletRequestListener in Jersey
-    private boolean isNotDeployed() {
-        return path == null;
-//        return false;
-    }
-
     @Override
     public void deploy(ServerContainer container) {
         try {
             UndertowContainer server = (UndertowContainer) container;
-            if (isNotDeployed()) {
-                DeploymentInfo webapp = getDeployment();
-                manager = Servlets.defaultContainer().addDeployment(webapp);
-                manager.deploy();
-                path = Handlers.path(Handlers.redirect(server.getContextPath())).addPrefixPath(container.getContextPath(), manager.start());
-            }
+            DeploymentInfo webapp = getDeployment(server.getContextPath());
+            manager = Servlets.defaultContainer().addDeployment(webapp);
+            manager.deploy();
+            path = Handlers.path(Handlers.redirect(server.getContextPath())).addPrefixPath(container.getContextPath(), manager.start());
             server.builder().setHandler(path);
         } catch (ServletException e) {
             throw new DescopedServerException(e);

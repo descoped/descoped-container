@@ -25,15 +25,15 @@ import javax.enterprise.inject.Vetoed;
  * An event that is fired on start up.  Components may listen to this event to start up on boot.
  */
 @Vetoed
-public class ApplicationStartupEvent {
+public class PreStartContainer {
 
     private ServerContainer container;
 
-    public ApplicationStartupEvent() {
+    public PreStartContainer() {
         throw new UnsupportedOperationException();
     }
 
-    public ApplicationStartupEvent(ServerContainer container) {
+    public PreStartContainer(ServerContainer container) {
         this.container = container;
     }
 

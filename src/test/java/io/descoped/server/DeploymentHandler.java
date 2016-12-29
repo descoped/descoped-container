@@ -1,6 +1,6 @@
 package io.descoped.server;
 
-import io.descoped.server.container.ApplicationStartupEvent;
+import io.descoped.server.container.PreStartContainer;
 import io.descoped.server.container.UndertowContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +16,8 @@ public class DeploymentHandler {
 
     private static final Logger log = LoggerFactory.getLogger(DeploymentHandler.class);
 
-    public void observeDeploymentHandlers(@Observes ApplicationStartupEvent event) {
-        UndertowContainer container = (UndertowContainer) event.container();
+    public void observeDeploymentHandlers(@Observes PreStartContainer event) {
+        final UndertowContainer container = (UndertowContainer) event.container();
         container.deployJaxRsResourceConfig();
     }
 

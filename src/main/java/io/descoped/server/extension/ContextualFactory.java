@@ -24,20 +24,18 @@ public class ContextualFactory implements ContextualLifecycle<UndertowContainer>
 
     @Override
     public UndertowContainer create(Bean<UndertowContainer> bean, CreationalContext<UndertowContainer> creationalContext) {
-        log.trace("......................................: {}", id);
         if (!instanceMap.containsKey(id)) {
-            log.trace("----> Create instance for id: {}", id);
-            UndertowContainer container = new UndertowContainer(null);
-            instanceMap.put(id, container);
+            UndertowContainer instance = new UndertowContainer();
+            log.trace("Create container instance: {}", instance);
+            instanceMap.put(id, instance);
         }
         UndertowContainer instance = (UndertowContainer) instanceMap.get(id);
-        log.trace("-----<< Get Instance: {}", instance);
         return instance;
     }
 
     @Override
     public void destroy(Bean<UndertowContainer> bean, UndertowContainer instance, CreationalContext<UndertowContainer> creationalContext) {
-        log.trace("-------> Destroy singleton instance: {}", instance);
+        log.trace("Destroy container instance: {}", instance);
         creationalContext.release();
     }
 }

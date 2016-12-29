@@ -2,7 +2,6 @@ package io.descoped.server.container;
 
 import io.descoped.server.deployment.RestDeployment;
 import io.undertow.Undertow;
-import io.undertow.server.handlers.PathHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,20 +15,15 @@ import javax.enterprise.inject.spi.CDI;
 public class UndertowContainer extends ServerContainer {
 
     private static final Logger log = LoggerFactory.getLogger(UndertowContainer.class);
-    private static PathHandler path;
     private Undertow server;
     private Undertow.Builder builder;
 
     public UndertowContainer() {
-        throw new UnsupportedOperationException();
+        super();
     }
 
-    public UndertowContainer(ServerContainer owner) {
-        super(owner);
-    }
-
-    private static String contextPath() {
-        String ctxPath = ServerContainer.getContextPath();
+    private String contextPath() {
+        String ctxPath = this.getContextPath();
         if (!ctxPath.startsWith("/")) {
             ctxPath = "/" + ctxPath;
         }
@@ -39,8 +33,8 @@ public class UndertowContainer extends ServerContainer {
     public Undertow.Builder builder() {
         if (builder == null) {
             builder = Undertow.builder()
-                .addHttpListener(getPort(), getHost())
-                ;
+                    .addHttpListener(getPort(), getHost())
+            ;
         }
         return builder;
     }
@@ -53,7 +47,7 @@ public class UndertowContainer extends ServerContainer {
     @Override
     public void start() {
         if (!isRunning() && isStopped()) {
-            CDI.current().getBeanManager().fireEvent(new ApplicationStartupEvent(this));
+            CDI.current().getBeanManager().fireEvent(new PreStartContainer(this));
 
             if (getDeployments().isEmpty()) {
                 log.error("\n\n\t-----> Unable to start Descoped Server because no Deployment has been registered! <-----\n");
@@ -62,9 +56,9 @@ public class UndertowContainer extends ServerContainer {
 
             server = builder.build();
 
-//        if (getMaxWorkers() > 0) {
-//            builder.setWorkerThreads(getMaxWorkers());
-//        }
+            if (getMaxWorkers() > 0) {
+                builder.setWorkerThreads(getMaxWorkers());
+            }
 
             server.start();
         }
@@ -72,28 +66,13 @@ public class UndertowContainer extends ServerContainer {
 
     @Override
     public void shutdown() {
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-            System.exit(-1);
-        }
         if (isRunning() && !isStopped()) {
+            CDI.current().getBeanManager().fireEvent(new PreStopContainer(this));
             for (Deployment deployment : getDeployments()) {
                 undeploy(deployment);
             }
             getDeployments().clear();
             server.stop();
-//            for(String dep : Servlets.defaultContainer().listDeployments()) {
-//                DeploymentManager di = Servlets.defaultContainer().getDeployment(dep);
-//                try {
-//                    di.stop();
-//                    di.undeploy();
-//                } catch (ServletException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            Servlets.deployment().getListeners().clear();
-//            Handlers.path().clearPaths();
             server = null;
         }
     }

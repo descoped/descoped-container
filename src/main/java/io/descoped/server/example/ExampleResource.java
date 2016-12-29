@@ -1,5 +1,6 @@
 package io.descoped.server.example;
 
+import io.descoped.server.support.Log;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.RequestScoped;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class ExampleResource {
 
     @Inject
+    @Log
     Logger log;
 
     @GET

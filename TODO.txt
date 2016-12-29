@@ -1,5 +1,1 @@
-Main -> UndertowContainer
-
-UndertowContainer fire an event to obtain deployment Components
-
 

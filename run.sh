@@ -1,4 +1,4 @@
 #!/bin/sh
 
-java -cp "target/appassembler/lib/*" io.descoped.server.Main
+java -cp "target/appassembler/lib/*" $1 io.descoped.server.Main
 

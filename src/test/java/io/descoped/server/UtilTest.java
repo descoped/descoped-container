@@ -1,7 +1,7 @@
 package io.descoped.server;
 
 import io.descoped.server.support.ConsoleAppender;
-import io.descoped.server.support.MyQualifier;
+import io.descoped.server.support.Log;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.testcontrol.api.TestControl;
@@ -19,22 +19,15 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
-public class CdiTest {
+public class UtilTest {
+
+    @Inject
+    @Log
+    Logger log;
 
     @Inject
     @ConfigProperty(name = "foo")
     String foo;
-
-    @Inject
-    Logger log;
-
-    @Inject @MyQualifier
-    private String hello;
-
-    @Test
-    public void testMe() throws Exception {
-        log.debug(hello);
-    }
 
     @Test
     public void testConfig() throws Exception {
@@ -42,6 +35,5 @@ public class CdiTest {
         log.trace("foo={}", foo);
         assertEquals(this.foo, foo);
     }
-
 
 }

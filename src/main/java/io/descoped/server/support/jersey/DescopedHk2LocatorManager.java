@@ -1,6 +1,7 @@
-package org.glassfish.jersey.ext.cdi1x.internal;
+package io.descoped.server.support.jersey;
 
 import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.ext.cdi1x.internal.LocalizationMessages;
 import org.glassfish.jersey.ext.cdi1x.internal.spi.Hk2LocatorManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ public class DescopedHk2LocatorManager implements Hk2LocatorManager {
 
     @Override
     public void registerLocator(ServiceLocator locator) {
-        log.trace("DescopedHk2LocatorManager::registerLocator: {}", locator);
+        log.trace("Register HK2 CDI Locator Manager: {}", locator);
         if (this.locator == null || locator != null) {
             this.locator = locator;
         } else if (this.locator != locator) {
@@ -28,7 +29,6 @@ public class DescopedHk2LocatorManager implements Hk2LocatorManager {
 
     @Override
     public ServiceLocator getEffectiveLocator() {
-        log.trace("DescopedHk2LocatorManager::getEffectiveLocator: {}", locator);
         return locator;
     }
 }
