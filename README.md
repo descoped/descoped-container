@@ -19,29 +19,60 @@ The Descoped Embedded Server is a tiny web server that bootstraps Weld Cdi Conta
 
 ## Build
 
+#### Build and install
 `mvn clean install`
+
+#### Run test suite
 
 `mvn clean test`
 
+#### Run a specific test
+
 `mvn clean test -Dtest=ContainerTest`
 
+#### Build all and skip tests
 `mvn clean install -DskipTest`
+
+#### Start server
 
 `./run.sh`
 
+#### Start server and deploy (only useful for when testing the `descoped-server` module itself)
+
 `./run.sh -Dorg.apache.deltaspike.ProjectStage=RestDeployment`
 
+## Usage
 
-# Exampels
+### Configuration (application.properties)
+
+```
+descoped.server.host=0.0.0.0
+descoped.server.port=8080
+descoped.server.contextPath=/
+descoped.server.jaxRsPackages=io.descoped
+descoped.server.maxWorkers=0
+```
+
+### @WebServer annotation
+
+Each ServerContainer is designated an `id`, which defaults to `@WebServer(id = "default")`. If you need to have multiple container instances running, then you must assign a new id for the other container. E.g. `@WebServer(id = "my-container")`.  
+
+### TestControl
+
+A random http port of 8080 + random(150) will be designated for each running instance during testing.
+
+
+
+# Examples
 
 ```java
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
-public class ServerExtTest {
+public class MyTest {
 
     @Inject
     @WebServer
-    ServerContainer server;
+    ServerContainer container;
 
     @Before
     public void setUp() throws Exception {
@@ -61,16 +92,20 @@ public class ServerExtTest {
 }
 ```
 
-you may also alternately deploy before calling start:
+Deployment can also be handled when the event observers are fired.
+
+### Pre-startup container
 
 ```java
-    public void handleDeployment(@Observes PreStartContainer event) {
+    public void onStartup(@Observes PreStartContainer event) {
         event.container().deploy(new RestDeployment());
     }
 ```
 
+### Pre-shutdown container
+
 ```java
-    public void handleDeployment(@Observes PreStopContainer event) {
-        event.container().deploy(new RestDeployment());
+    public void onShutdown(@Observes PreStopContainer event) {
+        // do something
     }
 ```

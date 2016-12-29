@@ -25,11 +25,11 @@ public class ExampleResource {
     Logger log;
 
     @GET
-    public Map<Object, Object> get()
-    {
+    public Map<Object, Object> get() {
         Map<Object, Object> map = new HashMap<Object, Object>();
         map.put("foo", "bar");
         log.trace("Produce => foo: bar");
         return map;
     }
+
 }
