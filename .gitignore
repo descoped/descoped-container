@@ -6,3 +6,5 @@
 /logs/
 
 *.iml
+/pom.xml.releaseBackup
+/release.properties
