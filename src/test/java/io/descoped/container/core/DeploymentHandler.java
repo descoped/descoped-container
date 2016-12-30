@@ -1,7 +1,5 @@
-package io.descoped.container;
+package io.descoped.container.core;
 
-import io.descoped.container.core.PreStartContainer;
-import io.descoped.container.core.UndertowContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

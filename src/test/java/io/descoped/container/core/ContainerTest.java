@@ -1,7 +1,6 @@
-package io.descoped.container;
+package io.descoped.container.core;
 
 import com.jayway.restassured.http.ContentType;
-import io.descoped.container.core.ServerContainer;
 import io.descoped.container.support.ConsoleAppender;
 import io.descoped.container.support.WebServer;
 import org.apache.deltaspike.testcontrol.api.TestControl;

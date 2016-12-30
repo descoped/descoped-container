@@ -1,4 +1,4 @@
-package io.descoped.container;
+package io.descoped.container.core;
 
 import io.descoped.container.support.ConsoleAppender;
 import io.descoped.container.support.Log;
