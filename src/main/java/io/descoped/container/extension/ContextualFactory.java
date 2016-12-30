@@ -30,12 +30,14 @@ public class ContextualFactory implements ContextualLifecycle<UndertowContainer>
             instanceMap.put(id, instance);
         }
         UndertowContainer instance = (UndertowContainer) instanceMap.get(id);
+//        instance.getDeployments().clear();
         return instance;
     }
 
     @Override
     public void destroy(Bean<UndertowContainer> bean, UndertowContainer instance, CreationalContext<UndertowContainer> creationalContext) {
         log.trace("Destroy core instance: {}", instance);
+        instance.getDeployments().clear();
         creationalContext.release();
     }
 }
