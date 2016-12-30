@@ -16,7 +16,9 @@ public class DeploymentHandler {
 
     public void observeDeploymentHandlers(@Observes PreStartContainer event) {
         final UndertowContainer container = (UndertowContainer) event.container();
-        container.deployJaxRsResourceConfig();
+        if (container.getDeployments().isEmpty()) {
+            container.deployJaxRsResourceConfig();
+        }
     }
 
 }
