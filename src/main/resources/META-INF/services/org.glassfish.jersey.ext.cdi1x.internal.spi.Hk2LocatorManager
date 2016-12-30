@@ -1,1 +1,1 @@
-io.descoped.server.support.jersey.DescopedHk2LocatorManager
+io.descoped.container.support.jersey.DescopedHk2LocatorManager

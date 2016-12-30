@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.descoped</groupId>
-    <artifactId>server</artifactId>
+    <artifactId>container</artifactId>
     <packaging>jar</packaging>
     <version>1.0.1-SNAPSHOT</version>
     <name>Descoped Server</name>
@@ -50,7 +50,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <service.name>DescopedServer</service.name>
-        <service.main.class>io.descoped.server.Main</service.main.class>
+        <service.main.class>io.descoped.container.Main</service.main.class>
 
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
