@@ -3,7 +3,8 @@ package io.descoped.server;
 import io.descoped.server.container.PreStartContainer;
 import io.descoped.server.container.ServerContainer;
 import io.descoped.server.container.UndertowContainer;
-import io.descoped.server.support.ContainerType;
+import io.descoped.server.deployment.DaemonTestProjectStageHolder;
+import io.descoped.server.support.WebServerLiteral;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
@@ -13,112 +14,101 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.CDI;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 public class Main {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
-    private ContainerType containerType = ContainerType.UNDERTOW;
-    private ServerContainer server;
+    private ServerContainer serverContainer;
 
     public Main() {
     }
 
-    public ServerContainer createContainer(String className) {
+    private static void installLogger() {
+        LogManager.getLogManager().reset();
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
+        LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
+    }
+
+    public boolean isRunning() {
+        return (serverContainer == null ? false : serverContainer.isRunning());
+    }
+
+    public int getPort() {
+        return (serverContainer == null ? 8080 : serverContainer.getPort());
+    }
+
+    private void run(Runnable waitFor) {
+        CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
         try {
-            Class<?> clazz = Class.forName(className);
-            Object instance = clazz.newInstance();
-            return (ServerContainer) instance;
-        } catch (ClassNotFoundException e) {
-            log.error("Unable to load '{}'!", e);
-        } catch (IllegalAccessException e) {
-            log.error("Unable to load '{}'!", e);
-        } catch (InstantiationException e) {
-            log.error("Unable to load '{}'!", e);
+            cdiContainer.boot();
+            cdiContainer.getContextControl().startContexts();
+            try {
+                start();
+                waitFor.run();
+            } finally {
+                stop();
+            }
+        } finally {
+            cdiContainer.shutdown();
         }
-        return null;
     }
 
     public void start() {
-        if (server == null) {
-            server = (containerType.equals(ContainerType.UNDERTOW) ? new UndertowContainer() : createContainer("io.descoped.server.containerGrizzlyContainer") );
+
+        if (serverContainer == null) {
+            serverContainer = CDI.current().select(ServerContainer.class, WebServerLiteral.DEFAULT).get();
+
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 public void run() {
                     log.debug("ShutdownHook triggered..");
-                    if (server != null) {
-                        server.shutdown();
-                        server = null;
+                    if (serverContainer != null) {
+                        serverContainer.shutdown();
+                        serverContainer = null;
                     }
                 }
             });
 
-            server.start();
+            serverContainer.start();
         }
     }
 
-    public int getPort() {
-        return (server != null ? server.getPort() : 8080);
-    }
-
-    public boolean isRunning() {
-        return (server != null && server.isRunning());
-    }
-
-    public boolean isStopped() {
-        return (server == null || server.isStopped());
-    }
-
-    public void shutdown() {
+    private void waitForKeyPress() {
         try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-            System.exit(-1);
+            System.in.read();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        if (server != null) server.shutdown();
-        server = null;
     }
 
-    private boolean isNotRestDeploymentForDeamonTesting() {
+    public void stop() {
+        if (serverContainer != null) serverContainer.shutdown();
+        serverContainer = null;
+    }
+
+    private boolean isDaemonTestProjectStage() {
         ProjectStage stage = ProjectStageProducer.getInstance().getProjectStage();
-        return !io.descoped.server.deployment.RestDeploymentProjectStageHolder.RestDeployment.equals(stage);
+        return !DaemonTestProjectStageHolder.DaemonTest.equals(stage);
     }
 
-    public void observeDeploymentHandlers(@Observes PreStartContainer event) {
-        if (isNotRestDeploymentForDeamonTesting()) return;
+    private void observeDeploymentHandlers(@Observes PreStartContainer event) {
+        if (isDaemonTestProjectStage()) return;
         UndertowContainer container = (UndertowContainer) event.container();
         container.deployJaxRsResourceConfig();
     }
 
     public static void main(String[] args) {
         long now = System.currentTimeMillis();
-        {
-            LogManager.getLogManager().reset();
-            SLF4JBridgeHandler.removeHandlersForRootLogger();
-            SLF4JBridgeHandler.install();
-            LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
-        }
-
-        CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
-        try {
-            cdiContainer.boot();
-            cdiContainer.getContextControl().startContexts();
-            Main main = new Main();
-            try {
-                main.start();
-                try {
-                    long time = System.currentTimeMillis() - now;
-                    log.info("Server started in {}ms..", time);
-                    System.in.read();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } finally {
-                main.shutdown();
-            }
-        } finally {
-            cdiContainer.shutdown();
-        }
+        installLogger();
+        Main main = new Main();
+        main.run(() -> {
+            long time = System.currentTimeMillis() - now;
+            log.info("Server started in {}ms..", time);
+            main.waitForKeyPress();
+        });
     }
 
 }

@@ -20,26 +20,26 @@ import static com.jayway.restassured.RestAssured.given;
 public class MainTest {
 
     private static final Logger log = LoggerFactory.getLogger(MainTest.class);
-    private Main server;
+    private Main main;
 
     @Before
     public void setUp() throws Exception {
-        server = new Main();
-        log.info("Start server..: {}", server.isRunning());
-        server.start();
-        log.info("Started server!");
+        main = new Main();
+        log.info("Start main..: {}", main.isRunning());
+        main.start();
+        log.info("Started main!");
     }
 
     @After
     public void tearDown() throws Exception {
-        server.shutdown();
-        log.info("Shutdown server!");
+        main.stop();
+        log.info("Shutdown main!");
     }
 
     @Test
     public void testRestTest() throws Exception {
         given()
-            .port(server.getPort())
+            .port(main.getPort())
             .contentType(ContentType.XML.withCharset("UTF-8"))
                 .log().everything()
             .expect()
@@ -49,5 +49,6 @@ public class MainTest {
                 .get("/test/")
             ;
     }
+
 
 }

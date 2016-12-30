@@ -1,1 +1,8 @@
+# Todo
 
+* Provide more details on the CDI Extension
+* more documentation of test control
+* explain the config system
+* add hystrix commands
+* add track and trace
+* add security and oauth2

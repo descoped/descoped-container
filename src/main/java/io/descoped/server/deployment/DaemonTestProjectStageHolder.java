@@ -6,11 +6,11 @@ import org.apache.deltaspike.core.api.projectstage.ProjectStageHolder;
 /**
  * Created by oranheim on 29/12/2016.
  */
-public class RestDeploymentProjectStageHolder implements ProjectStageHolder {
+public class DaemonTestProjectStageHolder implements ProjectStageHolder {
 
-    public static final class RestDeployment extends ProjectStage  {
+    public static final class DaemonTest extends ProjectStage  {
         private static final long serialVersionUID = -5556812956087205063L;
     }
 
-    public static final RestDeployment RestDeployment = new RestDeployment();
+    public static final DaemonTest DaemonTest = new DaemonTest();
 }

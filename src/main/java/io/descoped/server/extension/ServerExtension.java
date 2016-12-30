@@ -37,24 +37,36 @@ public class ServerExtension implements Extension {
 
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
         Integer n = 0;
-        for (Map.Entry<InjectionPoint, String> entry : injectionPoints.entrySet()) {
-            InjectionPoint injectionPoint = entry.getKey();
-            String id = entry.getValue();
-            String name = injectionPoint.getMember().getName(); //  + "_" + n.toString()
-
-            BeanBuilder<UndertowContainer> beanBuilder = new BeanBuilder<UndertowContainer>(bm)
-                    .id("DescopedWebServer#" + name)
-                    .beanClass(UndertowContainer.class)
-                    .types(ServerContainer.class, Object.class)
-                    .qualifiers(new WebServerLiteral(id))
-                    .name(name)
-                    .scope(Dependent.class)
-                    .beanLifecycle(new ContextualFactory(id));
-            Bean<?> bean = beanBuilder.create();
-            log.trace("Register Bean for InjectionPoint: {} => {}", id, name);
+        if (injectionPoints.isEmpty()) {
+            Bean<?> bean = createBean(WebServerLiteral.DEFAULT.id(), "container", bm);
             abd.addBean(bean);
-            n++;
+        } else {
+            for (Map.Entry<InjectionPoint, String> entry : injectionPoints.entrySet()) {
+                InjectionPoint injectionPoint = entry.getKey();
+                String id = entry.getValue();
+                String name = injectionPoint.getMember().getName(); //  + "_" + n.toString()
+
+                Bean<?> bean = createBean(id, name, bm);
+                log.trace("Register Bean for InjectionPoint: {} => {}", id, name);
+                abd.addBean(bean);
+                n++;
+            }
         }
+    }
+
+    private Bean<?> createBean(String id, String name, BeanManager bm) {
+        BeanBuilder<UndertowContainer> beanBuilder = new BeanBuilder<UndertowContainer>(bm)
+                .id("DescopedWebServer#" + name)
+                .beanClass(UndertowContainer.class)
+                .types(ServerContainer.class, Object.class)
+                .qualifiers(new WebServerLiteral(id))
+                .name(name)
+                .scope(Dependent.class)
+                .beanLifecycle(new ContextualFactory(id));
+        Bean<?> bean = beanBuilder.create();
+        log.trace("Register Bean for InjectionPoint: {} => {}", id, name);
+        return bean;
+
     }
 
 }

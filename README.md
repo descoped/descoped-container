@@ -39,7 +39,7 @@ The Descoped Embedded Server is a tiny web server that bootstraps Weld Cdi Conta
 
 #### Start server and deploy (only useful for when testing the `descoped-server` module itself)
 
-`./run.sh -Dorg.apache.deltaspike.ProjectStage=RestDeployment`
+`./run.sh -Dorg.apache.deltaspike.ProjectStage=DaemonTest`
 
 ## Usage
 
@@ -119,8 +119,3 @@ Deployment can also be handled when the event observers are fired.
     }
 ```
 
-# Todo
-
-* Provide more details on the CDI Extension
-* more documentation of test control
-* explain the config system
