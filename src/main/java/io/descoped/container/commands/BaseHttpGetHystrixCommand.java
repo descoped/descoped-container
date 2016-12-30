@@ -5,6 +5,7 @@ import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandProperties;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
+import org.apache.deltaspike.core.api.provider.BeanProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,10 @@ public abstract class BaseHttpGetHystrixCommand<R> extends HystrixCommand<R> {
         init(serviceUri, hystrixGroupKey);
     }
 
+    public BaseHttpGetHystrixCommand<R> injectCdiFields() {
+        BeanProvider.injectFields(this);
+        return this;
+    }
 
     protected BaseHttpGetHystrixCommand(URI serviceUri, String hystrixGroupKey) {
         super(HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(hystrixGroupKey)));

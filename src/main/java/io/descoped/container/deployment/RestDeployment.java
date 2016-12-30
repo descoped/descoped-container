@@ -11,10 +11,16 @@ import io.undertow.server.handlers.PathHandler;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
 import org.apache.deltaspike.cdise.servlet.CdiServletRequestListener;
+import org.apache.deltaspike.servlet.impl.event.EventBridgeContextListener;
+import org.apache.deltaspike.servlet.impl.event.EventBridgeFilter;
+import org.apache.deltaspike.servlet.impl.produce.RequestResponseHolderFilter;
+import org.apache.deltaspike.servlet.impl.produce.RequestResponseHolderListener;
+import org.apache.deltaspike.servlet.impl.produce.ServletContextHolderListener;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.servlet.ServletProperties;
 
 import javax.enterprise.inject.spi.CDI;
+import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
 import javax.ws.rs.core.Application;
 import java.nio.charset.StandardCharsets;
@@ -30,6 +36,14 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
     public RestDeployment() {
     }
 
+    public DeploymentManager getManager() {
+        return manager;
+    }
+
+    public PathHandler getPath() {
+        return path;
+    }
+
     private ClassIntrospecter getClassIntrospecter() {
         return CDI.current().select(CDIClassIntrospecter.class).get();
     }
@@ -40,6 +54,14 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
         DeploymentInfo webapp = Servlets.deployment()
 //                .setClassIntrospecter(getClassIntrospecter())
                 .addListener(listenerInfo)
+                .addListener(Servlets.listener(EventBridgeContextListener.class))
+//                .addListener(Servlets.listener(EventBridgeSessionListener.class))
+                .addListener(Servlets.listener(ServletContextHolderListener.class))
+                .addListener(Servlets.listener(RequestResponseHolderListener.class))
+                .addFilter(new FilterInfo("RequestResponseHolderFilter", RequestResponseHolderFilter.class))
+                .addFilterUrlMapping("RequestResponseHolderFilter", "/*", DispatcherType.REQUEST)
+                .addFilter(new FilterInfo("EventBridgeFilter", EventBridgeFilter.class))
+                .addFilterUrlMapping("EventBridgeFilter", "/*", DispatcherType.REQUEST)
                 .setClassLoader(ClassLoaders.tccl())
                 .setContextPath(contextPath)
                 .setDefaultEncoding(StandardCharsets.UTF_8.displayName())

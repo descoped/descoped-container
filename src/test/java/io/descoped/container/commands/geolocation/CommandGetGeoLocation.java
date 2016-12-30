@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kevinsawicki.http.HttpRequest;
 import io.descoped.container.commands.BaseHttpGetHystrixCommand;
 import io.descoped.container.support.DescopedServerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,13 +17,19 @@ import java.net.URI;
  */
 public class CommandGetGeoLocation extends BaseHttpGetHystrixCommand<GeoLocation> {
 
-    protected CommandGetGeoLocation() {
+    private static final Logger log = LoggerFactory.getLogger(CommandGetGeoLocation.class);
+
+    private final String ip;
+
+    protected CommandGetGeoLocation(String ip) {
         super(URI.create("http://www.geoplugin.net"), "GEO", 10000);
+        this.ip = ip;
     }
 
     @Override
     protected String getTargetPath() {
-        return "/json.gp";
+        boolean isLocalhost = (ip == null || "127.0.0.1".equals(ip) || ip.startsWith("192.168"));
+        return (isLocalhost || ip == null ? "/json.gp" : "/json.gp?ip=" + ip);
     }
 
     @Override

@@ -10,9 +10,12 @@ public class GeoLocation implements Serializable {
 
     private static final long serialVersionUID = -4721933434073766012L;
 
+    @JsonProperty("geoplugin_request")
+    private String ipAddress;
+    
     @JsonProperty("geoplugin_city")
     private String geoplugin_city;
-    
+
     @JsonProperty("geoplugin_region")
     private String geoplugin_region;
     
@@ -51,7 +54,14 @@ public class GeoLocation implements Serializable {
     
     @JsonProperty("geoplugin_currencyConverter")
     private String geoplugin_currencyConverter;
-    
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 
     public String getCity() {
         return geoplugin_city;
@@ -187,97 +197,23 @@ public class GeoLocation implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GeoLocation other = (GeoLocation) obj;
-        if (geoplugin_areaCode == null) {
-            if (other.geoplugin_areaCode != null)
-                return false;
-        } else if (!geoplugin_areaCode.equals(other.geoplugin_areaCode))
-            return false;
-        if (geoplugin_city == null) {
-            if (other.geoplugin_city != null)
-                return false;
-        } else if (!geoplugin_city.equals(other.geoplugin_city))
-            return false;
-        if (geoplugin_continentCode == null) {
-            if (other.geoplugin_continentCode != null)
-                return false;
-        } else if (!geoplugin_continentCode.equals(other.geoplugin_continentCode))
-            return false;
-        if (geoplugin_countryCode == null) {
-            if (other.geoplugin_countryCode != null)
-                return false;
-        } else if (!geoplugin_countryCode.equals(other.geoplugin_countryCode))
-            return false;
-        if (geoplugin_countryName == null) {
-            if (other.geoplugin_countryName != null)
-                return false;
-        } else if (!geoplugin_countryName.equals(other.geoplugin_countryName))
-            return false;
-        if (geoplugin_currencyCode == null) {
-            if (other.geoplugin_currencyCode != null)
-                return false;
-        } else if (!geoplugin_currencyCode.equals(other.geoplugin_currencyCode))
-            return false;
-        if (geoplugin_currencyConverter == null) {
-            if (other.geoplugin_currencyConverter != null)
-                return false;
-        } else if (!geoplugin_currencyConverter.equals(other.geoplugin_currencyConverter))
-            return false;
-        if (geoplugin_currencySymbol == null) {
-            if (other.geoplugin_currencySymbol != null)
-                return false;
-        } else if (!geoplugin_currencySymbol.equals(other.geoplugin_currencySymbol))
-            return false;
-        if (geoplugin_dmaCode == null) {
-            if (other.geoplugin_dmaCode != null)
-                return false;
-        } else if (!geoplugin_dmaCode.equals(other.geoplugin_dmaCode))
-            return false;
-        if (geoplugin_latitude == null) {
-            if (other.geoplugin_latitude != null)
-                return false;
-        } else if (!geoplugin_latitude.equals(other.geoplugin_latitude))
-            return false;
-        if (geoplugin_longitude == null) {
-            if (other.geoplugin_longitude != null)
-                return false;
-        } else if (!geoplugin_longitude.equals(other.geoplugin_longitude))
-            return false;
-        if (geoplugin_region == null) {
-            if (other.geoplugin_region != null)
-                return false;
-        } else if (!geoplugin_region.equals(other.geoplugin_region))
-            return false;
-        if (geoplugin_regionCode == null) {
-            if (other.geoplugin_regionCode != null)
-                return false;
-        } else if (!geoplugin_regionCode.equals(other.geoplugin_regionCode))
-            return false;
-        if (geoplugin_regionName == null) {
-            if (other.geoplugin_regionName != null)
-                return false;
-        } else if (!geoplugin_regionName.equals(other.geoplugin_regionName))
-            return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "GeoLocation [city=" + geoplugin_city + ", region=" + geoplugin_region
-                + ", areaCode=" + geoplugin_areaCode + ", dmaCode=" + geoplugin_dmaCode
-                + ", countryCode=" + geoplugin_countryCode + ", countryName=" + geoplugin_countryName
-                + ", continentCode=" + geoplugin_continentCode + ", latitude=" + geoplugin_latitude
-                + ", longitude=" + geoplugin_longitude + ", regionCode=" + geoplugin_regionCode
-                + ", regionName=" + geoplugin_regionName + ", currencyCode=" + geoplugin_currencyCode
-                + ", currencySymbol=" + geoplugin_currencySymbol + ", currencyConverter="
-                + geoplugin_currencyConverter + "]";
+        return "GeoLocation{" +
+                "ipAddress='" + ipAddress + '\'' +
+                ", geoplugin_city='" + geoplugin_city + '\'' +
+                ", geoplugin_region='" + geoplugin_region + '\'' +
+                ", geoplugin_areaCode='" + geoplugin_areaCode + '\'' +
+                ", geoplugin_dmaCode='" + geoplugin_dmaCode + '\'' +
+                ", geoplugin_countryCode='" + geoplugin_countryCode + '\'' +
+                ", geoplugin_countryName='" + geoplugin_countryName + '\'' +
+                ", geoplugin_continentCode='" + geoplugin_continentCode + '\'' +
+                ", geoplugin_latitude='" + geoplugin_latitude + '\'' +
+                ", geoplugin_longitude='" + geoplugin_longitude + '\'' +
+                ", geoplugin_regionCode='" + geoplugin_regionCode + '\'' +
+                ", geoplugin_regionName='" + geoplugin_regionName + '\'' +
+                ", geoplugin_currencyCode='" + geoplugin_currencyCode + '\'' +
+                ", geoplugin_currencySymbol='" + geoplugin_currencySymbol + '\'' +
+                ", geoplugin_currencyConverter='" + geoplugin_currencyConverter + '\'' +
+                '}';
     }
-    
 }
