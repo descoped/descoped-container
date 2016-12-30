@@ -41,7 +41,7 @@ public class PreStartContainer {
         return container;
     }
 
-    public void setContainer(ServerContainer container) {
+    protected void setContainer(ServerContainer container) {
         this.container = container;
     }
 

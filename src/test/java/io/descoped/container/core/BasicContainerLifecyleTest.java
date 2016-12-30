@@ -49,7 +49,8 @@ public class BasicContainerLifecyleTest {
     public static void done() throws Exception {
         assertEquals(2, count_lifecycle_start);
         assertEquals(2, count_lifecycle_stop);
-        assertEquals(2, count_preStop_event);
+//        assertEquals(2, count_preStart_event);
+//        assertEquals(2, count_preStop_event);
     }
 
     @Before

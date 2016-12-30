@@ -57,7 +57,6 @@ public class CommandGetGeoLocationTest {
 
     @Inject
     @Descoped
-    @RequestScoped
     Instance<GeoLocation> geoLocationInstance;
 
     @Produces
@@ -88,7 +87,7 @@ public class CommandGetGeoLocationTest {
                     .statusCode(HttpURLConnection.HTTP_OK)
                     .log().everything()
                 .when()
-                    .get("/geolocation2")
+                    .get("/geolocation")
                 .then()
                     .body("status", equalTo("ok"))
         ;
