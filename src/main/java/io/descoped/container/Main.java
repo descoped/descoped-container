@@ -1,8 +1,6 @@
 package io.descoped.container;
 
-import io.descoped.container.core.PreStartContainer;
 import io.descoped.container.core.ServerContainer;
-import io.descoped.container.core.UndertowContainer;
 import io.descoped.container.deployment.DaemonTestProjectStageHolder;
 import io.descoped.container.support.WebServerLiteral;
 import org.apache.deltaspike.cdise.api.CdiContainer;
@@ -13,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.CDI;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -93,11 +90,13 @@ public class Main {
         return !DaemonTestProjectStageHolder.DaemonTest.equals(stage);
     }
 
-    private void observeDeploymentHandlers(@Observes PreStartContainer event) {
-        if (isDaemonTestProjectStage()) return;
-        UndertowContainer container = (UndertowContainer) event.container();
-        container.deployJaxRsResourceConfig();
-    }
+//    private void observeDeploymentHandlers(@Observes PreStartContainer event) {
+//        if (isDaemonTestProjectStage()) return;
+//        UndertowContainer container = (UndertowContainer) event.container();
+//        if (container.getDeployments().isEmpty()) {
+//            container.deployJaxRsResourceConfig();
+//        }
+//    }
 
     public static void main(String[] args) {
         long now = System.currentTimeMillis();

@@ -68,7 +68,6 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
                 .setDeploymentName(Main.class.getSimpleName())
                 .setDisplayName(Main.class.getSimpleName())
                 .setEagerFilterInit(true);
-        ;
 
         Class<? extends Application> app = RestResourceConfig.class;
         if (app != null) {
@@ -89,7 +88,7 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
         try {
             UndertowContainer server = (UndertowContainer) container;
             DeploymentInfo webapp = getDeployment(server.getContextPath());
-            manager = Servlets.defaultContainer().addDeployment(webapp);
+            manager = Servlets.newContainer().addDeployment(webapp);
             manager.deploy();
             path = Handlers.path(Handlers.redirect(server.getContextPath())).addPrefixPath(container.getContextPath(), manager.start());
             server.builder().setHandler(path);
@@ -103,6 +102,11 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
         try {
             manager.stop();
             manager.undeploy();
+
+//            Servlets.deployment().getListeners().clear();
+//            Servlets.deployment().getFilters().clear();
+//
+//            ServletContextHolderHelper.release();
 
             manager = null;
             path = null;
