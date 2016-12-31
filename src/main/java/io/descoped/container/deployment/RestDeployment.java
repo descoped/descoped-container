@@ -105,7 +105,6 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
 
 //            Servlets.deployment().getListeners().clear();
 //            Servlets.deployment().getFilters().clear();
-//
 //            ServletContextHolderHelper.release();
 
             manager = null;

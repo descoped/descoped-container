@@ -4,6 +4,7 @@ import com.jayway.restassured.http.ContentType;
 import io.descoped.container.core.ServerContainer;
 import io.descoped.container.support.ConsoleAppender;
 import io.descoped.container.support.Descoped;
+import io.descoped.container.support.DescopedLiteral;
 import io.descoped.container.support.WebServer;
 import org.apache.deltaspike.core.api.literal.DeltaSpikeLiteral;
 import org.apache.deltaspike.testcontrol.api.TestControl;
@@ -14,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
@@ -37,16 +37,18 @@ public class CommandGetGeoLocationTest {
 
     private static final Logger log = LoggerFactory.getLogger(CommandGetGeoLocationTest.class);
 
+    /**
+     * Test resource is used to resolve GeoLocation during an active http request/response
+     */
     @Path("/geolocation")
     @RequestScoped
     public static class GeoLocationResource {
         @GET
         @javax.ws.rs.Produces(MediaType.APPLICATION_JSON)
         public String get() {
-            String remoteHost = CDI.current().select(HttpServletRequest.class, DeltaSpikeLiteral.INSTANCE).get().getRemoteHost();
-            GeoLocation response = new CommandGetGeoLocation(remoteHost).execute();
-            log.trace("Response: {}", response);
-            assertNotNull(response.getIpAddress());
+            GeoLocation location = CDI.current().select(GeoLocation.class, DescopedLiteral.INSTANCE).get();
+            log.trace("Response: {}", location);
+            assertNotNull(location.getIpAddress());
             return "{\"status\": \"ok\"}";
         }
     }
@@ -55,24 +57,13 @@ public class CommandGetGeoLocationTest {
     @WebServer(id = "geolocation")
     ServerContainer geocontainer;
 
-    @Inject
-    @Descoped
-    Instance<GeoLocation> geoLocationInstance;
-
     @Produces
     @RequestScoped
     @Descoped
     private GeoLocation produceGeoLocation() {
-        //String remoteHost = CDI.current().select(HttpServletRequest.class, DeltaSpikeLiteral.INSTANCE).get().getRemoteHost();
-        String remoteHost = null;
+        HttpServletRequest request = CDI.current().select(HttpServletRequest.class, DeltaSpikeLiteral.INSTANCE).get();
+        String remoteHost = request.getRemoteHost();
         return new CommandGetGeoLocation(remoteHost).execute();
-    }
-
-    @Test
-    public void testGetGeoLocation() throws Exception {
-        GeoLocation geoLocation = geoLocationInstance.get();
-        assertNotNull(geoLocation);
-        log.trace("GeoLocation: {}", geoLocation.toString());
     }
 
     @Test

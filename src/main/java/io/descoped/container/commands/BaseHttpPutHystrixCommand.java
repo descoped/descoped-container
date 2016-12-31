@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Code origin: Cantara/ConfigService-Dashboard under APL 2.0
+ * Created by Cantara/ConfigService-Dashboard under APL 2.0
  */
 public abstract class BaseHttpPutHystrixCommand<R> extends HystrixCommand<R> {
 
