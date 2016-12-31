@@ -3,14 +3,14 @@
     <groupId>io.descoped</groupId>
     <artifactId>container</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>Descoped Server</name>
     <url>http://www.descoped.io</url>
 
     <parent>
         <groupId>io.descoped</groupId>
         <artifactId>parent</artifactId>
-        <version>3-SNAPSHOT</version>
+        <version>2</version>
     </parent>
 
     <developers>
@@ -43,7 +43,7 @@
         <url>http://www.descoped.io</url>
         <connection>scm:git:git://github.com/descoped/descoped-server.git</connection>
         <developerConnection>scm:git:git@github.com:descoped/descoped-server.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.0.1</tag>
     </scm>
 
     <properties>
