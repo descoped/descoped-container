@@ -22,7 +22,6 @@ import org.glassfish.jersey.servlet.ServletProperties;
 import javax.enterprise.inject.spi.CDI;
 import javax.servlet.DispatcherType;
 import javax.servlet.ServletException;
-import javax.ws.rs.core.Application;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -69,16 +68,13 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
                 .setDisplayName(Main.class.getSimpleName())
                 .setEagerFilterInit(true);
 
-        Class<? extends Application> app = RestResourceConfig.class;
-        if (app != null) {
-            ServletInfo holder = Servlets.servlet(app.getName(), ServletContainer.class)
-                    .setLoadOnStartup(0)
-                    .setAsyncSupported(true)
-                    .setEnabled(true)
-                    .addMapping("/*")
-                    .addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, app.getName());
-            webapp.addServlet(holder);
-        }
+        ServletInfo holder = Servlets.servlet(RestResourceConfig.class.getName(), ServletContainer.class)
+                .setLoadOnStartup(0)
+                .setAsyncSupported(true)
+                .setEnabled(true)
+                .addMapping("/*")
+                .addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, RestResourceConfig.class.getName());
+        webapp.addServlet(holder);
 
         return webapp;
     }
