@@ -96,8 +96,8 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
     @Override
     public void undeploy(ServerContainer container) {
         try {
-            manager.stop();
-            manager.undeploy();
+            getManager().stop();
+            getManager().undeploy();
 
 //            Servlets.deployment().getListeners().clear();
 //            Servlets.deployment().getFilters().clear();
