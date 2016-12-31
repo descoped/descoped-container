@@ -11,8 +11,8 @@ The Descoped Embedded Server is a tiny web server that bootstraps Weld Cdi Conta
 ```xml
 <dependency>
     <groupId>io.descoped</groupId>
-    <artifactId>server</artifactId>
-    <version>1.0.0</version>
+    <artifactId>container</artifactId>
+    <version>1.0.1</version>
     <scope>compile</scope>
 </dependency>
 ```

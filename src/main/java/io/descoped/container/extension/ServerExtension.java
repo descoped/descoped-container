@@ -38,7 +38,7 @@ public class ServerExtension implements Extension {
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager bm) {
         Integer n = 0;
         if (injectionPoints.isEmpty()) {
-            Bean<?> bean = createBean(WebServerLiteral.DEFAULT.id(), "core", bm);
+            Bean<?> bean = createBean(WebServerLiteral.DEFAULT.id(), "container", bm);
             abd.addBean(bean);
         } else {
             for (Map.Entry<InjectionPoint, String> entry : injectionPoints.entrySet()) {
