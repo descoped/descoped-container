@@ -43,11 +43,11 @@ public class RestDeployment implements io.descoped.container.core.Deployment {
         return path;
     }
 
-    private ClassIntrospecter getClassIntrospecter() {
+    protected ClassIntrospecter getClassIntrospecter() {
         return CDI.current().select(CDIClassIntrospecter.class).get();
     }
 
-    private DeploymentInfo getDeployment(String contextPath) {
+    protected DeploymentInfo getDeployment(String contextPath) {
         ListenerInfo listenerInfo = Servlets.listener(CdiServletRequestListener.class);
 
         DeploymentInfo webapp = Servlets.deployment()
