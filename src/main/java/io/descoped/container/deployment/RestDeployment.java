@@ -38,7 +38,7 @@ public class RestDeployment extends BaseDeployment {
         try {
             UndertowContainer server = (UndertowContainer) container;
             DeploymentInfo webapp = newRestDeployment(Main.class.getSimpleName(), "/", "/*", RestResourceConfig.class);
-            manager = Servlets.newContainer().addDeployment(webapp);
+            manager = Servlets.defaultContainer().addDeployment(webapp);
             manager.deploy();
             path = Handlers.path(Handlers.redirect(server.getContextPath())).addPrefixPath(container.getContextPath(), manager.start());
             server.builder().setHandler(path);
