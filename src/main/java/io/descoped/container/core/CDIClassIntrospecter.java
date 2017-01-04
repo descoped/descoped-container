@@ -22,50 +22,78 @@ package io.descoped.container.core;
 import io.undertow.servlet.api.ClassIntrospecter;
 import io.undertow.servlet.api.InstanceFactory;
 import io.undertow.servlet.api.InstanceHandle;
+import io.undertow.servlet.util.DefaultClassIntrospector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.Vetoed;
 import javax.enterprise.inject.spi.CDI;
 
-@ApplicationScoped
+@Vetoed
 public class CDIClassIntrospecter implements ClassIntrospecter {
 
-    @Override
-    public <T> InstanceFactory<T> createInstanceFactory(Class<T> aClass) throws NoSuchMethodException {
-        return new CDIInstanceFactory<>(aClass);
+    public static final ClassIntrospecter INSTANCE = new CDIClassIntrospecter();
+    private static final Logger log = LoggerFactory.getLogger(CDIClassIntrospecter.class);
+
+    private CDIClassIntrospecter() {
     }
 
-    private static class CDIInstanceFactory<T> implements InstanceFactory<T> {
+    @Override
+    public <T> InstanceFactory<T> createInstanceFactory(Class<T> clazz) throws NoSuchMethodException {
+        log.trace("createInstanceFactory: {}", clazz);
+        Instance<T> inst = CDI.current().select(clazz);
+        if (inst.isUnsatisfied() || inst.isAmbiguous()) {
+            return DefaultClassIntrospector.INSTANCE.createInstanceFactory(clazz);
+        } else {
+            return new CdiInstanceFactory<>(inst);
+        }
+    }
 
-        private Class<T> aClass;
+    // ---------------------------------------------------------------------------------------------------------------
 
-        public CDIInstanceFactory(Class<T> aClass) {
-            this.aClass = aClass;
+    private static class CdiInstanceFactory<T> implements InstanceFactory<T> {
+        private static final Logger log = LoggerFactory.getLogger(CdiInstanceFactory.class);
+
+        private final Instance<T> inst;
+
+        CdiInstanceFactory(Instance<T> inst) {
+            this.inst = inst;
         }
 
         @Override
         public InstanceHandle<T> createInstance() throws InstantiationException {
-            return new CDIInstanceHandle<>(aClass);
+            log.trace("createInstance: ", inst);
+            return new CdiInstanceHandler<>(inst);
         }
+
     }
 
-    private static class CDIInstanceHandle<T> implements InstanceHandle<T> {
+    // ---------------------------------------------------------------------------------------------------------------
 
-        private Class<T> aClass;
-        private T instance;
+    private static class CdiInstanceHandler<T> implements InstanceHandle<T> {
+        private static final Logger log = LoggerFactory.getLogger(CdiInstanceHandler.class);
 
-        public CDIInstanceHandle(Class<T> aClass) {
-            this.aClass = aClass;
-            this.instance = CDI.current().select(aClass).get();
+        private final Instance<T> inst;
+        private T found = null;
+
+        CdiInstanceHandler(Instance<T> inst) {
+            this.inst = inst;
         }
 
         @Override
         public T getInstance() {
-            return instance;
+            if (this.found == null) {
+                this.found = inst.get();
+            }
+            log.trace("getInstance [ {} ] >> {}", inst, found);
+            return this.found;
         }
 
         @Override
         public void release() {
-
+            inst.destroy(this.found);
         }
     }
+
 }

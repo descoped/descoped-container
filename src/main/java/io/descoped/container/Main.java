@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.CDI;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -42,13 +43,15 @@ public class Main {
         CdiContainer cdiContainer = CdiContainerLoader.getCdiContainer();
         try {
             cdiContainer.boot();
-            cdiContainer.getContextControl().startContexts();
+            cdiContainer.getContextControl().startContext(ApplicationScoped.class);
             try {
                 start();
                 waitFor.run();
             } finally {
                 stop();
+
             }
+            cdiContainer.getContextControl().stopContext(ApplicationScoped.class);
         } finally {
             cdiContainer.shutdown();
         }
@@ -74,6 +77,7 @@ public class Main {
 
     private void waitForKeyPress() {
         try {
+            Thread.currentThread().join();
             System.in.read();
         } catch (Exception e) {
             e.printStackTrace();

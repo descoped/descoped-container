@@ -10,7 +10,7 @@ public final class ClassLoaders {
     public static ClassLoader tccl() {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         if (contextClassLoader == null) {
-            return ClassLoaders.class.getClassLoader();
+            return ClassLoader.getSystemClassLoader();
         }
         return contextClassLoader;
     }
