@@ -47,7 +47,7 @@ public class MainTest {
                 .statusCode(HttpURLConnection.HTTP_OK)
                 .log().everything()
             .when()
-                .get("/test/")
+                .get("/rest/test/")
             ;
     }
 

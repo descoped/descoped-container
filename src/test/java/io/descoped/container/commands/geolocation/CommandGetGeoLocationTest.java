@@ -78,7 +78,7 @@ public class CommandGetGeoLocationTest {
                     .statusCode(HttpURLConnection.HTTP_OK)
                     .log().everything()
                 .when()
-                    .get("/geolocation")
+                    .get("/rest/geolocation")
                 .then()
                     .body("status", equalTo("ok"))
         ;

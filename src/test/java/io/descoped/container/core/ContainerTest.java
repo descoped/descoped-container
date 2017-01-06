@@ -50,7 +50,7 @@ public class ContainerTest {
                     .statusCode(HttpURLConnection.HTTP_OK)
                     .log().everything()
                 .when()
-                    .get("/test/")
+                    .get("/rest/test/")
         ;
         defaultContainer.shutdown();
     }
@@ -67,7 +67,7 @@ public class ContainerTest {
                     .statusCode(HttpURLConnection.HTTP_OK)
                     .log().everything()
                 .when()
-                    .get("/test/")
+                    .get("/rest/test/")
         ;
         otherContainer.shutdown();
     }
