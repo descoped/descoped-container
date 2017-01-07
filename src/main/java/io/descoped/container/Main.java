@@ -65,7 +65,9 @@ public class Main {
                 public void run() {
                     log.debug("ShutdownHook triggered..");
                     if (serverContainer != null) {
-                        serverContainer.shutdown();
+                        if (!serverContainer.isStopped()) {
+                            serverContainer.shutdown();
+                        }
                         serverContainer = null;
                     }
                 }
