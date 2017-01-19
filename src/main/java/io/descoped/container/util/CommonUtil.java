@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Created by oranheim on 04/01/2017.
@@ -32,6 +34,16 @@ public class CommonUtil {
 
     public static void error(String msg, Object... values) {
         log.error(msg, values);
+    }
+
+    public static String fileSeparator = System.getProperty("file.separator");
+
+    public static Path getCurrentPath() {
+        return Paths.get("").toAbsolutePath();
+    }
+
+    public static String currentPath() {
+        return getCurrentPath().toString();
     }
 
     private static ThreadLocal<OutputStream> outputLocal = new ThreadLocal<OutputStream>() {
