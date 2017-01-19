@@ -20,6 +20,14 @@ import java.util.logging.LogManager;
 
 public class Main {
 
+    static {
+        String filename = CommonUtil.currentPath() + "/src/main/resources/logging.properties";
+        if (new File(filename).exists()) {
+            System.setProperty("java.util.logging.config", CommonUtil.currentPath() + "/src/main/resources/logging.properties");
+            System.out.println("---------------------> Set logging props: " + filename);
+        }
+    }
+
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private ServerContainer serverContainer;
 
@@ -27,11 +35,6 @@ public class Main {
     }
 
     private static void installLogger() {
-        String filename = CommonUtil.currentPath() + "/src/main/resources/logging.properties";
-        System.out.println("---------------------> check logging props: " + filename);
-        if (new File(filename).exists()) {
-            System.setProperty("java.util.logging.config", CommonUtil.currentPath() + "/src/main/resources/logging.properties");
-        }
         LogManager.getLogManager().reset();
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
