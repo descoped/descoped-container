@@ -2,6 +2,7 @@ package io.descoped.container.support;
 
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import java.io.File;
 import java.util.logging.LogManager;
 
 /**
@@ -12,6 +13,10 @@ import java.util.logging.LogManager;
 public class ConsoleAppender extends java.util.logging.ConsoleHandler {
 
     public ConsoleAppender() {
+        if (new File("src/main/resources/logging.properties").exists()) {
+            System.setProperty("java.util.logging.config", "src/main/resources/logging.properties");
+            System.out.println("---------------------> set logging props: " + System.getProperty("java.util.logging.config"));
+        }
         LogManager.getLogManager().reset();
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
