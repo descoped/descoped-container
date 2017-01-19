@@ -14,9 +14,10 @@ import java.util.logging.LogManager;
 public class ConsoleAppender extends java.util.logging.ConsoleHandler {
 
     public ConsoleAppender() {
-        if (new File(CommonUtil.currentPath() + "/src/main/resources/logging.properties").exists()) {
+        String filename = CommonUtil.currentPath() + "/src/main/resources/logging.properties";
+        System.out.println("---------------------> check logging props: " + filename);
+        if (new File(filename).exists()) {
             System.setProperty("java.util.logging.config", CommonUtil.currentPath() + "/src/main/resources/logging.properties");
-            System.out.println("---------------------> set logging props: " + System.getProperty("java.util.logging.config"));
         }
         LogManager.getLogManager().reset();
         SLF4JBridgeHandler.removeHandlersForRootLogger();
