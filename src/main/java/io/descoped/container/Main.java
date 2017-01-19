@@ -3,7 +3,6 @@ package io.descoped.container;
 import io.descoped.container.core.ServerContainer;
 import io.descoped.container.deployment.DaemonTestProjectStageHolder;
 import io.descoped.container.support.WebServerLiteral;
-import io.descoped.container.util.CommonUtil;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
@@ -14,19 +13,10 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.CDI;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 public class Main {
-
-    static {
-        String filename = CommonUtil.currentPath() + "/src/main/resources/logging.properties";
-        if (new File(filename).exists()) {
-            System.setProperty("java.util.logging.config", CommonUtil.currentPath() + "/src/main/resources/logging.properties");
-            System.out.println("---------------------> Set logging props: " + filename);
-        }
-    }
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private ServerContainer serverContainer;
