@@ -1,7 +1,10 @@
 package io.descoped.container.deployment;
 
+import io.descoped.container.Main;
 import io.descoped.container.core.CDIClassIntrospecter;
 import io.descoped.container.core.Deployment;
+import io.descoped.container.core.UndertowContainer;
+import io.descoped.container.deployment.spi.WebApp;
 import io.descoped.container.extension.ClassLoaders;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
@@ -113,4 +116,52 @@ abstract public class BaseDeployment implements Deployment {
         return deploymentInfo;
     }
 
+    public static UndertowWebApp restDeployment(UndertowContainer server) {
+        UndertowWebApp undertowWebApp = WebApp.create(UndertowWebApp.class)
+                .name(Main.class.getSimpleName())
+                .contextPath(server.getContextPath())
+                .addListener(CdiServletRequestListener.class)
+                .addListener(EventBridgeContextListener.class)
+                //.addListener(EventBridgeSessionListener.class)
+                .addListener(ServletContextHolderListener.class)
+                .addListener(RequestResponseHolderListener.class)
+                .addServlet("JAX-RS-" + Main.class.getSimpleName(), ServletContainer.class)
+                    .addMapping("/rest/*")
+                    .setAsyncSupported(true)
+                    .setLoadOnStartup(0)
+                    .addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, RestResourceConfig.class.getName())
+                    .up()
+                .addFilter("RequestResponseHolderFilter", RequestResponseHolderFilter.class)
+                    .addFilterUrlMapping("RequestResponseHolderFilter", "/rest/*", DispatcherType.REQUEST)
+                    .up()
+                .addFilter("EventBridgeFilter", EventBridgeFilter.class)
+                    .addFilterUrlMapping("EventBridgeFilter", "/rest/*", DispatcherType.REQUEST)
+                    .up()
+                .setEagerFilterInit(true)
+                ;
+        return undertowWebApp;
+    }
+    public static UndertowWebApp mvcDeployment(UndertowContainer server, Class<? extends ResourceConfig> resourceConfig, String resourcePath) {
+        UndertowWebApp undertowWebApp = WebApp.create(UndertowWebApp.class)
+                .name(Main.class.getSimpleName())
+                .contextPath(server.getContextPath())
+                .addListener(WeldInitialListener.class)
+                .addListener(WeldTerminalListener.class)
+                .addServlet("JAX-RS-MVC-" + Main.class.getSimpleName(), ServletContainer.class)
+                    .addMapping("/views/*")
+                    .setAsyncSupported(true)
+                    .setLoadOnStartup(1)
+                    .addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, resourceConfig.getName())
+                    .up()
+                .addFilter("RequestResponseHolderFilter", RequestResponseHolderFilter.class)
+                    .addFilterUrlMapping("RequestResponseHolderFilter", "/rest/*", DispatcherType.REQUEST)
+                    .up()
+                .addFilter("EventBridgeFilter", EventBridgeFilter.class)
+                    .addFilterUrlMapping("EventBridgeFilter", "/rest/*", DispatcherType.REQUEST)
+                    .up()
+                .setEagerFilterInit(true)
+                ;
+        undertowWebApp.getDeploymentInfo().setResourceManager(new ClassPathResourceManager(ClassLoaders.tccl(), resourcePath));
+        return undertowWebApp;
+    }
 }
