@@ -141,23 +141,23 @@ abstract public class BaseDeployment implements Deployment {
                 ;
         return undertowWebApp;
     }
-    public static UndertowWebApp mvcDeployment(UndertowContainer server, Class<? extends ResourceConfig> resourceConfig, String resourcePath) {
+    public static UndertowWebApp mvcDeployment(UndertowContainer server, Class<? extends ResourceConfig> resourceConfig, String mapping, String resourcePath) {
         UndertowWebApp undertowWebApp = WebApp.create(UndertowWebApp.class)
                 .name(Main.class.getSimpleName())
                 .contextPath(server.getContextPath())
                 .addListener(WeldInitialListener.class)
                 .addListener(WeldTerminalListener.class)
                 .addServlet("JAX-RS-MVC-" + Main.class.getSimpleName(), ServletContainer.class)
-                    .addMapping("/views/*")
+                    .addMapping(mapping)
                     .setAsyncSupported(true)
                     .setLoadOnStartup(1)
                     .addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, resourceConfig.getName())
                     .up()
                 .addFilter("RequestResponseHolderFilter", RequestResponseHolderFilter.class)
-                    .addFilterUrlMapping("RequestResponseHolderFilter", "/rest/*", DispatcherType.REQUEST)
+                    .addFilterUrlMapping("RequestResponseHolderFilter", mapping, DispatcherType.REQUEST)
                     .up()
                 .addFilter("EventBridgeFilter", EventBridgeFilter.class)
-                    .addFilterUrlMapping("EventBridgeFilter", "/rest/*", DispatcherType.REQUEST)
+                    .addFilterUrlMapping("EventBridgeFilter", mapping, DispatcherType.REQUEST)
                     .up()
                 .addWelcomePage("index.html")
                 ;
