@@ -12,7 +12,7 @@ public class RestDeployment extends UndertowDeployment {
 
     @Override
     public UndertowWebApp deployment(UndertowContainer container) {
-        return restDeployment(container);
+        return restDeployment(container, "/rest/*");
     }
 
 

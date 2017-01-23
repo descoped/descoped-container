@@ -42,7 +42,7 @@ public class DeploymentTest {
     public void testRestDeployment() throws Exception {
         UndertowContainer server = mock(UndertowContainer.class);
         when(server.getContextPath()).thenReturn("/ctx");
-        UndertowWebApp webapp = RestDeployment.restDeployment(server);
+        UndertowWebApp webapp = RestDeployment.restDeployment(server, "/rest/*");
         log.info("rest deployment: \n{}", webapp.info());
     }
 
