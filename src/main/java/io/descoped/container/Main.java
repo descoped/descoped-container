@@ -18,6 +18,10 @@ import java.util.logging.LogManager;
 
 public class Main {
 
+    static {
+        Bootstrap.SINGLETON.init();
+    }
+
     private static final Logger log = LoggerFactory.getLogger(Main.class);
     private ServerContainer serverContainer;
 
