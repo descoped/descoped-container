@@ -132,15 +132,16 @@ abstract public class BaseDeployment implements Deployment {
                     .addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, RestResourceConfig.class.getName())
                     .up()
                 .addFilter("RequestResponseHolderFilter", RequestResponseHolderFilter.class)
-                    .addFilterUrlMapping("RequestResponseHolderFilter", mapping, DispatcherType.REQUEST)
+                    .addFilterUrlMapping(mapping, DispatcherType.REQUEST)
                     .up()
                 .addFilter("EventBridgeFilter", EventBridgeFilter.class)
-                    .addFilterUrlMapping("EventBridgeFilter", mapping, DispatcherType.REQUEST)
+                    .addFilterUrlMapping(mapping, DispatcherType.REQUEST)
                     .up()
                 .setEagerFilterInit(true)
                 ;
         return undertowWebApp;
     }
+
     public static UndertowWebApp mvcDeployment(UndertowContainer server, Class<? extends ResourceConfig> resourceConfig, String mapping, String resourcePath) {
         UndertowWebApp undertowWebApp = WebApp.create(UndertowWebApp.class)
                 .name(Main.class.getSimpleName())
@@ -154,10 +155,10 @@ abstract public class BaseDeployment implements Deployment {
                     .addInitParam(ServletProperties.JAXRS_APPLICATION_CLASS, resourceConfig.getName())
                     .up()
                 .addFilter("RequestResponseHolderFilter", RequestResponseHolderFilter.class)
-                    .addFilterUrlMapping("RequestResponseHolderFilter", mapping, DispatcherType.REQUEST)
+                    .addFilterUrlMapping(mapping, DispatcherType.REQUEST)
                     .up()
                 .addFilter("EventBridgeFilter", EventBridgeFilter.class)
-                    .addFilterUrlMapping("EventBridgeFilter", mapping, DispatcherType.REQUEST)
+                    .addFilterUrlMapping(mapping, DispatcherType.REQUEST)
                     .up()
                 .addWelcomePage("index.html")
                 ;

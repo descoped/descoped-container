@@ -41,23 +41,23 @@ public class UndertowFilter implements Filter<UndertowWebApp> {
     }
 
     @Override
-    public Filter<UndertowWebApp> addFilterUrlMapping(String filterName, String mapping, DispatcherType dispatcher) {
+    public Filter<UndertowWebApp> addFilterUrlMapping(String mapping, DispatcherType dispatcher) {
         infoBuilder.append(",\n\t\t\"").append("urlMapping").append("\"").append(": {");
-        infoBuilder.append("\n\t\t\t\"").append("name").append("\": \"").append(filterName).append("\",");
+        infoBuilder.append("\n\t\t\t\"").append("name").append("\": \"").append(filterInfo.getName()).append("\",");
         infoBuilder.append("\n\t\t\t\"").append("mapping").append("\": \"").append(mapping).append("\",");
         infoBuilder.append("\n\t\t\t\"").append("dispatcher").append("\": \"").append(dispatcher).append("\"");
         infoBuilder.append("\n\t\t}");
-        deploymentInfo().addFilterUrlMapping(filterName, mapping, dispatcher);
+        deploymentInfo().addFilterUrlMapping(filterInfo.getName(), mapping, dispatcher);
         return this;
     }
 
     @Override
-    public Filter<UndertowWebApp> addFilterServletNameMapping(String filterName, String mapping, DispatcherType dispatcher) {
+    public Filter<UndertowWebApp> addFilterServletNameMapping(String mapping, DispatcherType dispatcher) {
         infoBuilder.append(",\n\t\t\"").append("servletNameMapping").append("\"").append(": {");
-        infoBuilder.append("\n\t\t\t\"").append("name").append("\": \"").append(filterName).append("\",");
+        infoBuilder.append("\n\t\t\t\"").append("name").append("\": \"").append(filterInfo.getName()).append("\",");
         infoBuilder.append("\n\t\t\t\"").append("mapping").append("\": \"").append(mapping).append("\",");
         infoBuilder.append("\n\t\t\t\"").append("dispatcher").append("\": \"").append(dispatcher).append("\"");
-        deploymentInfo().addFilterServletNameMapping(filterName, mapping, dispatcher);
+        deploymentInfo().addFilterServletNameMapping(filterInfo.getName(), mapping, dispatcher);
         return this;
     }
 

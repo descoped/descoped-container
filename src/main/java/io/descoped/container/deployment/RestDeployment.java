@@ -15,5 +15,4 @@ public class RestDeployment extends UndertowDeployment {
         return restDeployment(container, "/rest/*");
     }
 
-
 }

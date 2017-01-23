@@ -9,8 +9,8 @@ public interface Filter<F extends WebApp> {
 
     F up();
 
-    Filter<F> addFilterUrlMapping(final String filterName, final String mapping, DispatcherType dispatcher);
+    Filter<F> addFilterUrlMapping(final String mapping, DispatcherType dispatcher);
 
-    Filter<F> addFilterServletNameMapping(final String filterName, final String mapping, DispatcherType dispatcher);
+    Filter<F> addFilterServletNameMapping(final String mapping, DispatcherType dispatcher);
 
 }
