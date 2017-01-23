@@ -159,7 +159,7 @@ abstract public class BaseDeployment implements Deployment {
                 .addFilter("EventBridgeFilter", EventBridgeFilter.class)
                     .addFilterUrlMapping("EventBridgeFilter", "/rest/*", DispatcherType.REQUEST)
                     .up()
-                .setEagerFilterInit(true)
+                .addWelcomePage("index.html")
                 ;
         undertowWebApp.getDeploymentInfo().setResourceManager(new ClassPathResourceManager(ClassLoaders.tccl(), resourcePath));
         return undertowWebApp;
