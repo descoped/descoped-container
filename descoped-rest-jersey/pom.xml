@@ -8,9 +8,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>descoped-core</artifactId>
+    <artifactId>descoped-rest-jersey</artifactId>
     <packaging>jar</packaging>
-    <name>Descoped Core</name>
+    <name>Descoped REST Jersey</name>
     <url>http://www.descoped.io</url>
 
     <properties>

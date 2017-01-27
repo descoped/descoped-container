@@ -8,7 +8,6 @@
         <version>3-SNAPSHOT</version>
     </parent>
 
-    <groupId>io.descoped</groupId>
     <artifactId>descoped-core-project</artifactId>
     <packaging>pom</packaging>
     <version>1.0.2-SNAPSHOT</version>
@@ -42,20 +41,15 @@
     </distributionManagement>
 
     <scm>
+        <url>http://www.descoped.io</url>
         <connection>scm:git:git://github.com/descoped/descoped-server.git</connection>
         <developerConnection>scm:git:git@github.com:descoped/descoped-server.git</developerConnection>
-        <url>http://www.descoped.io</url>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <service.name>DescopedMvc</service.name>
-        <service.main.class>io.descoped.container.Main</service.main.class>
-
-        <grizzly.version>2.3.28</grizzly.version>
-        <undertow.version>1.2.11.Final</undertow.version>
-
         <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 
@@ -79,7 +73,7 @@
         <pluginRepository>
             <id>musific-public-repository</id>
             <name>Musific Public Maven Repository Group</name>
-            <url>http://musific.com/nexus/content/groups/public/</url>
+            <url>https://repository.musific.com/nexus/content/groups/public/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
@@ -99,7 +93,7 @@
 
     <modules>
         <module>descoped-core</module>
-        <!--<module>descoped-rest-jersey</module>-->
+        <module>descoped-rest-jersey</module>
     </modules>
 
 </project>
