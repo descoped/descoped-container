@@ -93,6 +93,11 @@
 
     <modules>
         <module>descoped-core</module>
+        <module>descoped-server-container</module>
+        <module>descoped-undertow-container</module>
+        <module>descoped-jetty-container</module>
+        <module>descoped-tomcat-container</module>
+        <module>descoped-grizzly-container</module>
         <module>descoped-rest-jersey</module>
     </modules>
 
