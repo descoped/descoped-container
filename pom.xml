@@ -99,6 +99,7 @@
         <module>descoped-tomcat-container</module>
         <module>descoped-grizzly-container</module>
         <module>descoped-rest-jersey</module>
+        <module>descoped-hystrix</module>
     </modules>
 
 </project>
