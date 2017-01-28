@@ -1,7 +1,7 @@
 package io.descoped.container.core;
 
-import io.descoped.container.support.ConsoleAppender;
-import io.descoped.container.support.Log;
+import io.descoped.container.log.ConsoleAppender;
+import io.descoped.container.log.Log;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.testcontrol.api.TestControl;

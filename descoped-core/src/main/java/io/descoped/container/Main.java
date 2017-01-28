@@ -1,8 +1,8 @@
 package io.descoped.container;
 
-import io.descoped.container.core.ServerContainer;
-import io.descoped.container.deployment.DaemonTestProjectStageHolder;
-import io.descoped.container.support.WebServerLiteral;
+import io.descoped.container.exception.DescopedServerException;
+import io.descoped.container.module.*;
+import io.descoped.container.stage.DaemonTestProjectStageHolder;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
@@ -11,19 +11,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.spi.CDI;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 public class Main {
 
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
+
     static {
         Bootstrap.SINGLETON.init();
     }
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
-    private ServerContainer serverContainer;
+    private static PrimitiveDiscovery discovery;
 
     public Main() {
     }
@@ -35,12 +38,32 @@ public class Main {
         LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
     }
 
-    public boolean isRunning() {
-        return (serverContainer == null ? false : serverContainer.isRunning());
+    public static void main(String[] args) {
+        long now = System.currentTimeMillis();
+        installLogger();
+        Main main = new Main();
+        main.run(() -> {
+            long time = System.currentTimeMillis() - now;
+            log.info("Server started in {}ms..", time);
+            main.waitForKeyPress();
+        });
     }
 
-    public int getPort() {
-        return (serverContainer == null ? 8080 : serverContainer.getPort());
+    public boolean isRunning() {
+        return (discovery != null && !discovery.isEmpty());
+    }
+
+//    public int getPort() {
+//        return (serverContainer == null ? 8080 : serverContainer.getPort());
+//    }
+
+    public static DescopedPrimitive findServiceInstance(Class<? extends DescopedPrimitive> primitiveClass) {
+        if (discovery == null) throw new IllegalStateException();
+        return discovery.findInstance(primitiveClass);
+    }
+
+    public static int serviceCount() {
+        return (discovery == null ? 0 : discovery.obtain().size());
     }
 
     private void run(Runnable waitFor) {
@@ -53,7 +76,6 @@ public class Main {
                 waitFor.run();
             } finally {
                 stop();
-
             }
             cdiContainer.getContextControl().stopContext(ApplicationScoped.class);
         } finally {
@@ -62,24 +84,84 @@ public class Main {
     }
 
     public void start() {
-        if (serverContainer == null) {
-            serverContainer = CDI.current().select(ServerContainer.class, WebServerLiteral.DEFAULT).get();
-
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                public void run() {
-                    log.debug("ShutdownHook triggered..");
-                    if (serverContainer != null) {
-                        if (!serverContainer.isStopped()) {
-                            serverContainer.shutdown();
-                        }
-                        serverContainer = null;
+        if (!isRunning()) {
+            discovery = new PrimitiveDiscovery();
+            Map<Class<DescopedPrimitive>, DescopedPrimitive> discovered = discovery.obtain();
+            for (Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive> primitiveEntry : discovered.entrySet()) {
+                DescopedPrimitive primitive = primitiveEntry.getValue();
+                try {
+                    if (!DescopedPrimitive.isRunning(primitive)) {
+                        int runLevel = ((PrimitiveLifecycle)primitive).internalClass().isAnnotationPresent(Priority.class)
+                            ? ((PrimitiveLifecycle)primitive).internalClass().getAnnotation(Priority.class).value()
+                            : PrimitivePriority.CORE;
+                        log.trace("Start service: {} [runLevel={}]", primitive, runLevel);
+                        primitive.init();
+                        primitive.start();
                     }
+                } catch (Exception e) {
+                    throw new DescopedServerException(e);
                 }
-            });
-
-            serverContainer.start();
+            }
         }
     }
+
+//    public void start() {
+//        if (serverContainer == null) {
+//            serverContainer = CDI.current().select(ServerContainer.class, WebServerLiteral.CORE).get();
+//
+//            Runtime.getRuntime().addShutdownHook(new Thread() {
+//                public void run() {
+//                    log.debug("ShutdownHook triggered..");
+//                    if (serverContainer != null) {
+//                        if (!serverContainer.isStopped()) {
+//                            serverContainer.shutdown();
+//                        }
+//                        serverContainer = null;
+//                    }
+//                }
+//            });
+//
+//            serverContainer.start();
+//        }
+//    }
+
+    public void stop() {
+        if (isRunning()) {
+            ListIterator<Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive>> descendingIterator = discovery.reverseOrder();
+            while (descendingIterator.hasPrevious()) {
+                Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive> primitiveEntry = descendingIterator.previous();
+                DescopedPrimitive primitive = primitiveEntry.getValue();
+                try {
+                    if (DescopedPrimitive.isRunning(primitive)) {
+                        int runLevel = ((PrimitiveLifecycle)primitive).internalClass().isAnnotationPresent(Priority.class)
+                            ? ((PrimitiveLifecycle)primitive).internalClass().getAnnotation(Priority.class).value()
+                            : PrimitivePriority.CORE;
+                        boolean waitFor = ((PrimitiveLifecycle)primitive).internalClass().isAnnotationPresent(Primitive.class)
+                            ? ((PrimitiveLifecycle)primitive).internalClass().getAnnotation(Primitive.class).waitFor()
+                            : false;
+                        log.trace("Stop service: {} [runLevel={}]", primitive, runLevel);
+                        primitive.stop();
+//                        while (waitFor) {
+//                            TimeUnit.MILLISECONDS.sleep(50);
+//                        }
+                        primitive.destroy();
+                    }
+                    discovery.removePrimitive(primitiveEntry.getKey());
+                } catch (Exception e) {
+                    throw new DescopedServerException(e);
+                }
+            }
+            if (!discovery.isEmpty()) {
+                throw new IllegalStateException("Error in shutdown of services");
+            }
+            discovery = null;
+        }
+    }
+
+//    public void stop() {
+//        if (serverContainer != null) serverContainer.shutdown();
+//        serverContainer = null;
+//    }
 
     private void waitForKeyPress() {
         try {
@@ -90,16 +172,6 @@ public class Main {
         }
     }
 
-    public void stop() {
-        if (serverContainer != null) serverContainer.shutdown();
-        serverContainer = null;
-    }
-
-    private boolean isDaemonTestProjectStage() {
-        ProjectStage stage = ProjectStageProducer.getInstance().getProjectStage();
-        return !DaemonTestProjectStageHolder.DaemonTest.equals(stage);
-    }
-
 //    private void observeDeploymentHandlers(@Observes PreStartContainer event) {
 //        if (isDaemonTestProjectStage()) return;
 //        UndertowContainer container = (UndertowContainer) event.container();
@@ -108,15 +180,9 @@ public class Main {
 //        }
 //    }
 
-    public static void main(String[] args) {
-        long now = System.currentTimeMillis();
-        installLogger();
-        Main main = new Main();
-        main.run(() -> {
-            long time = System.currentTimeMillis() - now;
-            log.info("Server started in {}ms..", time);
-            main.waitForKeyPress();
-        });
+    public static boolean isDaemonTestProjectStage() {
+        ProjectStage stage = ProjectStageProducer.getInstance().getProjectStage();
+        return !DaemonTestProjectStageHolder.DaemonTest.equals(stage);
     }
 
 }
