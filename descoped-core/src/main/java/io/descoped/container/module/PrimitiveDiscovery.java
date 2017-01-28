@@ -42,7 +42,13 @@ public class PrimitiveDiscovery {
             Map<Class<DescopedPrimitive>, Integer> primitives = discover();
             for (Map.Entry<Class<DescopedPrimitive>, Integer> primitive : primitives.entrySet()) {
                 DescopedPrimitive primitiveInstance = CDI.current().select(primitive.getKey()).get();
-                cache.put(primitive.getKey(), new PrimitiveLifecycle(primitiveInstance));
+                DescopedPrimitive lifecycle = new PrimitiveLifecycle(primitiveInstance);
+                try {
+                    lifecycle.init();
+                    cache.put(primitive.getKey(), lifecycle);
+                } catch (Exception e) {
+                    throw new IllegalStateException();
+                }
             }
         }
         return cache;
@@ -58,7 +64,13 @@ public class PrimitiveDiscovery {
     }
 
     public void removePrimitive(Class<DescopedPrimitive> primitiveClass) {
-        cache.remove(primitiveClass);
+        try {
+            PrimitiveLifecycle lifecycle = (PrimitiveLifecycle) findInstance(primitiveClass);
+            lifecycle.destroy();
+            cache.remove(primitiveClass);
+        } catch (Exception e) {
+            throw new IllegalStateException();
+        }
     }
 
     public boolean isEmpty() {

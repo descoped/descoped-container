@@ -20,6 +20,10 @@ public class PrimitiveLifecycle implements DescopedPrimitive {
         return delegate.getClass();
     }
 
+    public DescopedPrimitive getDelegate() {
+        return delegate;
+    }
+
     @Override
     public void init() {
         delegate.init();

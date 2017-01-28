@@ -1,7 +1,7 @@
 package io.descoped.container.core;
 
-import io.descoped.container.Main;
 import io.descoped.container.log.ConsoleAppender;
+import io.descoped.container.module.DescopedContainer;
 import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.After;
@@ -18,22 +18,22 @@ import static org.junit.Assert.assertEquals;
 public class MainTest {
 
     private static final Logger log = LoggerFactory.getLogger(MainTest.class);
-    private Main main;
+    private DescopedContainer descopedContainer;
 
     @Before
     public void setUp() throws Exception {
-        main = new Main();
-        log.info("Start main..: {}", main.isRunning());
-        main.start();
-        log.info("Started main!");
-        assertEquals(3, main.serviceCount());
+        descopedContainer = new DescopedContainer();
+        log.info("Start descopedContainer..: {}", descopedContainer.isRunning());
+        descopedContainer.start();
+        log.info("Started descopedContainer!");
+        assertEquals(3, descopedContainer.serviceCount());
     }
 
     @After
     public void tearDown() throws Exception {
-        main.stop();
-        log.info("Shutdown main!");
-        assertEquals(0, main.serviceCount());
+        descopedContainer.stop();
+        log.info("Shutdown descopedContainer!");
+        assertEquals(0, descopedContainer.serviceCount());
     }
 
     @Test
@@ -44,7 +44,7 @@ public class MainTest {
 //    @Test
 //    public void testRestTest() throws Exception {
 //        given()
-////            .port(main.getPort())
+////            .port(descopedContainer.getPort())
 //            .contentType(ContentType.XML.withCharset("UTF-8"))
 //                .log().everything()
 //            .expect()

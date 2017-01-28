@@ -19,7 +19,7 @@ public class BarModule implements DescopedPrimitive {
 
     @Override
     public void stop() {
-        System.out.println("--------------------> Is BarModule Running? " + DescopedPrimitive.isRunning(this));
+        System.out.println("--------------------> Is BarModule Running? " + isRunning());
     }
 
     @Override

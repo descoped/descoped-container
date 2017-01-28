@@ -6,3 +6,11 @@
 * add hystrix commands
 * add track and trace
 * add security and oauth2
+
+
+* make event observer in core (before|after start+stop)
+* implement waitFor and interrupt in shutdown
+* refactor serverContainer to undertow
+* implement deployment per container brand
+* refactor Main to a DescopedContainer and use that as base for ServerContainer (start/stop/etc)
+* use DescopedContainer in Main
