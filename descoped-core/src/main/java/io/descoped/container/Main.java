@@ -51,15 +51,13 @@ public class Main {
             cdiContainer.boot();
             cdiContainer.getContextControl().startContext(ApplicationScoped.class);
             try {
-                Runtime.getRuntime().addShutdownHook(new Thread() {
-                    public void run() {
-                        log.debug("ShutdownHook triggered..");
-                        if (descopedContainer != null) {
-                            descopedContainer.stop();
-                            descopedContainer = null;
-                        }
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    log.debug("ShutdownHook triggered..");
+                    if (descopedContainer != null) {
+                        descopedContainer.stop();
+                        descopedContainer = null;
                     }
-                });
+                }));
                 descopedContainer.start();
                 waitFor.run();
             } finally {

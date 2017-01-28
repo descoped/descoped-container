@@ -15,9 +15,9 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
-public class MainTest {
+public class DescopedContainerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(MainTest.class);
+    private static final Logger log = LoggerFactory.getLogger(DescopedContainerTest.class);
     private DescopedContainer descopedContainer;
 
     @Before

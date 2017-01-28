@@ -10,7 +10,7 @@
 
     <artifactId>descoped-core</artifactId>
     <packaging>jar</packaging>
-    <name>Descoped Core</name>
+    <name>Descoped Container Core</name>
     <url>http://www.descoped.io</url>
 
     <properties>
@@ -52,6 +52,7 @@
             <artifactId>cdi-api</artifactId>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -63,6 +64,7 @@
             <artifactId>validation-api</artifactId>
             <version>1.1.0.Final</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>javax.interceptor</groupId>
@@ -70,7 +72,7 @@
             <version>1.2</version>
         </dependency>
 
-        <!-- asm must be here when using owb -->
+        <!-- asm must be here when using owb
 
         <dependency>
             <groupId>asm</groupId>
@@ -78,6 +80,7 @@
             <version>3.3.1</version>
             <scope>runtime</scope>
         </dependency>
+        -->
 
 
         <!-- DeltaSpike Deps -->
@@ -102,6 +105,7 @@
             <artifactId>deltaspike-security-module-impl</artifactId>
         </dependency>
 
+        <!--
         <dependency>
             <groupId>org.apache.deltaspike.modules</groupId>
             <artifactId>deltaspike-servlet-module-api</artifactId>
@@ -112,6 +116,7 @@
             <artifactId>deltaspike-servlet-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.apache.deltaspike.modules</groupId>
@@ -123,16 +128,17 @@
             <artifactId>deltaspike-test-control-module-impl</artifactId>
         </dependency>
 
-        <!-- DeltaSpike dependencies for Java-SE -->
+        <!-- DeltaSpike dependencies for Java-SE
 
         <dependency>
             <groupId>org.apache.deltaspike.cdictrl</groupId>
             <artifactId>deltaspike-cdictrl-servlet</artifactId>
         </dependency>
+         -->
 
 
 
-        <!-- Undertow deps -->
+        <!-- Undertow deps
 
         <dependency>
             <groupId>io.undertow</groupId>
@@ -157,8 +163,9 @@
             <artifactId>undertow-websockets-jsr</artifactId>
             <version>${undertow.version}</version>
         </dependency>
+        -->
 
-        <!-- Jersey -->
+        <!-- Jersey
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
@@ -170,8 +177,9 @@
             <artifactId>jersey-cdi1x</artifactId>
             <version>${jersey.version}</version>
         </dependency>
+        -->
 
-        <!-- Jackson -->
+        <!-- Jackson
 
         <dependency>
             <groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -187,9 +195,10 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
         </dependency>
+        -->
 
 
-        <!-- JSON helper stuff -->
+        <!-- JSON helper stuff
 
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
@@ -200,21 +209,24 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
         </dependency>
+        -->
 
 
-        <!-- hystrix-->
+        <!-- hystrix
 
         <dependency>
             <groupId>com.netflix.hystrix</groupId>
             <artifactId>hystrix-core</artifactId>
         </dependency>
+        -->
 
-        <!-- KevinSawicki URL HTTP -->
+        <!-- KevinSawicki URL HTTP
 
         <dependency>
             <groupId>com.github.kevinsawicki</groupId>
             <artifactId>http-request</artifactId>
         </dependency>
+        -->
 
         <!-- Log -->
 
@@ -225,17 +237,19 @@
 
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -250,10 +264,10 @@
             <artifactId>junit</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.jayway.restassured</groupId>
-            <artifactId>rest-assured</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.jayway.restassured</groupId>-->
+            <!--<artifactId>rest-assured</artifactId>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.mockito</groupId>
