@@ -16,15 +16,13 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class PrimitiveDiscovery {
 
-    private boolean useSPILoader = false;
+    private static PrimitiveDiscovery instance = null;
+
+    protected boolean useSPILoader = false;
 
     private Map<Class<DescopedPrimitive>, DescopedPrimitive> cache = new LinkedHashMap<>();
 
     public PrimitiveDiscovery() {
-    }
-
-    public PrimitiveDiscovery(boolean useSPILoader) {
-        this.useSPILoader = useSPILoader;
     }
 
     private List<Class<?>> discoverCdiClasses() {
@@ -118,5 +116,13 @@ public class PrimitiveDiscovery {
 
     public boolean isEmpty() {
         return cache.isEmpty();
+    }
+
+    public static PrimitiveDiscovery getModuleInstances() {
+        if (instance == null) {
+            instance = new PrimitiveDiscovery();
+            instance.useSPILoader = true;
+        }
+        return instance;
     }
 }
