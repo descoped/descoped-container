@@ -35,8 +35,6 @@ public class ModuleLoader {
             Object module = it.next();
             if (clazz == module.getClass() && module.getClass().isAnnotationPresent(PrimitiveModule.class)) {
                 return (T) module;
-            } else {
-                throw new DescopedServerException("You must annotate '" + module.getClass().getName() + "' with @PrimitiveModule when using SPI! Current declaration is in conflict with CDI primitives.");
             }
         }
         return null;
