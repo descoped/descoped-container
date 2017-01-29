@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.inject.spi.CDI;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
@@ -27,7 +26,7 @@ public class PrimitiveTest {
 
     @Test
     public void testPrimitiveDiscoveryStartOrder() throws Exception {
-        PrimitiveDiscovery primitiveDiscovery = CDI.current().select(PrimitiveDiscovery.class).get();
+        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getPrimitiveInstances();
         Map<Class<DescopedPrimitive>, DescopedPrimitive> map = primitiveDiscovery.obtain();
 
         assertEquals(3, map.size());
@@ -50,7 +49,7 @@ public class PrimitiveTest {
 
     @Test
     public void testPrimitiveDiscoveryShutdownOrder() throws Exception {
-        PrimitiveDiscovery primitiveDiscovery = CDI.current().select(PrimitiveDiscovery.class).get();
+        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getPrimitiveInstances();
         Map<Class<DescopedPrimitive>, DescopedPrimitive> map = primitiveDiscovery.obtain();
 
         assertEquals(3, map.size());

@@ -41,7 +41,7 @@ public class DescopedContainer {
     }
 
     public DescopedContainer() {
-        spiPrimitiveModuleDiscovery = PrimitiveDiscovery.getModuleInstances();
+        spiPrimitiveModuleDiscovery = PrimitiveDiscovery.getPrimitiveModuleInstances();
     }
 
     public boolean isRunning() {
@@ -51,7 +51,7 @@ public class DescopedContainer {
     public void start() {
         if (!isRunning()) {
             log.info("Initiating discovery of Descoped Primitives..");
-            cdiPrimitiveDiscovery = new PrimitiveDiscovery();
+            cdiPrimitiveDiscovery = PrimitiveDiscovery.getPrimitiveInstances();
             Map<Class<DescopedPrimitive>, DescopedPrimitive> discovered = cdiPrimitiveDiscovery.obtain();
             for (Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive> primitiveEntry : discovered.entrySet()) {
                 DescopedPrimitive primitive = primitiveEntry.getValue();

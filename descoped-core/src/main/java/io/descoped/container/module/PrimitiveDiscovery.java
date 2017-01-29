@@ -22,7 +22,7 @@ public class PrimitiveDiscovery {
 
     private Map<Class<DescopedPrimitive>, DescopedPrimitive> cache = new LinkedHashMap<>();
 
-    public PrimitiveDiscovery() {
+    private PrimitiveDiscovery() {
     }
 
     private List<Class<?>> discoverCdiClasses() {
@@ -118,11 +118,15 @@ public class PrimitiveDiscovery {
         return cache.isEmpty();
     }
 
-    public static PrimitiveDiscovery getModuleInstances() {
+    public static PrimitiveDiscovery getPrimitiveModuleInstances() {
         if (instance == null) {
             instance = new PrimitiveDiscovery();
             instance.useSPILoader = true;
         }
         return instance;
+    }
+
+    public static PrimitiveDiscovery getPrimitiveInstances() {
+        return CDI.current().select(PrimitiveDiscovery.class).get();
     }
 }

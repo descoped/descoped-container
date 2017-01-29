@@ -25,7 +25,7 @@ public class PrimitiveModuleTest {
 
     @Test
     public void testPrimitiveDiscoveryStartOrder() throws Exception {
-        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getModuleInstances();
+        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getPrimitiveModuleInstances();
         Map<Class<DescopedPrimitive>, DescopedPrimitive> map = primitiveDiscovery.obtain();
 
         assertEquals(1, map.size());
@@ -40,7 +40,7 @@ public class PrimitiveModuleTest {
 
     @Test
     public void testPrimitiveDiscoveryShutdownOrder() throws Exception {
-        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getModuleInstances();
+        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getPrimitiveModuleInstances();
         Map<Class<DescopedPrimitive>, DescopedPrimitive> map = primitiveDiscovery.obtain();
 
         assertEquals(1, map.size());
