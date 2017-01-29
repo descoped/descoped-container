@@ -15,7 +15,7 @@ public class ModuleTest {
 
     @Test
     public void testLoadModules() throws Exception {
-        ServiceLoader<DescopedModule> modules = ServiceLoader.load(DescopedModule.class);
+        ServiceLoader<DescopedPrimitive> modules = ServiceLoader.load(DescopedPrimitive.class);
         modules.forEach(module -> {
             log.trace("---> {}", module);
 

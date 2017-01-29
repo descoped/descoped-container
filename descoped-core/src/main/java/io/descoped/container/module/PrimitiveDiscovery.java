@@ -16,9 +16,16 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class PrimitiveDiscovery {
 
-    private static boolean USE_SPI = true;
+    private boolean useSPILoader = false;
 
     private Map<Class<DescopedPrimitive>, DescopedPrimitive> cache = new LinkedHashMap<>();
+
+    public PrimitiveDiscovery() {
+    }
+
+    public PrimitiveDiscovery(boolean useSPILoader) {
+        this.useSPILoader = useSPILoader;
+    }
 
     private List<Class<?>> discoverCdiClasses() {
         BeanManager beanManager = CDI.current().getBeanManager();
@@ -26,7 +33,7 @@ public class PrimitiveDiscovery {
         List<Class<?>> clazzes = new ArrayList<>();
         List<Class<?>> classes = beans.stream().map(Bean::getBeanClass).collect(Collectors.toList());
         classes.forEach(clazz -> {
-            boolean isDescopedModule = clazz.getInterfaces()[0].toString().contains("DescopedModule");
+            boolean isDescopedModule = clazz.isAnnotationPresent(PrimitiveModule.class);
             if (!isDescopedModule) {
                 clazzes.add(clazz);
             }
@@ -48,11 +55,11 @@ public class PrimitiveDiscovery {
     }
 
     private List<Class<?>> discoverClasses() {
-        return (USE_SPI ? discoverModuleClasses() : discoverCdiClasses());
+        return (useSPILoader ? discoverModuleClasses() : discoverCdiClasses());
     }
 
     private <T extends DescopedPrimitive> T getClass(Class<T> clazz) {
-        return (USE_SPI ? getModuleClass(clazz) : getCdiClass(clazz));
+        return (useSPILoader ? getModuleClass(clazz) : getCdiClass(clazz));
     }
 
     private Map<Class<DescopedPrimitive>, Integer> sortMapByPriority(Map<Class<DescopedPrimitive>, Integer> map) {

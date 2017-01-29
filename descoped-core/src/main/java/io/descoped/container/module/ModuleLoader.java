@@ -1,5 +1,7 @@
 package io.descoped.container.module;
 
+import io.descoped.container.exception.DescopedServerException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +20,11 @@ public class ModuleLoader {
     public static List<Class<?>> discover() {
         List<Class<?>> classes = new ArrayList<>();
         serviceLoader().forEach(module -> {
-            classes.add(module.getClass());
+            if (module.getClass().isAnnotationPresent(PrimitiveModule.class)) {
+                classes.add(module.getClass());
+            } else {
+                throw new DescopedServerException("You must annotate '" + module.getClass().getName() + "' with @PrimitiveModule when using SPI! Current declaration is in conflict with CDI primitives.");
+            }
         });
         return classes;
     }
@@ -27,8 +33,10 @@ public class ModuleLoader {
         ServiceLoader<?> modules = serviceLoader();
         for(Iterator<?> it = modules.iterator(); it.hasNext(); ) {
             Object module = it.next();
-            if (clazz == module.getClass()) {
+            if (clazz == module.getClass() && module.getClass().isAnnotationPresent(PrimitiveModule.class)) {
                 return (T) module;
+            } else {
+                throw new DescopedServerException("You must annotate '" + module.getClass().getName() + "' with @PrimitiveModule when using SPI! Current declaration is in conflict with CDI primitives.");
             }
         }
         return null;
