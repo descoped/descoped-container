@@ -8,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
  */
 @Priority(PrimitivePriority.FRAMEWORK)
 @ApplicationScoped
-public class FooModule implements DescopedPrimitive {
+public class FooPrimitive implements DescopedPrimitive {
 
     @Override
     public void init() {

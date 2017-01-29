@@ -7,7 +7,7 @@ import javax.annotation.Priority;
  */
 @Priority(5)
 //@ApplicationScoped
-public class BazModule implements DescopedPrimitive {
+public class BazPrimitive implements DescopedPrimitive {
     @Override
     public void init() {
 

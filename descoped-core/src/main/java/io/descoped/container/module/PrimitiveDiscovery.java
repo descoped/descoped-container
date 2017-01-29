@@ -16,7 +16,44 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class PrimitiveDiscovery {
 
+    private static boolean USE_SPI = true;
+
     private Map<Class<DescopedPrimitive>, DescopedPrimitive> cache = new LinkedHashMap<>();
+
+    private List<Class<?>> discoverCdiClasses() {
+        BeanManager beanManager = CDI.current().getBeanManager();
+        Set<Bean<?>> beans = beanManager.getBeans(DescopedPrimitive.class);
+        List<Class<?>> clazzes = new ArrayList<>();
+        List<Class<?>> classes = beans.stream().map(Bean::getBeanClass).collect(Collectors.toList());
+        classes.forEach(clazz -> {
+            boolean isDescopedModule = clazz.getInterfaces()[0].toString().contains("DescopedModule");
+            if (!isDescopedModule) {
+                clazzes.add(clazz);
+            }
+        });
+        return clazzes;
+    }
+
+    private <T extends DescopedPrimitive> T getCdiClass(Class<T> clazz) {
+        return CDI.current().select(clazz).get();
+    }
+
+    private List<Class<?>> discoverModuleClasses() {
+        List<Class<?>> classes = ModuleLoader.discover();
+        return classes;
+    }
+
+    private <T extends DescopedPrimitive> T getModuleClass(Class<T> clazz) {
+        return ModuleLoader.get(clazz);
+    }
+
+    private List<Class<?>> discoverClasses() {
+        return (USE_SPI ? discoverModuleClasses() : discoverCdiClasses());
+    }
+
+    private <T extends DescopedPrimitive> T getClass(Class<T> clazz) {
+        return (USE_SPI ? getModuleClass(clazz) : getCdiClass(clazz));
+    }
 
     private Map<Class<DescopedPrimitive>, Integer> sortMapByPriority(Map<Class<DescopedPrimitive>, Integer> map) {
         return map.entrySet().stream()
@@ -26,9 +63,8 @@ public class PrimitiveDiscovery {
     }
 
     private Map<Class<DescopedPrimitive>, Integer> discover() {
-        BeanManager beanManager = CDI.current().getBeanManager();
-        Set<Bean<?>> beans = beanManager.getBeans(DescopedPrimitive.class);
-        List<Class<?>> classes = beans.stream().map(Bean::getBeanClass).collect(Collectors.toList());
+        List<Class<?>> classes = discoverClasses();
+
         Map<Class<DescopedPrimitive>, Integer> map = new LinkedHashMap<>();
         for (Class<?> clazz : classes) {
             Integer priority = clazz.isAnnotationPresent(Priority.class) ? clazz.getAnnotation(Priority.class).value() : PrimitivePriority.CORE;
@@ -41,7 +77,7 @@ public class PrimitiveDiscovery {
         if (cache.isEmpty()) {
             Map<Class<DescopedPrimitive>, Integer> primitives = discover();
             for (Map.Entry<Class<DescopedPrimitive>, Integer> primitive : primitives.entrySet()) {
-                DescopedPrimitive primitiveInstance = CDI.current().select(primitive.getKey()).get();
+                DescopedPrimitive primitiveInstance = getClass(primitive.getKey());
                 DescopedPrimitive lifecycle = new PrimitiveLifecycle(primitiveInstance);
                 try {
                     lifecycle.init();
