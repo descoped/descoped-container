@@ -3,22 +3,19 @@ package io.descoped.container.module.ext;
 /**
  * Created by oranheim on 30/01/2017.
  */
-public class CdiInstanceHandle<T> implements InstanceHandle<T> {
+public class CdiInstanceHandle<T> extends Instance<T> {
 
-    private final Instance<T> instance;
-
-    public CdiInstanceHandle(final Instance<T> instance) {
-        this.instance = instance;
+    public CdiInstanceHandle(final T instance) {
+        super(instance);
     }
 
     @Override
     public T get() {
-        return instance.get();
+        return super.get();
     }
 
     @Override
     public void release() {
-        instance.release();
+        super.release();
     }
-
 }

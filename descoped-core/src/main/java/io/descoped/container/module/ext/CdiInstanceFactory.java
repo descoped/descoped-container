@@ -15,43 +15,29 @@ import java.util.stream.Collectors;
  */
 public class CdiInstanceFactory<T> implements InstanceFactory<T> {
 
-    private final Class<T> typedClass;
+    private final Class<T> factoryClass;
+    private List<Class<?>> discoveredClasses = null;
     private Map<Class<T>, Instance<T>> instances = new LinkedHashMap<>();
 
     // don't pass instance param here, but resolve all beans and add then to instanceList
-    public CdiInstanceFactory(final Class<T> typedClass) {
-        this.typedClass = typedClass;
+    public CdiInstanceFactory(final Class<T> factoryClass) {
+        this.factoryClass = factoryClass;
     }
 
-    private List<Class<?>> discover() {
+    @Override
+    public List<Class<?>> discover() {
+        if (discoveredClasses != null) return discoveredClasses;
+
         BeanManager beanManager = CDI.current().getBeanManager();
-        Set<Bean<?>> beans = beanManager.getBeans(typedClass);
-        List<Class<?>> clazzes = new ArrayList<>();
+        Set<Bean<?>> beans = beanManager.getBeans(factoryClass);
+        List<Class<?>> acceptClasses = new ArrayList<>();
         List<Class<?>> classes = beans.stream().map(Bean::getBeanClass).collect(Collectors.toList());
         for(Class<?> clazz : classes) {
             if (accept(clazz)) {
-                clazzes.add(clazz);
+                acceptClasses.add(clazz);
             }
         }
-        return clazzes;
-    }
-
-    public Map<Class<T>, Instance<T>> instances() {
-        if (!instances.isEmpty()) return instances;
-
-//            Map<Class<DescopedPrimitive>, Integer> primitives = discover();
-//            for (Map.Entry<Class<DescopedPrimitive>, Integer> primitive : primitives.entrySet()) {
-//                DescopedPrimitive primitiveInstance = getClass(primitive.getKey());
-//                DescopedPrimitive lifecycle = new PrimitiveLifecycle(primitiveInstance);
-//                try {
-//                    lifecycle.init();
-//                    cache.put(primitive.getKey(), lifecycle);
-//                } catch (Exception e) {
-//                    throw new IllegalStateException();
-//                }
-//            }
-        return null;
-
+        return acceptClasses;
     }
 
     @Override
@@ -59,4 +45,25 @@ public class CdiInstanceFactory<T> implements InstanceFactory<T> {
         boolean isDescopedModule = clazz.isAnnotationPresent(PrimitiveModule.class);
         return !isDescopedModule;
     }
+
+    @Override
+    public Map<Class<T>, Instance<T>> instances() {
+        if (!instances.isEmpty()) return instances;
+
+        List<Class<?>> classes = discover();
+        for(Class<?> clazz : classes) {
+            T bean = (T) CDI.current().select(clazz).get();
+            create((Class<T>) clazz, bean);
+        }
+
+        return instances;
+    }
+
+    @Override
+    public Instance<T> create(Class<T> clazz, T instance) {
+        Instance<T> instanceHandler = new CdiInstanceHandle(instance);
+        instances.put(clazz, instanceHandler);
+        return instanceHandler;
+    }
+
 }
