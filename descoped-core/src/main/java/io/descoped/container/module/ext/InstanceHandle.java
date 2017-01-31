@@ -5,7 +5,7 @@ package io.descoped.container.module.ext;
  */
 public interface InstanceHandle<T> {
 
-    T getInstance();
+    T get();
 
     void release();
 

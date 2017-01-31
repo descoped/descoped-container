@@ -5,6 +5,6 @@ package io.descoped.container.module.ext;
  */
 public interface InstanceFactory<T> {
 
-    InstanceHandle<T> createInstance();
+    boolean accept(Class<?> clazz);
 
 }

@@ -1,7 +1,5 @@
 package io.descoped.container.module.ext;
 
-import javax.enterprise.inject.Instance;
-
 /**
  * Created by oranheim on 30/01/2017.
  */
@@ -14,12 +12,13 @@ public class CdiInstanceHandle<T> implements InstanceHandle<T> {
     }
 
     @Override
-    public T getInstance() {
+    public T get() {
         return instance.get();
     }
 
     @Override
     public void release() {
-        instance.destroy(instance.get());
+        instance.release();
     }
+
 }
