@@ -9,8 +9,8 @@ public class CdiClassFactory implements ClassFactory {
 
     public CdiClassFactory() {
         CdiInstanceFactory<DescopedPrimitive> factory = new CdiInstanceFactory<>(DescopedPrimitive.class);
-        InstanceHandle<DescopedPrimitive> instance = factory.createInstance();
-        DescopedPrimitive obj = instance.get();
+//        InstanceHandle<DescopedPrimitive> instance = factory.createInstance();
+//        DescopedPrimitive obj = instance.get();
     }
     
     @Override
