@@ -18,12 +18,15 @@ final public class DefaultInstanceFactory {
         INSTANCES.put(factoryClass, factory);
     }
 
-    static {
+    private static final void init() {
         register(SpiInstanceFactory.class, new SpiInstanceFactory<>(DescopedPrimitive.class));
         register(CdiInstanceFactory.class, new CdiInstanceFactory<>(DescopedPrimitive.class));
     }
 
     public static final InstanceFactory<DescopedPrimitive> get(Class<? extends InstanceFactory> factoryClass) {
+        if (INSTANCES.isEmpty()) {
+            init();
+        }
         return INSTANCES.get(factoryClass);
     }
 
