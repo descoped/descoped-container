@@ -20,13 +20,13 @@ public class DescopedContainer<T extends DescopedPrimitive> {
     private static final Logger log = LoggerFactory.getLogger(DescopedContainer.class);
     private InstanceFactory<T> instanceFactory;
 
+    public DescopedContainer(final InstanceFactory<T> instanceFactory) {
+        this.instanceFactory = instanceFactory;
+    }
+
     @Deprecated
     public static <T extends DescopedPrimitive> InstanceHandler<T> findPrimitiveInstance(Class<T> primitiveClass) {
         return DefaultInstanceFactory.findInstance(primitiveClass);
-    }
-
-    public DescopedContainer(final InstanceFactory<T> instanceFactory) {
-        this.instanceFactory = instanceFactory;
     }
 
     public int serviceCount() {
@@ -34,7 +34,12 @@ public class DescopedContainer<T extends DescopedPrimitive> {
     }
 
     public boolean isRunning() {
-        return (instanceFactory != null && !instanceFactory.instances().isEmpty());
+        for (Map.Entry<Class<T>, InstanceHandler<T>> entry : instanceFactory.instances().entrySet()) {
+            if (entry.getValue().isRunning()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void load() {
@@ -43,47 +48,65 @@ public class DescopedContainer<T extends DescopedPrimitive> {
         }
     }
 
+    private String factoryName() {
+        String factoryName = instanceFactory.name();
+        if ("SPI".equals(factoryName)) factoryName = "SPI Module";
+        if ("CDI".equals(factoryName)) factoryName = "CDI Extension";
+        return factoryName;
+    }
+
+
     public void start() {
         if (!isRunning()) {
-            log.info("Initiating discovery of Descoped Primitives..");
+            log.info("Initiating discovery of Descoped {} Primitives..", factoryName());
             Map<Class<T>, InstanceHandler<T>> discovered = instanceFactory.load();
             for (Map.Entry<Class<T>, InstanceHandler<T>> primitiveEntry : discovered.entrySet()) {
                 InstanceHandler<DescopedPrimitive> primitive = (InstanceHandler<DescopedPrimitive>) primitiveEntry.getValue();
                 try {
+                    DescopedPrimitive primitiveInstance = primitive.get();
                     if (!primitive.isRunning()) {
-                        int runLevel = primitive.get().getClass().isAnnotationPresent(Priority.class)
-                                ? primitive.get().getClass().getAnnotation(Priority.class).value()
+                        Class<DescopedPrimitive> annoClass = primitive.getType();
+                        int runLevel = annoClass.isAnnotationPresent(Priority.class)
+                                ? annoClass.getAnnotation(Priority.class).value()
                                 : PrimitivePriority.CORE;
-                        log.trace("Start service: {} [runLevel={}]", primitive.get(), runLevel);
-                        primitive.get().start();
-                        ((LifecycleInstanceHandler)primitive).setRunning(true);
+
+                        log.trace("Start {} service: {} [runLevel={}]", factoryName(), annoClass, runLevel);
+
+                        primitiveInstance.start();
+                        ((LifecycleInstanceHandler) primitive).setRunning(true);
                     }
                 } catch (Exception e) {
                     throw new DescopedServerException(e);
                 }
             }
-            log.info("Started {} primitives", discovered.size());
+            log.info("Started {} {} primitives", discovered.size(), factoryName());
         }
     }
 
     public void stop() {
         if (isRunning()) {
-            log.info("Releasing all Descoped Primitives..");
+            log.info("Releasing all Descoped {} Primitives..", factoryName());
             ListIterator<Map.Entry<Class<T>, InstanceHandler<T>>> descendingIterator = instanceFactory.reverseOrder();
+            int count = 0;
             while (descendingIterator.hasPrevious()) {
                 Map.Entry<Class<T>, InstanceHandler<T>> primitiveEntry = descendingIterator.previous();
                 InstanceHandler<T> primitive = primitiveEntry.getValue();
                 try {
+                    DescopedPrimitive primitiveInstance = primitive.get();
                     if (primitive.isRunning()) {
-                        int runLevel = primitive.get().getClass().isAnnotationPresent(Priority.class)
-                                ? primitive.get().getClass().getAnnotation(Priority.class).value()
+                        Class<T> annoClass = primitive.getType();
+
+                        int runLevel = annoClass.isAnnotationPresent(Priority.class)
+                                ? annoClass.getAnnotation(Priority.class).value()
                                 : PrimitivePriority.CORE;
-                        boolean waitFor = primitive.get().getClass().isAnnotationPresent(Primitive.class)
-                                ? primitive.get().getClass().getAnnotation(Primitive.class).waitFor()
+                        boolean waitFor = annoClass.isAnnotationPresent(Primitive.class)
+                                ? annoClass.getAnnotation(Primitive.class).waitFor()
                                 : false;
-                        log.trace("Stop service: {} [runLevel={}]", primitive.get(), runLevel);
-                        primitive.get().stop();
-                        ((LifecycleInstanceHandler)primitive).setRunning(false);
+
+                        log.trace("Stop {} service: {} [runLevel={}]", factoryName(), annoClass, runLevel);
+
+                        primitiveInstance.stop();
+                        ((LifecycleInstanceHandler) primitive).setRunning(false);
                         // todo: implement waitFor service to complete on interrupt through DescopedPrimitive and -Lifecycle
 //                        while (waitFor) {
 //                            TimeUnit.MILLISECONDS.sleep(50);
@@ -93,7 +116,9 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                 } catch (Exception e) {
                     throw new DescopedServerException(e);
                 }
+                count++;
             }
+            log.info("Stopped {} {} primitives", count, factoryName());
             if (!instanceFactory.instances().isEmpty()) {
                 throw new IllegalStateException("Error in shutdown of services");
             }

@@ -8,6 +8,8 @@ import java.util.Map;
  */
 public interface InstanceFactory<T> {
 
+    String name();
+
     Map<Class<T>, InstanceHandler<T>> load();
 
     Map<Class<T>, InstanceHandler<T>> instances();

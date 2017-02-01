@@ -5,6 +5,8 @@ package io.descoped.container.module.factory;
  */
 public interface InstanceHandler<T> {
 
+    Class<T> getType();
+
     T get();
 
     boolean isRunning();

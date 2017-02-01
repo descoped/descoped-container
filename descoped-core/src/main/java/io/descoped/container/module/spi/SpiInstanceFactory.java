@@ -29,6 +29,11 @@ public class SpiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
     }
 
     @Override
+    public String name() {
+        return "SPI";
+    }
+
+    @Override
     protected List<Class<T>> discover() {
         List<Class<T>> classes = new ArrayList<>();
         ServiceLoader<? extends T> loader = serviceLoader();

@@ -2,7 +2,6 @@ package io.descoped.container.module.factory;
 
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.PrimitivePriority;
-import org.jboss.weld.bean.proxy.ProxyObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,15 +30,6 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
     abstract protected InstanceHandler<T> create(Class<T> clazz, Object instance);
 
     abstract protected Object get(Class<T> primitive);
-
-    protected boolean isProxyClass(Class<T> primitiveClass) {
-        return ProxyObject.class.isAssignableFrom(primitiveClass);
-    }
-
-    protected Class<T> proxyClass(Class<T> primitiveClass) {
-        primitiveClass = (isProxyClass(primitiveClass) ? (Class<T>) primitiveClass.getSuperclass() : primitiveClass);
-        return primitiveClass;
-    }
 
     private Map<Class<T>, Integer> sortMapByPriority(Map<Class<T>, Integer> map) {
         return map.entrySet().stream()
@@ -74,10 +64,12 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
         // iterate classes and create internal instance map
         for (Map.Entry<Class<T>, Integer> primitive : primitivesMap.entrySet()) {
             InstanceHandler<T> primitiveInstance = find(primitive.getKey());
+//            log.trace("---------> class: {}", primitive.getKey());
+//                log.trace("------> class: {} -- inst: {}", primitive.getKey(), primitiveInstance.get());
             try {
                 primitiveInstance.get().init();
             } catch (Exception e) {
-                throw new IllegalStateException();
+                throw new IllegalStateException("Error resolving bean: " + primitiveInstance.getType() + " in factory: " + getClass(), e);
             }
         }
 

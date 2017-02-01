@@ -29,6 +29,11 @@ public class CdiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
     }
 
     @Override
+    public String name() {
+        return "CDI";
+    }
+
+    @Override
     protected List<Class<T>> discover() {
         BeanManager beanManager = CDI.current().getBeanManager();
         Set<Bean<?>> beans = beanManager.getBeans(factoryClass);
@@ -38,8 +43,9 @@ public class CdiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
 
     @Override
     public boolean accept(Class<T> clazz) {
+//        log.trace("accept: {}", clazz);
         boolean isDescopedModule = clazz.isAnnotationPresent(PrimitiveModule.class);
-        if (isDescopedModule) log.trace("Skip Class: {}", clazz);
+//        if (isDescopedModule) log.trace("Skip Class: {}", clazz);
         return !isDescopedModule;
     }
 
