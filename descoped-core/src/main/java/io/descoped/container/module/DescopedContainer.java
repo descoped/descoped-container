@@ -17,10 +17,11 @@ import java.util.Map;
  */
 public class DescopedContainer<T extends DescopedPrimitive> {
 
-    private static final Logger log = LoggerFactory.getLogger(DescopedContainer.class);
+    private Logger log;
     private InstanceFactory<T> instanceFactory;
 
     public DescopedContainer(final InstanceFactory<T> instanceFactory) {
+        log = LoggerFactory.getLogger(DescopedContainer.class.getName() + "::" + instanceFactory.getClass().getSimpleName());
         this.instanceFactory = instanceFactory;
     }
 
