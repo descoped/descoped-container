@@ -1,6 +1,7 @@
 package io.descoped.container.module;
 
 import io.descoped.container.module.factory.DefaultInstanceFactory;
+import io.descoped.container.module.factory.InstanceHandler;
 
 /**
  * Created by oranheim on 27/01/2017.
@@ -20,7 +21,8 @@ public interface DescopedPrimitive {
     }
 
     static boolean isRunning(DescopedPrimitive descopedPrimitive) {
-        return DefaultInstanceFactory.findInstance(descopedPrimitive.getClass()).isRunning();
+        InstanceHandler<? extends DescopedPrimitive> instance = DefaultInstanceFactory.findInstance(descopedPrimitive.getClass());
+        return (instance != null ? instance.get().isRunning() : false);
     }
 
 }

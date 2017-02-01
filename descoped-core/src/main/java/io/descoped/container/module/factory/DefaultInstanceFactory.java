@@ -23,6 +23,10 @@ final public class DefaultInstanceFactory {
         register(CdiInstanceFactory.class, new CdiInstanceFactory<>(DescopedPrimitive.class));
     }
 
+    static {
+        init();
+    }
+
     public static final InstanceFactory<DescopedPrimitive> get(Class<? extends InstanceFactory> factoryClass) {
         if (INSTANCES.isEmpty()) {
             init();
