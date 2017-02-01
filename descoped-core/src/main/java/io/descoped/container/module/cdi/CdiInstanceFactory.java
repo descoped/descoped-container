@@ -1,9 +1,9 @@
-package io.descoped.container.module.ext.cdi;
+package io.descoped.container.module.cdi;
 
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.PrimitiveModule;
-import io.descoped.container.module.ext.BaseInstanceFactory;
-import io.descoped.container.module.ext.InstanceHandler;
+import io.descoped.container.module.factory.BaseInstanceFactory;
+import io.descoped.container.module.factory.InstanceHandler;
 import io.descoped.container.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

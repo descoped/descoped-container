@@ -1,10 +1,11 @@
-package io.descoped.container.module.ext.spi;
+package io.descoped.container.module.spi;
 
+import io.descoped.container.exception.DescopedServerException;
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.PrimitiveModule;
-import io.descoped.container.module.ext.BaseInstanceFactory;
-import io.descoped.container.module.ext.Instance;
-import io.descoped.container.module.ext.InstanceHandler;
+import io.descoped.container.module.factory.BaseInstanceFactory;
+import io.descoped.container.module.factory.Instance;
+import io.descoped.container.module.factory.InstanceHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,8 @@ public class SpiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
             if (accept(moduleClass)) {
                 classes.add(moduleClass);
                 weakInstanceMap.put(moduleClass, module);
+            } else {
+                throw new DescopedServerException("You must annotate '" + module.getClass().getName() + "' with @PrimitiveModule when using SPI! Current declaration is in conflict with CDI primitives.");
             }
         }
         return classes;

@@ -2,31 +2,36 @@ package io.descoped.container.core;
 
 import io.descoped.container.log.ConsoleAppender;
 import io.descoped.container.module.DescopedContainer;
+import io.descoped.container.module.DescopedPrimitive;
+import io.descoped.container.module.factory.DefaultInstanceFactory;
+import io.descoped.container.module.factory.InstanceFactory;
+import io.descoped.container.module.spi.SpiInstanceFactory;
 import org.apache.deltaspike.testcontrol.api.TestControl;
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(CdiTestRunner.class)
+@RunWith(JUnit4.class)
 @TestControl(logHandler = ConsoleAppender.class)
-public class DescopedContainerTest {
+public class DescopedSpiContainerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(DescopedContainerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(DescopedSpiContainerTest.class);
     private DescopedContainer descopedContainer;
 
     @Before
     public void setUp() throws Exception {
-        descopedContainer = new DescopedContainer();
+        InstanceFactory<DescopedPrimitive> factory = DefaultInstanceFactory.get(SpiInstanceFactory.class);
+        descopedContainer = new DescopedContainer(factory);
         log.info("Start descopedContainer..: {}", descopedContainer.isRunning());
         descopedContainer.start();
         log.info("Started descopedContainer!");
-        assertEquals(3, descopedContainer.serviceCount());
+        assertEquals(1, descopedContainer.serviceCount());
     }
 
     @After

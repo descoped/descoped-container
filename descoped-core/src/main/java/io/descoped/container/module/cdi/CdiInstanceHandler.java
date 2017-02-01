@@ -1,6 +1,6 @@
-package io.descoped.container.module.ext.cdi;
+package io.descoped.container.module.cdi;
 
-import io.descoped.container.module.ext.LifecycleInstanceHandler;
+import io.descoped.container.module.factory.LifecycleInstanceHandler;
 
 import javax.enterprise.inject.Instance;
 

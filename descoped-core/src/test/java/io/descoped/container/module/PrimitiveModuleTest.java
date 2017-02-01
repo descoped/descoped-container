@@ -1,9 +1,9 @@
 package io.descoped.container.module;
 
-import io.descoped.container.module.ext.InstanceFactory;
-import io.descoped.container.module.ext.InstanceHandler;
-import io.descoped.container.module.ext.spi.SpiInstanceFactory;
+import io.descoped.container.module.factory.InstanceFactory;
+import io.descoped.container.module.factory.InstanceHandler;
 import io.descoped.container.module.spi.CdiContainerModule;
+import io.descoped.container.module.spi.SpiInstanceFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

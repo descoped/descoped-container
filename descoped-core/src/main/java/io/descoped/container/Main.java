@@ -2,6 +2,10 @@ package io.descoped.container;
 
 import io.descoped.container.module.Bootstrap;
 import io.descoped.container.module.DescopedContainer;
+import io.descoped.container.module.DescopedPrimitive;
+import io.descoped.container.module.cdi.CdiInstanceFactory;
+import io.descoped.container.module.factory.DefaultInstanceFactory;
+import io.descoped.container.module.factory.InstanceFactory;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
 import org.slf4j.Logger;
@@ -24,7 +28,8 @@ public class Main {
 
     public Main() {
         log.info("Starting Descoped Container");
-        descopedContainer = new DescopedContainer();
+        InstanceFactory<DescopedPrimitive> factory = DefaultInstanceFactory.get(CdiInstanceFactory.class);
+        descopedContainer = new DescopedContainer(factory);
     }
 
     private static void installLogger() {

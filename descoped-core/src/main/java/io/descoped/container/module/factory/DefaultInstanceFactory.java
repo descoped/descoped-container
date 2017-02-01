@@ -1,8 +1,8 @@
-package io.descoped.container.module.ext;
+package io.descoped.container.module.factory;
 
 import io.descoped.container.module.DescopedPrimitive;
-import io.descoped.container.module.ext.cdi.CdiInstanceFactory;
-import io.descoped.container.module.ext.spi.SpiInstanceFactory;
+import io.descoped.container.module.cdi.CdiInstanceFactory;
+import io.descoped.container.module.spi.SpiInstanceFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

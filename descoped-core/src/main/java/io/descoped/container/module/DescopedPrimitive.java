@@ -1,5 +1,7 @@
 package io.descoped.container.module;
 
+import io.descoped.container.module.factory.DefaultInstanceFactory;
+
 /**
  * Created by oranheim on 27/01/2017.
  */
@@ -18,13 +20,7 @@ public interface DescopedPrimitive {
     }
 
     static boolean isRunning(DescopedPrimitive descopedPrimitive) {
-        Class<? extends DescopedPrimitive> clazz = (descopedPrimitive instanceof PrimitiveLifecycle ?
-                ((PrimitiveLifecycle) descopedPrimitive).internalClass() : descopedPrimitive.getClass());
-        PrimitiveLifecycle primitive = DescopedContainer.findPrimitiveLifecycleInstance(clazz);
-        if (primitive != null) {
-            return primitive.isRunning();
-        }
-        throw new IllegalStateException("Unable to locate primitive class: " + descopedPrimitive);
+        return DefaultInstanceFactory.findInstance(descopedPrimitive.getClass()).isRunning();
     }
 
 }

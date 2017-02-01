@@ -1,4 +1,4 @@
-package io.descoped.container.module.ext;
+package io.descoped.container.module.factory;
 
 /**
  * Created by oranheim on 01/02/2017.

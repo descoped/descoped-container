@@ -1,4 +1,4 @@
-package io.descoped.container.module.ext;
+package io.descoped.container.module.factory;
 
 import io.descoped.container.module.DescopedPrimitive;
 
