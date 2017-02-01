@@ -4,6 +4,8 @@ import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.factory.InstanceHandler;
 import io.descoped.container.module.spi.CdiContainerModule;
 import io.descoped.container.module.spi.SpiInstanceFactory;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,12 +21,12 @@ import static org.junit.Assert.assertTrue;
  */
 //@RunWith(JUnit4.class)
 //@TestControl(logHandler = ConsoleAppender.class)
-//@Ignore
+@Ignore
 public class PrimitiveModuleTest {
 
     private static final Logger log = LoggerFactory.getLogger(PrimitiveModuleTest.class);
 
-//    @Test
+    @Test
     public void testPrimitiveDiscoveryStartOrder() throws Exception {
         try {
             InstanceFactory<DescopedPrimitive> instanceFactory = new SpiInstanceFactory<>(DescopedPrimitive.class);

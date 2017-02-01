@@ -6,6 +6,7 @@ import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.factory.InstanceHandler;
 import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by oranheim on 27/01/2017.
  */
+@Ignore
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
 public class PrimitiveTest {

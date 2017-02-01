@@ -6,6 +6,7 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by oranheim on 10/12/2016.
  */
+@Ignore
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
 public class UtilTest {

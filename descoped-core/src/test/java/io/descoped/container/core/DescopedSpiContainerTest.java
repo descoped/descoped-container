@@ -18,9 +18,9 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 @RunWith(JUnit4.class)
 @TestControl(logHandler = ConsoleAppender.class)
-@Ignore
 public class DescopedSpiContainerTest {
 
     private static final Logger log = LoggerFactory.getLogger(DescopedSpiContainerTest.class);
