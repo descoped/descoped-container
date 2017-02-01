@@ -14,13 +14,13 @@ final public class DefaultInstanceFactory {
 
     private static final Map<Class<? extends InstanceFactory>, InstanceFactory<DescopedPrimitive>> INSTANCES = new ConcurrentHashMap<>();
 
+    private static final void register(Class<? extends InstanceFactory> factoryClass, InstanceFactory<DescopedPrimitive> factory) {
+        INSTANCES.put(factoryClass, factory);
+    }
+
     static {
         register(SpiInstanceFactory.class, new SpiInstanceFactory<>(DescopedPrimitive.class));
         register(CdiInstanceFactory.class, new CdiInstanceFactory<>(DescopedPrimitive.class));
-    }
-
-    private static final void register(Class<? extends InstanceFactory> factoryClass, InstanceFactory<DescopedPrimitive> factory) {
-        INSTANCES.put(factoryClass, factory);
     }
 
     public static final InstanceFactory<DescopedPrimitive> get(Class<? extends InstanceFactory> factoryClass) {
