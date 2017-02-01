@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * Created by oranheim on 04/01/2017.
@@ -15,37 +16,7 @@ import java.nio.file.Paths;
 public class CommonUtil {
 
     private static final Logger log = LoggerFactory.getLogger(CommonUtil.class);
-
-    public static void info(String msg, Object... values) {
-        log.info(msg, values);
-    }
-
-    public static void debug(String msg, Object... values) {
-        log.debug(msg, values);
-    }
-
-    public static void trace(String msg, Object... values) {
-        log.trace(msg, values);
-    }
-
-    public static void warn(String msg, Object... values) {
-        log.warn(msg, values);
-    }
-
-    public static void error(String msg, Object... values) {
-        log.error(msg, values);
-    }
-
     public static String fileSeparator = System.getProperty("file.separator");
-
-    public static Path getCurrentPath() {
-        return Paths.get("").toAbsolutePath();
-    }
-
-    public static String currentPath() {
-        return getCurrentPath().toString();
-    }
-
     private static ThreadLocal<OutputStream> outputLocal = new ThreadLocal<OutputStream>() {
         private OutputStream output = null;
 
@@ -68,6 +39,34 @@ public class CommonUtil {
             super.remove();
         }
     };
+
+    public static void info(String msg, Object... values) {
+        log.info(msg, values);
+    }
+
+    public static void debug(String msg, Object... values) {
+        log.debug(msg, values);
+    }
+
+    public static void trace(String msg, Object... values) {
+        log.trace(msg, values);
+    }
+
+    public static void warn(String msg, Object... values) {
+        log.warn(msg, values);
+    }
+
+    public static void error(String msg, Object... values) {
+        log.error(msg, values);
+    }
+
+    public static Path getCurrentPath() {
+        return Paths.get("").toAbsolutePath();
+    }
+
+    public static String currentPath() {
+        return getCurrentPath().toString();
+    }
 
     public static void closeOutputStream(OutputStream output) throws IOException {
         output.flush();
@@ -129,6 +128,18 @@ public class CommonUtil {
         }
         out.close();
         return out;
+    }
+
+    public static <T, L extends List<T>> L typedList(List<?> untypedList, Class<T> itemClass, Class<L> listClass) {
+        L list = null;
+        try {
+            list = listClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+        }
+        for (Object item : untypedList) {
+            list.add((T) item);
+        }
+        return list;
     }
 
 }

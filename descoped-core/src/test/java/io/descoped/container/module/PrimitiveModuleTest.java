@@ -1,5 +1,8 @@
 package io.descoped.container.module;
 
+import io.descoped.container.module.ext.InstanceFactory;
+import io.descoped.container.module.ext.InstanceHandler;
+import io.descoped.container.module.ext.spi.SpiInstanceFactory;
 import io.descoped.container.module.spi.CdiContainerModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +28,13 @@ public class PrimitiveModuleTest {
 
     @Test
     public void testPrimitiveDiscoveryStartOrder() throws Exception {
-        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getPrimitiveModuleInstances();
-        Map<Class<DescopedPrimitive>, DescopedPrimitive> map = primitiveDiscovery.obtain();
+        InstanceFactory<DescopedPrimitive> instanceFactory = new SpiInstanceFactory<>(DescopedPrimitive.class);
+        Map<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> map = instanceFactory.load();
 
         assertEquals(1, map.size());
 
-        Iterator<Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive>> accedingIt = map.entrySet().iterator();
-        Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive> entry;
+        Iterator<Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>>> accedingIt = map.entrySet().iterator();
+        Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> entry;
 
         assertTrue(accedingIt.hasNext());
         entry = accedingIt.next();
@@ -40,18 +43,18 @@ public class PrimitiveModuleTest {
 
     @Test
     public void testPrimitiveDiscoveryShutdownOrder() throws Exception {
-        PrimitiveDiscovery primitiveDiscovery = PrimitiveDiscovery.getPrimitiveModuleInstances();
-        Map<Class<DescopedPrimitive>, DescopedPrimitive> map = primitiveDiscovery.obtain();
+        InstanceFactory<DescopedPrimitive> instanceFactory = new SpiInstanceFactory<>(DescopedPrimitive.class);
+        Map<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> map = instanceFactory.load();
 
         assertEquals(1, map.size());
 
-        ListIterator<Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive>> decendingIt = primitiveDiscovery.reverseOrder();
-        Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive> entry;
+        ListIterator<Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>>> decendingIt = instanceFactory.reverseOrder();
+        Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> entry;
 
         assertTrue(decendingIt.hasPrevious());
         entry = decendingIt.previous();
         assertEquals(CdiContainerModule.class, entry.getKey());
-        primitiveDiscovery.removePrimitive(entry.getKey());
+        instanceFactory.remove(entry.getKey());
 
         assertEquals(0, map.size());
     }

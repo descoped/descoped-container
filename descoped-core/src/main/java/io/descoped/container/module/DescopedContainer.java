@@ -1,6 +1,11 @@
 package io.descoped.container.module;
 
 import io.descoped.container.exception.DescopedServerException;
+import io.descoped.container.module.ext.DefaultInstanceFactory;
+import io.descoped.container.module.ext.InstanceFactory;
+import io.descoped.container.module.ext.InstanceHandler;
+import io.descoped.container.module.ext.LifecycleInstanceHandler;
+import io.descoped.container.module.ext.spi.SpiInstanceFactory;
 import io.descoped.container.stage.DaemonTestProjectStageHolder;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 import org.apache.deltaspike.core.util.ProjectStageProducer;
@@ -17,9 +22,7 @@ import java.util.Map;
 public class DescopedContainer {
 
     private static final Logger log = LoggerFactory.getLogger(DescopedContainer.class);
-
-    private static PrimitiveDiscovery spiPrimitiveModuleDiscovery;
-    private static PrimitiveDiscovery cdiPrimitiveDiscovery;
+    private static InstanceFactory<DescopedPrimitive> spiInstanceFactory;
 
     public static boolean isDaemonTestProjectStage() {
         ProjectStage stage = ProjectStageProducer.getInstance().getProjectStage();
@@ -27,41 +30,42 @@ public class DescopedContainer {
     }
 
     public static PrimitiveLifecycle findPrimitiveLifecycleInstance(Class<? extends DescopedPrimitive> primitiveClass) {
-        if (cdiPrimitiveDiscovery == null) throw new IllegalStateException();
-        return (PrimitiveLifecycle) cdiPrimitiveDiscovery.findInstance(primitiveClass);
+//        if (cdiPrimitiveDiscovery == null) throw new IllegalStateException();
+//        return (PrimitiveLifecycle) cdiPrimitiveDiscovery.findInstance(primitiveClass);
+        return null;
     }
 
-    public static <T extends DescopedPrimitive> T findPrimitiveInstance(Class<T> primitiveClass) {
-        T instance = (T) findPrimitiveLifecycleInstance(primitiveClass).getDelegate();
-        return instance;
+    public static <T extends DescopedPrimitive> InstanceHandler<T> findPrimitiveInstance(Class<T> primitiveClass) {
+        return DefaultInstanceFactory.findInstance(primitiveClass);
     }
 
     public static int serviceCount() {
-        return (cdiPrimitiveDiscovery == null ? 0 : cdiPrimitiveDiscovery.obtain().size());
+//        return (cdiPrimitiveDiscovery == null ? 0 : cdiPrimitiveDiscovery.obtain().size());
+        return -1;
     }
 
     public DescopedContainer() {
-        spiPrimitiveModuleDiscovery = PrimitiveDiscovery.getPrimitiveModuleInstances();
+        spiInstanceFactory = DefaultInstanceFactory.get(SpiInstanceFactory.class);
     }
 
     public boolean isRunning() {
-        return (cdiPrimitiveDiscovery != null && !cdiPrimitiveDiscovery.isEmpty());
+        return (spiInstanceFactory != null && !spiInstanceFactory.instances().isEmpty());
     }
 
     public void start() {
         if (!isRunning()) {
             log.info("Initiating discovery of Descoped Primitives..");
-            cdiPrimitiveDiscovery = PrimitiveDiscovery.getPrimitiveInstances();
-            Map<Class<DescopedPrimitive>, DescopedPrimitive> discovered = cdiPrimitiveDiscovery.obtain();
-            for (Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive> primitiveEntry : discovered.entrySet()) {
-                DescopedPrimitive primitive = primitiveEntry.getValue();
+            Map<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> discovered = spiInstanceFactory.instances();
+            for (Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> primitiveEntry : discovered.entrySet()) {
+                InstanceHandler<DescopedPrimitive> primitive = primitiveEntry.getValue();
                 try {
                     if (!primitive.isRunning()) {
                         int runLevel = ((PrimitiveLifecycle) primitive).internalClass().isAnnotationPresent(Priority.class)
                                 ? ((PrimitiveLifecycle) primitive).internalClass().getAnnotation(Priority.class).value()
                                 : PrimitivePriority.CORE;
                         log.trace("Start service: {} [runLevel={}]", primitive, runLevel);
-                        primitive.start();
+                        primitive.get().start();
+                        ((LifecycleInstanceHandler)primitive).setRunning(true);
                     }
                 } catch (Exception e) {
                     throw new DescopedServerException(e);
@@ -74,10 +78,10 @@ public class DescopedContainer {
     public void stop() {
         if (isRunning()) {
             log.info("Releasing all Descoped Primitives..");
-            ListIterator<Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive>> descendingIterator = cdiPrimitiveDiscovery.reverseOrder();
+            ListIterator<Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>>> descendingIterator = spiInstanceFactory.reverseOrder();
             while (descendingIterator.hasPrevious()) {
-                Map.Entry<Class<DescopedPrimitive>, DescopedPrimitive> primitiveEntry = descendingIterator.previous();
-                DescopedPrimitive primitive = primitiveEntry.getValue();
+                Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> primitiveEntry = descendingIterator.previous();
+                InstanceHandler<DescopedPrimitive> primitive = primitiveEntry.getValue();
                 try {
                     if (primitive.isRunning()) {
                         int runLevel = ((PrimitiveLifecycle) primitive).internalClass().isAnnotationPresent(Priority.class)
@@ -87,23 +91,23 @@ public class DescopedContainer {
                                 ? ((PrimitiveLifecycle) primitive).internalClass().getAnnotation(Primitive.class).waitFor()
                                 : false;
                         log.trace("Stop service: {} [runLevel={}]", primitive, runLevel);
-                        primitive.stop();
+                        primitive.get().stop();
+                        ((LifecycleInstanceHandler)primitive).setRunning(false);
                         // todo: implement waitFor service to complete on interrupt through DescopedPrimitive and -Lifecycle
 //                        while (waitFor) {
 //                            TimeUnit.MILLISECONDS.sleep(50);
 //                        }
                     }
-                    cdiPrimitiveDiscovery.removePrimitive(primitiveEntry.getKey());
+                    spiInstanceFactory.remove(primitiveEntry.getKey());
                 } catch (Exception e) {
                     throw new DescopedServerException(e);
                 }
             }
-            if (!cdiPrimitiveDiscovery.isEmpty()) {
+            if (!spiInstanceFactory.instances().isEmpty()) {
                 throw new IllegalStateException("Error in shutdown of services");
             }
-            cdiPrimitiveDiscovery = null;
+            spiInstanceFactory = null;
         }
     }
-
 
 }

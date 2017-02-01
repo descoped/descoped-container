@@ -1,6 +1,6 @@
 package io.descoped.container.module.ext;
 
-import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 /**
@@ -8,12 +8,14 @@ import java.util.Map;
  */
 public interface InstanceFactory<T> {
 
-    List<Class<?>> discover();
+    Map<Class<T>, InstanceHandler<T>> load();
 
-    boolean accept(Class<?> clazz);
+    Map<Class<T>, InstanceHandler<T>> instances();
 
-    Map<Class<T>, Instance<T>> instances();
+    ListIterator<Map.Entry<Class<T>, InstanceHandler<T>>> reverseOrder();
 
-    Instance<T> create(Class<T> clazz, T instance);
+    InstanceHandler<T> find(Class<T> clazz);
+
+    void remove(Class<T> primitive);
 
 }

@@ -3,7 +3,7 @@ package io.descoped.container.module.ext;
 /**
  * Created by oranheim on 30/01/2017.
  */
-public class Instance<T> implements InstanceHandle<T> {
+public class Instance<T> extends LifecycleInstanceHandler<T> {
 
     protected T instance;
 
