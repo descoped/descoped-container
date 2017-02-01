@@ -59,7 +59,7 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                 InstanceHandler<DescopedPrimitive> primitive = (InstanceHandler<DescopedPrimitive>) primitiveEntry.getValue();
                 try {
                     DescopedPrimitive primitiveInstance = primitive.get();
-                    if (!primitive.isRunning()) {
+                    if (!primitive.get().isRunning()) {
                         Class<DescopedPrimitive> annoClass = primitive.getType();
                         int runLevel = annoClass.isAnnotationPresent(Priority.class)
                                 ? annoClass.getAnnotation(Priority.class).value()
@@ -88,7 +88,7 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                 InstanceHandler<T> primitive = primitiveEntry.getValue();
                 try {
                     DescopedPrimitive primitiveInstance = primitive.get();
-                    if (primitive.isRunning()) {
+                    if (primitive.get().isRunning()) {
                         Class<T> annoClass = primitive.getType();
 
                         int runLevel = annoClass.isAnnotationPresent(Priority.class)
