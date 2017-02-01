@@ -15,8 +15,8 @@ import javax.enterprise.inject.spi.CDI;
 /**
  * Created by oranheim on 28/01/2017.
  */
-@Primitive
 @Priority(PrimitivePriority.FRAMEWORK)
+@Primitive
 @ApplicationScoped
 public class UndertowPrimitive implements DescopedPrimitive {
 

@@ -1,6 +1,6 @@
-package io.descoped.container.deployment;
+package io.descoped.container.undertow.deployment;
 
-import io.descoped.container.core.UndertowContainer;
+import io.descoped.container.undertow.core.UndertowContainer;
 
 /**
  * Created by oranheim on 20/12/2016.

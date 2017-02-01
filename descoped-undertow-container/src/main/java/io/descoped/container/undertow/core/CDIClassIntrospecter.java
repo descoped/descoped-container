@@ -17,7 +17,7 @@
  *     under the License.
  */
 
-package io.descoped.container.core;
+package io.descoped.container.undertow.core;
 
 import io.undertow.servlet.api.ClassIntrospecter;
 import io.undertow.servlet.api.InstanceFactory;

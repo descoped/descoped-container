@@ -1,8 +1,8 @@
-package io.descoped.container.deployment;
+package io.descoped.container.undertow.deployment;
 
 import io.descoped.container.core.ServerContainer;
-import io.descoped.container.core.UndertowContainer;
 import io.descoped.container.exception.DescopedServerException;
+import io.descoped.container.undertow.core.UndertowContainer;
 import io.undertow.Handlers;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.servlet.Servlets;

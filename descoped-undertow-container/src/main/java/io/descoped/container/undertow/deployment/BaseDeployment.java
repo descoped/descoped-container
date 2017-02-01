@@ -1,11 +1,11 @@
-package io.descoped.container.deployment;
+package io.descoped.container.undertow.deployment;
 
 import io.descoped.container.Main;
-import io.descoped.container.core.CDIClassIntrospecter;
 import io.descoped.container.core.Deployment;
-import io.descoped.container.core.UndertowContainer;
 import io.descoped.container.deployment.spi.WebApp;
 import io.descoped.container.extension.ClassLoaders;
+import io.descoped.container.undertow.core.CDIClassIntrospecter;
+import io.descoped.container.undertow.core.UndertowContainer;
 import io.undertow.server.handlers.PathHandler;
 import io.undertow.server.handlers.resource.ClassPathResourceManager;
 import io.undertow.servlet.Servlets;

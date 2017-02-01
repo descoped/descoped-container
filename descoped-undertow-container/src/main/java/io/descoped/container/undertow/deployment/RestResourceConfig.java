@@ -1,4 +1,4 @@
-package io.descoped.container.deployment;
+package io.descoped.container.undertow.deployment;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -1,4 +1,4 @@
-package io.descoped.container.deployment;
+package io.descoped.container.undertow.deployment;
 
 import io.descoped.container.deployment.spi.Filter;
 import io.descoped.container.deployment.spi.WebApp;

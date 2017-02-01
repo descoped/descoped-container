@@ -1,10 +1,10 @@
-package io.descoped.container.deployment;
+package io.descoped.container.undertow.deployment;
 
-import io.descoped.container.core.CDIClassIntrospecter;
 import io.descoped.container.deployment.spi.Filter;
 import io.descoped.container.deployment.spi.Servlet;
 import io.descoped.container.deployment.spi.WebApp;
 import io.descoped.container.extension.ClassLoaders;
+import io.descoped.container.undertow.core.CDIClassIntrospecter;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
 import org.slf4j.Logger;

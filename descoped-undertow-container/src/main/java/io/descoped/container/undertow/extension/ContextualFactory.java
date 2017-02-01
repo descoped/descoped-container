@@ -1,7 +1,7 @@
-package io.descoped.container.extension;
+package io.descoped.container.undertow.extension;
 
 import io.descoped.container.core.ServerContainer;
-import io.descoped.container.core.UndertowContainer;
+import io.descoped.container.undertow.core.UndertowContainer;
 import org.apache.deltaspike.core.util.metadata.builder.ContextualLifecycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

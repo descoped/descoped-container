@@ -1,7 +1,9 @@
 package io.descoped.container.deployment;
 
-import io.descoped.container.core.UndertowContainer;
 import io.descoped.container.deployment.spi.WebApp;
+import io.descoped.container.undertow.core.UndertowContainer;
+import io.descoped.container.undertow.deployment.RestDeployment;
+import io.descoped.container.undertow.deployment.UndertowWebApp;
 import org.apache.deltaspike.cdise.servlet.CdiServletRequestListener;
 import org.apache.deltaspike.servlet.impl.event.EventBridgeFilter;
 import org.glassfish.jersey.servlet.ServletContainer;

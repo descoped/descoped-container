@@ -1,14 +1,10 @@
 package io.descoped.container.extension;
 
-import io.descoped.container.core.ServerContainer;
-import io.descoped.container.core.UndertowContainer;
 import io.descoped.container.support.WebServer;
 import io.descoped.container.support.WebServerLiteral;
-import org.apache.deltaspike.core.util.bean.BeanBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
 import java.util.Map;
@@ -55,18 +51,18 @@ public class ServerExtension implements Extension {
     }
 
     private Bean<?> createBean(String id, String name, BeanManager bm) {
-        BeanBuilder<UndertowContainer> beanBuilder = new BeanBuilder<UndertowContainer>(bm)
-                .id("DescopedWebServer#" + name)
-                .beanClass(UndertowContainer.class)
-                .types(ServerContainer.class, Object.class)
-                .qualifiers(new WebServerLiteral(id))
-                .name(name)
-                .scope(Dependent.class)
-                .beanLifecycle(new ContextualFactory(id));
-        Bean<?> bean = beanBuilder.create();
-        log.trace("Register Bean for InjectionPoint: {} => {}", id, name);
-        return bean;
-
+//        BeanBuilder<UndertowContainer> beanBuilder = new BeanBuilder<UndertowContainer>(bm)
+//                .id("DescopedWebServer#" + name)
+//                .beanClass(UndertowContainer.class)
+//                .types(ServerContainer.class, Object.class)
+//                .qualifiers(new WebServerLiteral(id))
+//                .name(name)
+//                .scope(Dependent.class)
+//                .beanLifecycle(new ContextualFactory(id));
+//        Bean<?> bean = beanBuilder.create();
+//        log.trace("Register Bean for InjectionPoint: {} => {}", id, name);
+//        return bean;
+        return null;
     }
 
 }

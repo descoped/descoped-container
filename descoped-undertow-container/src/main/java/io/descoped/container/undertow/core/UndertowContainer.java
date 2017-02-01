@@ -1,6 +1,10 @@
-package io.descoped.container.core;
+package io.descoped.container.undertow.core;
 
-import io.descoped.container.deployment.RestDeployment;
+import io.descoped.container.core.Deployment;
+import io.descoped.container.core.PreStartContainer;
+import io.descoped.container.core.PreStopContainer;
+import io.descoped.container.core.ServerContainer;
+import io.descoped.container.undertow.deployment.RestDeployment;
 import io.undertow.Undertow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
