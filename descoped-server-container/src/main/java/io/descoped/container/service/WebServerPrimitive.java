@@ -1,4 +1,4 @@
-package io.descoped.container.undertow.service;
+package io.descoped.container.service;
 
 import io.descoped.container.core.ServerContainer;
 import io.descoped.container.module.DescopedPrimitive;
@@ -18,9 +18,9 @@ import javax.enterprise.inject.spi.CDI;
 @Priority(PrimitivePriority.FRAMEWORK)
 @Primitive
 @ApplicationScoped
-public class UndertowPrimitive implements DescopedPrimitive {
+public class WebServerPrimitive implements DescopedPrimitive {
 
-    private static final Logger log = LoggerFactory.getLogger(UndertowPrimitive.class);
+    private static final Logger log = LoggerFactory.getLogger(WebServerPrimitive.class);
 
     private ServerContainer serverContainer;
 
@@ -30,7 +30,6 @@ public class UndertowPrimitive implements DescopedPrimitive {
 
     @Override
     public void init() {
-
     }
 
     @Override
@@ -43,22 +42,14 @@ public class UndertowPrimitive implements DescopedPrimitive {
 
     @Override
     public void stop() {
-        if (serverContainer != null) serverContainer.shutdown();
-        serverContainer = null;
+        if (serverContainer != null) {
+            serverContainer.shutdown();
+            serverContainer = null;
+        }
     }
 
     @Override
     public void destroy() {
-
     }
-
-//    private void observeDeploymentHandlers(@Observes PreStartContainer event) {
-//        if (isDaemonTestProjectStage()) return;
-//        UndertowContainer container = (UndertowContainer) event.container();
-//        if (container.getDeployments().isEmpty()) {
-//            container.deployJaxRsResourceConfig();
-//        }
-//    }
-
 
 }

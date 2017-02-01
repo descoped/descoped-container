@@ -46,6 +46,13 @@
         </dependency>
 
         <dependency>
+            <groupId>io.descoped</groupId>
+            <artifactId>descoped-rest-jersey</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.deltaspike.modules</groupId>
             <artifactId>deltaspike-servlet-module-impl</artifactId>
             <scope>compile</scope>

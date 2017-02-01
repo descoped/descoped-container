@@ -1,7 +1,6 @@
-package io.descoped.container.undertow.extension;
+package io.descoped.container.extension;
 
 import io.descoped.container.core.ServerContainer;
-import io.descoped.container.undertow.core.UndertowContainer;
 import org.apache.deltaspike.core.util.metadata.builder.ContextualLifecycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,7 @@ import javax.enterprise.inject.spi.Bean;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ContextualFactory implements ContextualLifecycle<UndertowContainer> {
+public class ContextualFactory implements ContextualLifecycle<ServerContainer> {
 
     private static final Logger log = LoggerFactory.getLogger(ContextualFactory.class);
 
@@ -23,18 +22,18 @@ public class ContextualFactory implements ContextualLifecycle<UndertowContainer>
     }
 
     @Override
-    public UndertowContainer create(Bean<UndertowContainer> bean, CreationalContext<UndertowContainer> creationalContext) {
+    public ServerContainer create(Bean<ServerContainer> bean, CreationalContext<ServerContainer> creationalContext) {
         if (!instanceMap.containsKey(id)) {
-            UndertowContainer instance = new UndertowContainer();
+            ServerContainer instance = ServerExtension.newInstance();
             log.trace("Create core instance: {}", instance);
             instanceMap.put(id, instance);
         }
-        UndertowContainer instance = (UndertowContainer) instanceMap.get(id);
+        ServerContainer instance = (ServerContainer) instanceMap.get(id);
         return instance;
     }
 
     @Override
-    public void destroy(Bean<UndertowContainer> bean, UndertowContainer instance, CreationalContext<UndertowContainer> creationalContext) {
+    public void destroy(Bean<ServerContainer> bean, ServerContainer instance, CreationalContext<ServerContainer> creationalContext) {
         log.trace("Destroy core instance: {}", instance);
         creationalContext.release();
     }
