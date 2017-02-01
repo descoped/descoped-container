@@ -43,12 +43,6 @@ public class DescopedContainer<T extends DescopedPrimitive> {
         return false;
     }
 
-    private void load() {
-        if (!isRunning()) {
-            instanceFactory.load();
-        }
-    }
-
     private String factoryName() {
         String factoryName = instanceFactory.name();
         if ("SPI".equals(factoryName)) factoryName = "SPI Module";
@@ -123,13 +117,6 @@ public class DescopedContainer<T extends DescopedPrimitive> {
             if (!instanceFactory.instances().isEmpty()) {
                 throw new IllegalStateException("Error in shutdown of services");
             }
-            instanceFactory = null;
-        }
-    }
-
-    private void release() {
-        if (!isRunning()) {
-            instanceFactory.instances().clear();
             instanceFactory = null;
         }
     }
