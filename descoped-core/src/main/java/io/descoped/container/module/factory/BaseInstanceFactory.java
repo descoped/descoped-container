@@ -64,7 +64,7 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
         // iterate classes and create internal instance map
         for (Map.Entry<Class<T>, Integer> primitive : primitivesMap.entrySet()) {
             InstanceHandler<T> primitiveInstance = find(primitive.getKey());
-//            log.trace("---------> class: {}", primitive.getKey());
+            log.trace("---------> class: {}", primitive.getKey());
 //                log.trace("------> class: {} -- inst: {}", primitive.getKey(), primitiveInstance.get());
             try {
                 primitiveInstance.get().init();

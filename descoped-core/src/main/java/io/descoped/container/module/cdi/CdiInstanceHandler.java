@@ -14,6 +14,7 @@ public class CdiInstanceHandler<T> extends LifecycleInstanceHandler<T> {
 
     public CdiInstanceHandler(final Instance<T> instance) {
         this.instance = instance;
+        get();
     }
 
     @Override

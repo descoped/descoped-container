@@ -9,6 +9,7 @@ import io.descoped.container.module.spi.SpiInstanceFactory;
 import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -19,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
 @TestControl(logHandler = ConsoleAppender.class)
+@Ignore
 public class DescopedSpiContainerTest {
 
     private static final Logger log = LoggerFactory.getLogger(DescopedSpiContainerTest.class);
