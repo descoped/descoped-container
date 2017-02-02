@@ -1,11 +1,14 @@
 package io.descoped.container.module;
 
+import io.descoped.container.log.ConsoleAppender;
 import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.factory.InstanceHandler;
 import io.descoped.container.module.spi.CdiContainerModule;
 import io.descoped.container.module.spi.SpiInstanceFactory;
-import org.junit.Ignore;
+import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +22,9 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by oranheim on 27/01/2017.
  */
-//@RunWith(JUnit4.class)
-//@TestControl(logHandler = ConsoleAppender.class)
-@Ignore
+@RunWith(JUnit4.class)
+@TestControl(logHandler = ConsoleAppender.class)
+//@Ignore
 public class PrimitiveModuleTest {
 
     private static final Logger log = LoggerFactory.getLogger(PrimitiveModuleTest.class);
@@ -45,7 +48,7 @@ public class PrimitiveModuleTest {
         }
     }
 
-//    @Test
+    @Test
     public void testPrimitiveDiscoveryShutdownOrder() throws Exception {
         InstanceFactory<DescopedPrimitive> instanceFactory = new SpiInstanceFactory<>(DescopedPrimitive.class);
         Map<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> map = instanceFactory.load();
