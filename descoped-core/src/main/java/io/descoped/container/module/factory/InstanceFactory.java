@@ -1,5 +1,8 @@
 package io.descoped.container.module.factory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -20,4 +23,11 @@ public interface InstanceFactory<T> {
 
     void remove(Class<T> primitive);
 
+    default Logger LOG() {
+        return LOGGER(this.getClass());
+    }
+
+    static Logger LOGGER(Class<?> instanceFactoryClass) {
+        return LoggerFactory.getLogger(instanceFactoryClass);
+    }
 }

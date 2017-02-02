@@ -2,8 +2,6 @@ package io.descoped.container.module.factory;
 
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.PrimitivePriority;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
 import java.util.*;
@@ -14,7 +12,6 @@ import java.util.stream.Collectors;
  */
 abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implements InstanceFactory<T> {
 
-    private final static Logger log = LoggerFactory.getLogger(BaseInstanceFactory.class);
     protected final Class<? extends T> factoryClass;
     private List<Class<T>> discoveredClasses = null;
     private Map<Class<T>, InstanceHandler<T>> instances = new LinkedHashMap<>();
@@ -64,10 +61,10 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
         // iterate classes and create internal instance map
         for (Map.Entry<Class<T>, Integer> primitive : primitivesMap.entrySet()) {
             InstanceHandler<T> primitiveInstance = find(primitive.getKey());
-            log.trace("---------> class: {}", primitive.getKey());
-//                log.trace("------> class: {} -- inst: {}", primitive.getKey(), primitiveInstance.get());
             try {
+                LOG().trace("Invoke {}.init()", primitive.getKey());
                 primitiveInstance.get().init();
+                LOG().trace("Invoked {}.init()", primitive.getKey());
             } catch (Exception e) {
                 throw new IllegalStateException("Error resolving bean: " + primitiveInstance.getType() + " in factory: " + getClass(), e);
             }
@@ -105,11 +102,11 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
     public void remove(Class<T> primitive) {
         InstanceHandler<T> instance = find(primitive);
         try {
+            LOG().trace("Invoke {}.destroy()", primitive);
             instance.get().destroy();
+            LOG().trace("Invoked {}.destroy()", primitive);
         } catch (Exception e) {
-            log.error("Error invoking destroy method on: " + instance.getType(), e);
-//            e.printStackTrace();
-//            throw new IllegalStateException();
+            LOG().error("Error invoking destroy method on: " + instance.getType(), e);
         }
         instances.remove(primitive);
         instance.release();

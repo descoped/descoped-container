@@ -6,8 +6,6 @@ import io.descoped.container.module.PrimitiveModule;
 import io.descoped.container.module.factory.BaseInstanceFactory;
 import io.descoped.container.module.factory.Instance;
 import io.descoped.container.module.factory.InstanceHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -16,7 +14,6 @@ import java.util.*;
  */
 public class SpiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanceFactory<T> {
 
-    private final static Logger log = LoggerFactory.getLogger(SpiInstanceFactory.class);
     private volatile Map<Class<T>, T> weakInstanceMap = new WeakHashMap<>();
 
     public SpiInstanceFactory(final Class<T> factoryClass) {
@@ -53,7 +50,7 @@ public class SpiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
     @Override
     protected boolean accept(Class<T> clazz) {
         boolean isDescopedModule = clazz.isAnnotationPresent(PrimitiveModule.class);
-        if (!isDescopedModule) log.trace("Skip Class: {}", clazz);
+        if (!isDescopedModule) LOG().trace("Skip Class: {}", clazz);
         return isDescopedModule;
     }
 

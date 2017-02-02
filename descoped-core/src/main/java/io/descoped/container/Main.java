@@ -52,27 +52,12 @@ public class Main {
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 log.debug("ShutdownHook triggered..");
-                if (descopedContainer != null) {
-                    descopedContainer.stop();
-//                    try {
-//                        Thread.sleep(250);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-                    descopedContainer = null;
-                    instanceFactory = null;
-                }
+                stop();
             }));
             descopedContainer.start();
             waitFor.run();
         } finally {
-            if (descopedContainer != null) {
-                descopedContainer.stop();
-//                descopedContainer = null;
-//
-//     instanceFactory = null;
-            }
-            log.trace("Leaving.. Bye!");
+            stop();
         }
     }
 
@@ -83,6 +68,15 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void stop() {
+        if (descopedContainer != null) {
+            descopedContainer.stop();
+            descopedContainer = null;
+            instanceFactory = null;
+        }
+        log.trace("Leaving.. Bye!");
     }
 
 }

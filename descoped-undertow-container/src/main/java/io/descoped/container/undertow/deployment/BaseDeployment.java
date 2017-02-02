@@ -45,7 +45,7 @@ abstract public class BaseDeployment implements Deployment {
         List<ServletContainerInitializerInfo> infos = new ArrayList<>();
         for (ServletContainerInitializer initializer : ServiceLoader.load(ServletContainerInitializer.class)) {
             HandlesTypes types = initializer.getClass().getAnnotation(HandlesTypes.class);
-            log.trace("---> HandleTypes: {} ==> {}", initializer.getClass(), types);
+            log.trace("HandleTypes: {} => {}", initializer.getClass(), types);
             infos.add(new ServletContainerInitializerInfo(
                     initializer.getClass(),
                     new ImmediateInstanceFactory<>(initializer),

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
+import java.util.Arrays;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -65,9 +66,9 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                                 ? annoClass.getAnnotation(Priority.class).value()
                                 : PrimitivePriority.CORE;
 
-                        log.trace("Start {} service: {} [runLevel={}]", factoryName(), annoClass, runLevel);
-
+                        log.trace("Invoke {} {}.start() [runLevel={}]", factoryName(), annoClass, runLevel);
                         primitiveInstance.start();
+                        log.trace("Invoked {} {}.start() [runLevel={}]", factoryName(), annoClass, runLevel);
                         ((LifecycleInstanceHandler) primitive).setRunning(true);
                     }
                 } catch (Exception e) {
@@ -80,8 +81,8 @@ public class DescopedContainer<T extends DescopedPrimitive> {
 
     public void stop() {
         if (isRunning()) {
-            log.info("Releasing all Descoped {} Primitives..", factoryName());
             ListIterator<Map.Entry<Class<T>, InstanceHandler<T>>> descendingIterator = instanceFactory.reverseOrder();
+            log.info("Releasing {} Descoped {} Primitives..", Arrays.asList(descendingIterator).size(), factoryName());
             int count = 0;
             while (descendingIterator.hasPrevious()) {
                 Map.Entry<Class<T>, InstanceHandler<T>> primitiveEntry = descendingIterator.previous();
@@ -98,22 +99,22 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                                 ? annoClass.getAnnotation(Primitive.class).waitFor()
                                 : false;
 
-                        log.trace("-> Stop {} service: {} [runLevel={}]", factoryName(), annoClass, runLevel);
-
+                        log.trace("Invoke {} {}.stop() [runLevel={}]", factoryName(), annoClass, runLevel);
                         primitiveInstance.stop();
-                        log.trace("<- Stopped {} service: {}", factoryName(), annoClass);
+                        log.trace("Invoked {} {}.stop() [runLevel={}]", factoryName(), annoClass, runLevel);
                         ((LifecycleInstanceHandler) primitive).setRunning(false);
                         // todo: implement waitFor service to complete on interrupt through DescopedPrimitive and -Lifecycle
 //                        while (waitFor) {
 //                            TimeUnit.MILLISECONDS.sleep(50);
 //                        }
 //                        Thread.sleep(500);
-                        log.trace("------> removing instance: {}", primitiveEntry.getKey());
+                        log.trace("Removing instance: {}", primitiveEntry.getKey());
                         instanceFactory.remove(primitiveEntry.getKey());
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
 //                    throw new DescopedServerException(e);
+                    log.error("Error during shutdown of DescopedContainer!", e);
                 }
                 count++;
             }

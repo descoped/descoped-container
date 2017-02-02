@@ -5,8 +5,6 @@ import io.descoped.container.module.PrimitiveModule;
 import io.descoped.container.module.factory.BaseInstanceFactory;
 import io.descoped.container.module.factory.InstanceHandler;
 import io.descoped.container.util.CommonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Bean;
@@ -21,8 +19,6 @@ import java.util.stream.Collectors;
  * Created by oranheim on 30/01/2017.
  */
 public class CdiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanceFactory<T> {
-
-    private final static Logger log = LoggerFactory.getLogger(CdiInstanceFactory.class);
 
     public CdiInstanceFactory(final Class<? extends T> factoryClass) {
         super(factoryClass);
@@ -52,7 +48,8 @@ public class CdiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
 
     @Override
     public InstanceHandler<T> create(Class<T> clazz, Object instance) {
-        InstanceHandler<T> instanceHandler = new io.descoped.container.module.factory.Instance<T>(((Instance<T>) instance).get());
+//        InstanceHandler<T> instanceHandler = new io.descoped.container.module.factory.Instance<T>(((Instance<T>) instance).get());
+        InstanceHandler<T> instanceHandler = new CdiInstanceHandler<T>((Instance<T>) instance);
         return instanceHandler;
     }
 

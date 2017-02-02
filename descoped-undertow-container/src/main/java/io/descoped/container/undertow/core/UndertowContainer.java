@@ -18,7 +18,7 @@ import javax.enterprise.inject.spi.CDI;
 @Vetoed
 public class UndertowContainer extends ServerContainer {
 
-    private static final Logger log = LoggerFactory.getLogger(UndertowContainer.class);
+    public static final Logger log = LoggerFactory.getLogger(UndertowContainer.class);
     private Undertow server;
     private Undertow.Builder builder;
 

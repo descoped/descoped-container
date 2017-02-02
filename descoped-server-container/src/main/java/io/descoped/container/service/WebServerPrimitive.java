@@ -43,9 +43,7 @@ public class WebServerPrimitive implements DescopedPrimitive {
     @Override
     public void stop() {
         if (serverContainer != null) {
-            log.trace("START SHUTDOWN");
             serverContainer.shutdown();
-            log.trace("DONE SHUTDOWN");
             serverContainer = null;
         }
     }

@@ -8,7 +8,6 @@ import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.InstanceFactory;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
-import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,30 +37,21 @@ public class CdiContainerModule implements DescopedPrimitive {
     public void start() {
         cdiContainer.boot();
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
-//        cdiContainer.getContextControl().startContext(RequestScoped.class);
         descopedContainer.start();
     }
 
     @Override
     public void stop() {
-        log.info("-----------------> stop");
         descopedContainer.stop();
-        log.info("-----------------> stopped -- is CDI alive: {}", BeanManagerProvider.isActive());
-//        try {
-//            Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         cdiContainer.getContextControl().stopContext(ApplicationScoped.class);
         cdiContainer.shutdown();
-//        cdiContainer.getContextControl().stopContexts();
     }
 
     @Override
     public void destroy() {
-//        descopedContainer = null;
-//        instanceFactory = null;
-//        cdiContainer = null;
+        descopedContainer = null;
+        instanceFactory = null;
+        cdiContainer = null;
     }
 
 }
