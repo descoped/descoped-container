@@ -98,18 +98,22 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                                 ? annoClass.getAnnotation(Primitive.class).waitFor()
                                 : false;
 
-                        log.trace("Stop {} service: {} [runLevel={}]", factoryName(), annoClass, runLevel);
+                        log.trace("-> Stop {} service: {} [runLevel={}]", factoryName(), annoClass, runLevel);
 
                         primitiveInstance.stop();
+                        log.trace("<- Stopped {} service: {}", factoryName(), annoClass);
                         ((LifecycleInstanceHandler) primitive).setRunning(false);
                         // todo: implement waitFor service to complete on interrupt through DescopedPrimitive and -Lifecycle
 //                        while (waitFor) {
 //                            TimeUnit.MILLISECONDS.sleep(50);
 //                        }
+                        Thread.sleep(500);
+                        log.trace("------> removing instance: {}", primitiveEntry.getKey());
+                        instanceFactory.remove(primitiveEntry.getKey());
                     }
-                    instanceFactory.remove(primitiveEntry.getKey());
                 } catch (Exception e) {
-                    throw new DescopedServerException(e);
+                    e.printStackTrace();
+//                    throw new DescopedServerException(e);
                 }
                 count++;
             }

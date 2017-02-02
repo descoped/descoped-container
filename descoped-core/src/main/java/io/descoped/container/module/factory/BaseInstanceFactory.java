@@ -107,7 +107,9 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
         try {
             instance.get().destroy();
         } catch (Exception e) {
-            throw new IllegalStateException();
+            log.error("Error invoking destroy method on: " + instance.getType(), e);
+//            e.printStackTrace();
+//            throw new IllegalStateException();
         }
         instances.remove(primitive);
         instance.release();

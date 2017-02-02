@@ -27,6 +27,7 @@ public interface DescopedPrimitive {
         try {
             return (instance != null ? instance.isRunning() : false);
         } catch (ContextNotActiveException e) {
+            e.printStackTrace();
             return false;
         }
     }

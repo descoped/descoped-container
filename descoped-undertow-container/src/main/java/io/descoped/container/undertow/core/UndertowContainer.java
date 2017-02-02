@@ -71,14 +71,19 @@ public class UndertowContainer extends ServerContainer {
     @Override
     public void shutdown() {
         if (isRunning() && !isStopped()) {
-            CDI.current().getBeanManager().fireEvent(new PreStopContainer(this));
-            server.stop();
-            for (Deployment deployment : getDeployments()) {
-                undeploy(deployment);
+            try {
+                CDI.current().getBeanManager().fireEvent(new PreStopContainer(this));
+                server.stop();
+                for (Deployment deployment : getDeployments()) {
+                    undeploy(deployment);
+                }
+                getDeployments().clear();
+                server = null;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            getDeployments().clear();
-            server = null;
         }
+//        CdiContainerLoader.getCdiContainer().getContextControl().startContext(ApplicationScoped.class);
     }
 
     @Override

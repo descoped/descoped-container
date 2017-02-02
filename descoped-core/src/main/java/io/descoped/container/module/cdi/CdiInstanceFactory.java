@@ -51,7 +51,7 @@ public class CdiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
 
     @Override
     public InstanceHandler<T> create(Class<T> clazz, Object instance) {
-        InstanceHandler<T> instanceHandler = new CdiInstanceHandler<T>((Instance<T>) instance);
+        InstanceHandler<T> instanceHandler = new io.descoped.container.module.factory.Instance<T>(((Instance<T>) instance).get());
         return instanceHandler;
     }
 

@@ -27,6 +27,10 @@ public class CdiInstanceHandler<T> extends LifecycleInstanceHandler<T> {
 
     @Override
     public void release() {
-        instance.destroy(found);
+        try {
+            instance.destroy(found);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

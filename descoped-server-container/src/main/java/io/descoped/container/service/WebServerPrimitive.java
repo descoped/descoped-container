@@ -9,15 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.CDI;
+import javax.inject.Singleton;
 
 /**
  * Created by oranheim on 28/01/2017.
  */
 @Priority(PrimitivePriority.FRAMEWORK)
 @Primitive
-@ApplicationScoped
+@Singleton
 public class WebServerPrimitive implements DescopedPrimitive {
 
     private static final Logger log = LoggerFactory.getLogger(WebServerPrimitive.class);

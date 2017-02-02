@@ -27,7 +27,6 @@ public class CdiContainerModule implements DescopedPrimitive {
     private InstanceFactory<DescopedPrimitive> instanceFactory;
     private DescopedContainer<DescopedPrimitive> descopedContainer;
 
-
     @Override
     public void init() {
         cdiContainer = CdiContainerLoader.getCdiContainer();
@@ -45,16 +44,23 @@ public class CdiContainerModule implements DescopedPrimitive {
 
     @Override
     public void stop() {
+        log.info("-----------------> stop");
         descopedContainer.stop();
-        cdiContainer.getContextControl().stopContexts();
+        log.info("-----------------> stopped");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         cdiContainer.shutdown();
+//        cdiContainer.getContextControl().stopContexts();
     }
 
     @Override
     public void destroy() {
-        descopedContainer = null;
-        instanceFactory = null;
-        cdiContainer = null;
+//        descopedContainer = null;
+//        instanceFactory = null;
+//        cdiContainer = null;
     }
 
 }

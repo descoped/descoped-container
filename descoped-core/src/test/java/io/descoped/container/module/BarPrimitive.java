@@ -1,11 +1,11 @@
 package io.descoped.container.module;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 
 /**
  * Created by oranheim on 27/01/2017.
  */
-@ApplicationScoped
+@Singleton
 public class BarPrimitive implements DescopedPrimitive {
 
     @Override

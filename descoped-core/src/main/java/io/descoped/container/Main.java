@@ -54,6 +54,11 @@ public class Main {
                 log.debug("ShutdownHook triggered..");
                 if (descopedContainer != null) {
                     descopedContainer.stop();
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     descopedContainer = null;
                     instanceFactory = null;
                 }
@@ -62,9 +67,9 @@ public class Main {
             waitFor.run();
         } finally {
             if (descopedContainer != null) {
-                descopedContainer.stop();
-                descopedContainer = null;
-                instanceFactory = null;
+//                descopedContainer.stop();
+//                descopedContainer = null;
+//                instanceFactory = null;
             }
         }
     }

@@ -1,13 +1,13 @@
 package io.descoped.container.module;
 
 import javax.annotation.Priority;
-import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 
 /**
  * Created by oranheim on 28/01/2017.
  */
 @Priority(5)
-@ApplicationScoped
+@Singleton
 public class BazPrimitive implements DescopedPrimitive {
     @Override
     public void init() {
