@@ -5,11 +5,11 @@ import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.Primitive;
 import io.descoped.container.module.PrimitivePriority;
 import io.descoped.container.support.WebServerLiteral;
+import io.descoped.container.util.CdiUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
-import javax.enterprise.inject.spi.CDI;
 import javax.inject.Singleton;
 
 /**
@@ -35,7 +35,8 @@ public class WebServerPrimitive implements DescopedPrimitive {
     @Override
     public void start() {
         if (serverContainer == null) {
-            serverContainer = CDI.current().select(ServerContainer.class, WebServerLiteral.DEFAULT).get();
+//            serverContainer = CDI.current().select(ServerContainer.class, WebServerLiteral.DEFAULT).get();
+            serverContainer = CdiUtil.instanceOf(ServerContainer.class, WebServerLiteral.DEFAULT);
             serverContainer.start();
         }
     }
