@@ -8,12 +8,12 @@ import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.InstanceFactory;
 import org.apache.deltaspike.cdise.api.CdiContainer;
 import org.apache.deltaspike.cdise.api.CdiContainerLoader;
+import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 
 /**
  * Created by oranheim on 28/01/2017.
@@ -38,7 +38,7 @@ public class CdiContainerModule implements DescopedPrimitive {
     public void start() {
         cdiContainer.boot();
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
-        cdiContainer.getContextControl().startContext(RequestScoped.class);
+//        cdiContainer.getContextControl().startContext(RequestScoped.class);
         descopedContainer.start();
     }
 
@@ -46,12 +46,13 @@ public class CdiContainerModule implements DescopedPrimitive {
     public void stop() {
         log.info("-----------------> stop");
         descopedContainer.stop();
-        log.info("-----------------> stopped");
+        log.info("-----------------> stopped -- is CDI alive: {}", BeanManagerProvider.isActive());
 //        try {
 //            Thread.sleep(500);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
+        cdiContainer.getContextControl().stopContext(ApplicationScoped.class);
         cdiContainer.shutdown();
 //        cdiContainer.getContextControl().stopContexts();
     }

@@ -69,8 +69,10 @@ public class Main {
             if (descopedContainer != null) {
                 descopedContainer.stop();
 //                descopedContainer = null;
-//                instanceFactory = null;
+//
+//     instanceFactory = null;
             }
+            log.trace("Leaving.. Bye!");
         }
     }
 

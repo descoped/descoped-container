@@ -26,6 +26,7 @@ public class CdiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
 
     public CdiInstanceFactory(final Class<? extends T> factoryClass) {
         super(factoryClass);
+        System.setProperty("org.jboss.weld.se.shutdownHook", "false");
     }
 
     @Override
