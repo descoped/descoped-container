@@ -6,7 +6,6 @@ import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.factory.InstanceHandler;
 import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by oranheim on 27/01/2017.
  */
-@Ignore
+//@Ignore
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
 public class PrimitiveTest {
@@ -31,32 +30,28 @@ public class PrimitiveTest {
 
     @Test
     public void testPrimitiveDiscoveryStartOrder() throws Exception {
-        try {
-            InstanceFactory<DescopedPrimitive> instanceFactory = new CdiInstanceFactory<>(DescopedPrimitive.class);
-            Map<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> map = instanceFactory.load();
+        InstanceFactory<DescopedPrimitive> instanceFactory = new CdiInstanceFactory<>(DescopedPrimitive.class);
+        Map<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> map = instanceFactory.load();
 
-            assertEquals(3, map.size());
+        assertEquals(3, map.size());
 
-            Iterator<Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>>> accedingIt = map.entrySet().iterator();
-            Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> entry;
+        Iterator<Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>>> accedingIt = map.entrySet().iterator();
+        Map.Entry<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> entry;
 
-            assertTrue(accedingIt.hasNext());
-            entry = accedingIt.next();
-            assertEquals(BazPrimitive.class, entry.getKey());
+        assertTrue(accedingIt.hasNext());
+        entry = accedingIt.next();
+        assertEquals(BazPrimitive.class, entry.getKey());
 
-            assertTrue(accedingIt.hasNext());
-            entry = accedingIt.next();
-            assertEquals(BarPrimitive.class, entry.getKey());
+        assertTrue(accedingIt.hasNext());
+        entry = accedingIt.next();
+        assertEquals(BarPrimitive.class, entry.getKey());
 
-            assertTrue(accedingIt.hasNext());
-            entry = accedingIt.next();
-            assertEquals(FooPrimitive.class, entry.getKey());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        assertTrue(accedingIt.hasNext());
+        entry = accedingIt.next();
+        assertEquals(FooPrimitive.class, entry.getKey());
     }
 
-//    @Test
+    @Test
     public void testPrimitiveDiscoveryShutdownOrder() throws Exception {
         InstanceFactory<DescopedPrimitive> instanceFactory = new CdiInstanceFactory<>(DescopedPrimitive.class);
         Map<Class<DescopedPrimitive>, InstanceHandler<DescopedPrimitive>> map = instanceFactory.load();
