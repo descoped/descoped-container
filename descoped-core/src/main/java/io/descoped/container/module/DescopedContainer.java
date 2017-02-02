@@ -107,7 +107,7 @@ public class DescopedContainer<T extends DescopedPrimitive> {
 //                        while (waitFor) {
 //                            TimeUnit.MILLISECONDS.sleep(50);
 //                        }
-                        Thread.sleep(500);
+//                        Thread.sleep(500);
                         log.trace("------> removing instance: {}", primitiveEntry.getKey());
                         instanceFactory.remove(primitiveEntry.getKey());
                     }

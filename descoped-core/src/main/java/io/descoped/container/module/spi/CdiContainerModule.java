@@ -47,11 +47,11 @@ public class CdiContainerModule implements DescopedPrimitive {
         log.info("-----------------> stop");
         descopedContainer.stop();
         log.info("-----------------> stopped");
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         cdiContainer.shutdown();
 //        cdiContainer.getContextControl().stopContexts();
     }
