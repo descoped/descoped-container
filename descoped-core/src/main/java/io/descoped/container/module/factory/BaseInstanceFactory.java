@@ -16,7 +16,7 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
     private List<Class<T>> discoveredClasses = null;
     private Map<Class<T>, InstanceHandler<T>> instances = new LinkedHashMap<>();
 
-    public BaseInstanceFactory(final Class<? extends T> factoryClass) {
+    public BaseInstanceFactory(Class<? extends T> factoryClass) {
         this.factoryClass = factoryClass;
     }
 

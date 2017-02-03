@@ -16,7 +16,7 @@ public class SpiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanc
 
     private volatile Map<Class<T>, T> weakInstanceMap = new WeakHashMap<>();
 
-    public SpiInstanceFactory(final Class<T> factoryClass) {
+    public SpiInstanceFactory(Class<? extends T> factoryClass) {
         super(factoryClass);
     }
 

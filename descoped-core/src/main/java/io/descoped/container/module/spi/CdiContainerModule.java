@@ -38,7 +38,7 @@ public class CdiContainerModule implements DescopedPrimitive {
     public void start() {
         cdiContainer.boot();
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
-        cdiContainer.getContextControl().startContext(RequestScoped.class);
+        cdiContainer.getContextControl().startContext(RequestScoped.class); // todo: only required for testing when using SPI
         descopedContainer.start();
     }
 
