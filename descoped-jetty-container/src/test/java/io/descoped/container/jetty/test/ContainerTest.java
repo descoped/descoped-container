@@ -63,11 +63,6 @@ public class ContainerTest {
         defaultContainer.shutdown();
     }
 
-//    @Test
-    public void testMe() throws Exception {
-
-    }
-
     @Test
     public void testDefaultContainer() throws Exception {
         given()
