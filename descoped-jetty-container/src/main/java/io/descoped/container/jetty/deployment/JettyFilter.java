@@ -32,11 +32,13 @@ public class JettyFilter implements Filter<JettyWebApp> {
         return owner();
     }
 
+    // example: http://stackoverflow.com/questions/11645516/giving-multiple-url-patterns-to-servlet-filter
     @Override
     public Filter<JettyWebApp> addFilterUrlMapping(String mapping, DispatcherType dispatcher) {
-        FilterHolder filterHolder = owner().getWebAppContext().addFilter(this.filter, mapping, EnumSet.of(dispatcher));
+        FilterHolder filterHolder = new FilterHolder(filter);
         filterHolder.setName(filterName);
-//        filterHolder.set
+        filterHolder.setInitParameter(filterName, mapping);
+        owner().getWebAppContext().addFilter(filterHolder, mapping, EnumSet.of(dispatcher));
         return this;
     }
 

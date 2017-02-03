@@ -8,6 +8,7 @@ import io.descoped.container.jetty.deployment.JettyWebApp;
 import io.descoped.container.log.ConsoleAppender;
 import io.descoped.container.support.WebServer;
 import org.apache.deltaspike.cdise.servlet.CdiServletRequestListener;
+import org.apache.deltaspike.servlet.impl.event.EventBridgeFilter;
 import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.After;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.servlet.DispatcherType;
 import java.net.HttpURLConnection;
 
 import static com.jayway.restassured.RestAssured.given;
@@ -45,11 +47,11 @@ public class ContainerTest {
                 .addServlet("dummyServlet", DummyServlet.class)
                     .addMapping("/*")
                     .up()
-//                .addFilter("EventBridgeFilter", EventBridgeFilter.class)
-//                    .addFilterUrlMapping("/*", DispatcherType.REQUEST)
-//                    .up()
+                .addFilter("EventBridgeFilter", EventBridgeFilter.class)
+                    .addFilterUrlMapping("/*", DispatcherType.REQUEST)
+                    .up()
                 ;
-        log.trace("webAppContext: {}", webapp.getWebAppContext().toString());
+        log.trace("webAppContext: {}", webapp.getWebAppContext().dump());
         deployment.deploy(webapp);
         defaultContainer.deploy(deployment);
         defaultContainer.start();
