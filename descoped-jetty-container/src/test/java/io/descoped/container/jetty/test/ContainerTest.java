@@ -49,6 +49,7 @@ public class ContainerTest {
 //                    .addFilterUrlMapping("/*", DispatcherType.REQUEST)
 //                    .up()
                 ;
+        log.trace("webAppContext: {}", webapp.getWebAppContext().toString());
         deployment.deploy(webapp);
         defaultContainer.deploy(deployment);
         defaultContainer.start();
@@ -76,7 +77,6 @@ public class ContainerTest {
                 .when()
                     .get("/test/")
         ;
-        defaultContainer.shutdown();
     }
 
 }
