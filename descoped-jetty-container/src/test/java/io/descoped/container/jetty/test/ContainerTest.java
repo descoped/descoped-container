@@ -23,6 +23,7 @@ import javax.servlet.DispatcherType;
 import java.net.HttpURLConnection;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.containsString;
 
 /**
  * Created by oranheim on 22/12/2016.
@@ -52,7 +53,7 @@ public class ContainerTest {
                     .up()
                 ;
         log.trace("webAppContext: {}", webapp.getWebAppContext().dump());
-        deployment.deploy(webapp);
+        deployment.register(webapp);
         defaultContainer.deploy(deployment);
         defaultContainer.start();
     }
@@ -78,6 +79,8 @@ public class ContainerTest {
                     .log().everything()
                 .when()
                     .get("/test/")
+                .then()
+                    .body(containsString("hello world"))
         ;
     }
 

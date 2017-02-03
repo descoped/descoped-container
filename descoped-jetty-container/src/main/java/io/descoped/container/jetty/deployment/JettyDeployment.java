@@ -13,7 +13,7 @@ public class JettyDeployment implements Deployment {
 
     private JettyWebApp webapp;
 
-    public void deploy(JettyWebApp webapp) {
+    public void register(JettyWebApp webapp) {
         this.webapp = webapp;
     }
 
