@@ -15,6 +15,6 @@ public interface Servlet<S extends WebApp> {
 
     Servlet<S> setLoadOnStartup(int loadOnStartup);
 
-    Servlet<S> setEnabled(boolean asyncSupported);
+    Servlet<S> setEnabled(boolean enabled);
 
 }
