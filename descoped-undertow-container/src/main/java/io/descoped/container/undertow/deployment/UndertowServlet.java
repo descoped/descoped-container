@@ -17,13 +17,13 @@ public class UndertowServlet implements Servlet<UndertowWebApp> {
     private static final Logger log = LoggerFactory.getLogger(UndertowServlet.class);
     private final WebApp<UndertowWebApp> owner;
     private final ServletInfo servletInfo;
-    private StringBuilder infoBuilder = new StringBuilder();
     protected static ThreadLocal<Integer> servletCount = ThreadLocal.withInitial(() -> 0);
 
     public UndertowServlet(WebApp<UndertowWebApp> owner, String servletName, Class<? extends javax.servlet.Servlet> servlet) {
         this.owner = owner;
-        infoBuilder.append("\t\t\"").append("name").append("\"").append(": \"").append(servletName).append("\"");
-        infoBuilder.append(",\n\t\t\"").append("servlet").append("\"").append(": \"").append(servlet.getName()).append("\"");
+        owner().infoBuilder.key("addServlet" + servletCount.get())
+                .keyValue("name", servletName)
+                .keyValue("servlet", servlet.getName());
         this.servletInfo = Servlets.servlet(servletName, servlet);
         try {
             this.servletInfo.setInstanceFactory(CDIClassIntrospecter.INSTANCE.createInstanceFactory(servlet));
@@ -44,45 +44,46 @@ public class UndertowServlet implements Servlet<UndertowWebApp> {
 
     @Override
     public UndertowWebApp up() {
-        owner().addInfo("addServlet" + servletCount.get(), infoBuilder); servletCount.set(servletCount.get()+1);
+        owner().infoBuilder.up();
+        servletCount.set(servletCount.get()+1);
         deploymentInfo().addServlet(servletInfo);
         return owner();
     }
 
     @Override
     public Servlet<UndertowWebApp> addMapping(String mapping) {
-        infoBuilder.append(",\n\t\t\"").append("mapping").append("\"").append(": \"").append(mapping).append("\"");
+        owner().infoBuilder.keyValue("mapping", mapping);
         servletInfo.addMapping(mapping);
         return this;
     }
 
     @Override
     public Servlet<UndertowWebApp> addInitParam(String name, String value) {
-        infoBuilder.append(",\n\t\t\"").append("initParam").append("\"").append(": {");
-        infoBuilder.append("\n\t\t\t\"").append("name").append("\": \"").append(name).append("\",");
-        infoBuilder.append("\n\t\t\t\"").append("value").append("\": \"").append(value).append("\"");
-        infoBuilder.append("\n\t\t}");
+        owner().infoBuilder.key("initParam")
+                .keyValue("name", name)
+                .keyValue("value", value)
+                .up();
         servletInfo.addInitParam(name, value);
         return this;
     }
 
     @Override
     public Servlet<UndertowWebApp> setAsyncSupported(boolean asyncSupported) {
-        infoBuilder.append(",\n\t\t\"").append("asyncSupported").append("\"").append(": \"").append(asyncSupported).append("\"");
+        owner().infoBuilder.keyValue("asyncSupported", String.valueOf(asyncSupported));
         servletInfo.setAsyncSupported(asyncSupported);
         return this;
     }
 
     @Override
     public Servlet<UndertowWebApp> setLoadOnStartup(int loadOnStartup) {
-        infoBuilder.append(",\n\t\t\"").append("loadOnStartup").append("\"").append(": \"").append(loadOnStartup).append("\"");
+        owner().infoBuilder.keyValue("loadOnStartup", String.valueOf(loadOnStartup));
         servletInfo.setLoadOnStartup(loadOnStartup);
         return this;
     }
 
     @Override
     public Servlet<UndertowWebApp> setEnabled(boolean enabled) {
-        infoBuilder.append(",\n\t\t\"").append("enabled").append("\"").append(": \"").append(enabled).append("\"");
+        owner().infoBuilder.keyValue("enabled", String.valueOf(enabled));
         servletInfo.setEnabled(enabled);
         return this;
     }

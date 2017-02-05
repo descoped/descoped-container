@@ -4,6 +4,7 @@ import io.descoped.container.deployment.spi.Filter;
 import io.descoped.container.deployment.spi.Servlet;
 import io.descoped.container.deployment.spi.WebApp;
 import io.descoped.container.extension.ClassLoaders;
+import io.descoped.container.info.InfoBuilder;
 import io.descoped.container.undertow.core.CDIClassIntrospecter;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
@@ -19,15 +20,17 @@ public class UndertowWebApp implements WebApp<UndertowWebApp> {
 
     private static final Logger log = LoggerFactory.getLogger(UndertowWebApp.class);
     private final DeploymentInfo deploymentInfo;
-    private final StringBuilder infoBuilder;
+    private final StringBuilder infoBuilderOld;
     protected static ThreadLocal<Integer> listenerCount = ThreadLocal.withInitial(() -> 0);
+    protected InfoBuilder infoBuilder = InfoBuilder.builder();
 
     public UndertowWebApp() {
         UndertowWebApp.listenerCount.remove();
         UndertowServlet.servletCount.remove();
         UndertowFilter.filterCount.remove();
 
-        infoBuilder = new StringBuilder();
+
+        infoBuilderOld = new StringBuilder();
         ClassLoader classLoader = ClassLoaders.tccl();
         deploymentInfo = Servlets.deployment();
         deploymentInfo.setClassIntrospecter(CDIClassIntrospecter.INSTANCE);
@@ -38,38 +41,23 @@ public class UndertowWebApp implements WebApp<UndertowWebApp> {
         return deploymentInfo;
     }
 
-    protected void addInfo(String key, StringBuilder builder) {
-        if (infoBuilder.length() > 0) infoBuilder.append(",\n");
-        infoBuilder.append("\t\"").append(key).append("\": {\n").append(builder).append("\n\t}");
-    }
-
-    protected void addInfo(String key, String value) {
-        if (infoBuilder.length() > 0) infoBuilder.append(",\n");
-        infoBuilder.append("\t\"").append(key).append("\": \"").append(value).append("\"");
-    }
-
-    protected void addInfo(String key, String valueKey, String valueValue) {
-        if (infoBuilder.length() > 0) infoBuilder.append(",\n");
-        infoBuilder.append("\t\"").append(key).append("\": {\n\t\t\"").append(valueKey).append("\": \"").append(valueValue).append("\"\n\t}");
-    }
-
     @Override
     public UndertowWebApp name(String name) {
-        addInfo("name", name);
+        infoBuilder.keyValue("name", name);
         deploymentInfo.setDeploymentName(name);
         return this;
     }
 
     @Override
     public UndertowWebApp contextPath(String contextPath) {
-        addInfo("contextPath", contextPath);
+        infoBuilder.keyValue("contextPath", contextPath);
         deploymentInfo.setContextPath(contextPath);
         return this;
     }
 
     @Override
     public UndertowWebApp addListener(Class<? extends EventListener> listenerClass) {
-        addInfo("addListener" + listenerCount.get(), listenerClass.getName()); listenerCount.set(listenerCount.get().intValue()+1);
+        infoBuilder.keyValue("addListener" + listenerCount.get(), listenerClass.getName()); listenerCount.set(listenerCount.get().intValue()+1);
         deploymentInfo.addListener(Servlets.listener(listenerClass));
         return this;
     }
@@ -86,21 +74,21 @@ public class UndertowWebApp implements WebApp<UndertowWebApp> {
 
     @Override
     public UndertowWebApp setEagerFilterInit(boolean eagerFilterInit) {
-        addInfo("eagerFilterInit", String.valueOf(eagerFilterInit));
+        infoBuilder.keyValue("eagerFilterInit", String.valueOf(eagerFilterInit));
         deploymentInfo.setEagerFilterInit(eagerFilterInit);
         return this;
     }
 
     @Override
     public UndertowWebApp addWelcomePage(String welcomePage) {
-        addInfo("welcomePage", welcomePage);
+        infoBuilder.keyValue("welcomePage", welcomePage);
         deploymentInfo.addWelcomePage(welcomePage);
         return this;
     }
 
     @Override
     public String info() {
-        return String.format("{\n%s\n}", infoBuilder.toString());
+        return infoBuilder.build();
     }
 
     @Override
