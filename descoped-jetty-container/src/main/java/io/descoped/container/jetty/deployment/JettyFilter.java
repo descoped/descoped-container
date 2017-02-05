@@ -15,10 +15,13 @@ public class JettyFilter implements Filter<JettyWebApp> {
     private final WebApp<JettyWebApp> owner;
     private final String filterName;
     private final Class<? extends javax.servlet.Filter> filter;
-//    private final Filter<JettyWebApp> filterHolder;
+    protected static ThreadLocal<Integer> filterCount = ThreadLocal.withInitial(() -> 0);
 
     public JettyFilter(WebApp<JettyWebApp> owner, String filterName, Class<? extends javax.servlet.Filter> filter) {
         this.owner = owner;
+        owner().infoBuilder.key("addFilter" + filterCount.get())
+                .keyValue("name", filterName)
+                .keyValue("filter", filter.getName());
         this.filterName = filterName;
         this.filter = filter;
     }
@@ -29,12 +32,22 @@ public class JettyFilter implements Filter<JettyWebApp> {
 
     @Override
     public JettyWebApp up() {
+        owner().infoBuilder.up();
+        filterCount.set(filterCount.get()+1);
         return owner();
     }
 
     // example: http://stackoverflow.com/questions/11645516/giving-multiple-url-patterns-to-servlet-filter
     @Override
     public Filter<JettyWebApp> addFilterUrlMapping(String mapping, DispatcherType dispatcher) {
+        owner().infoBuilder.key("urlMapping")
+                .keyValue("name", filterName)
+//                .keyValue("mapping", mapping)
+                .keyValue("dispatcher", String.valueOf(dispatcher))
+                .key("initParam")
+                    .keyValue(filterName, mapping)
+                    .up()
+                .up();
         FilterHolder filterHolder = new FilterHolder(filter);
         filterHolder.setName(filterName);
         filterHolder.setInitParameter(filterName, mapping);
@@ -44,6 +57,11 @@ public class JettyFilter implements Filter<JettyWebApp> {
 
     @Override
     public Filter<JettyWebApp> addFilterServletNameMapping(String mapping, DispatcherType dispatcher) {
+        owner().infoBuilder.key("servletNameMapping")
+                .keyValue("name", filterName)
+                .keyValue("mapping", mapping)
+                .keyValue("dispatcher", String.valueOf(dispatcher))
+                .up();
         FilterHolder filterHolder = owner().getWebAppContext().addFilter(this.filter, mapping, EnumSet.of(dispatcher));
         filterHolder.setName(filterName);
         return this;

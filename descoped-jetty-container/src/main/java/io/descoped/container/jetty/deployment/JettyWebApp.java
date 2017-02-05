@@ -5,6 +5,7 @@ import io.descoped.container.deployment.spi.Servlet;
 import io.descoped.container.deployment.spi.WebApp;
 import io.descoped.container.exception.DescopedServerException;
 import io.descoped.container.extension.ClassLoaders;
+import io.descoped.container.info.InfoBuilder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.util.ArrayList;
@@ -18,8 +19,14 @@ public class JettyWebApp implements WebApp<JettyWebApp> {
 
     private WebAppContext webAppContext;
     private List<String> welcomePages = new ArrayList<>();
+    protected static ThreadLocal<Integer> listenerCount = ThreadLocal.withInitial(() -> 0);
+    protected InfoBuilder infoBuilder = InfoBuilder.builder();
 
     public JettyWebApp() {
+        JettyWebApp.listenerCount.remove();
+        JettyServlet.servletCount.remove();
+        JettyFilter.filterCount.remove();
+
         webAppContext = new WebAppContext();
         webAppContext.setClassLoader(ClassLoaders.tccl());
         webAppContext.setResourceBase(".");
@@ -31,18 +38,21 @@ public class JettyWebApp implements WebApp<JettyWebApp> {
 
     @Override
     public JettyWebApp name(String name) {
+        infoBuilder.keyValue("name", name);
         webAppContext.setDisplayName(name);
         return this;
     }
 
     @Override
     public JettyWebApp contextPath(String contextPath) {
+        infoBuilder.keyValue("contextPath", contextPath);
         webAppContext.setContextPath(contextPath);
         return this;
     }
 
     @Override
     public JettyWebApp addListener(Class<? extends EventListener> listenerClass) {
+        infoBuilder.keyValue("addListener" + listenerCount.get(), listenerClass.getName()); listenerCount.set(listenerCount.get().intValue()+1);
         try {
             webAppContext.addEventListener(listenerClass.newInstance());
         } catch (IllegalAccessException | InstantiationException e) {
@@ -63,12 +73,14 @@ public class JettyWebApp implements WebApp<JettyWebApp> {
 
     @Override
     public JettyWebApp setEagerFilterInit(boolean eagerFilterInit) {
+        //infoBuilder.keyValue("eagerFilterInit", String.valueOf(eagerFilterInit));
         // do nothing - not supported jetty
         return this;
     }
 
     @Override
     public JettyWebApp addWelcomePage(String welcomePage) {
+        infoBuilder.keyValue("welcomePage", welcomePage);
         welcomePages.add(welcomePage);
         webAppContext.setWelcomeFiles(welcomePages.toArray(new String[welcomePages.size()]));
         return this;
@@ -76,7 +88,7 @@ public class JettyWebApp implements WebApp<JettyWebApp> {
 
     @Override
     public String info() {
-        return "";
+        return infoBuilder.build();
     }
 
     @Override

@@ -20,7 +20,6 @@ public class UndertowWebApp implements WebApp<UndertowWebApp> {
 
     private static final Logger log = LoggerFactory.getLogger(UndertowWebApp.class);
     private final DeploymentInfo deploymentInfo;
-    private final StringBuilder infoBuilderOld;
     protected static ThreadLocal<Integer> listenerCount = ThreadLocal.withInitial(() -> 0);
     protected InfoBuilder infoBuilder = InfoBuilder.builder();
 
@@ -29,8 +28,6 @@ public class UndertowWebApp implements WebApp<UndertowWebApp> {
         UndertowServlet.servletCount.remove();
         UndertowFilter.filterCount.remove();
 
-
-        infoBuilderOld = new StringBuilder();
         ClassLoader classLoader = ClassLoaders.tccl();
         deploymentInfo = Servlets.deployment();
         deploymentInfo.setClassIntrospecter(CDIClassIntrospecter.INSTANCE);
