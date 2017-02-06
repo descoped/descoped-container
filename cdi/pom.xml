@@ -9,13 +9,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>io.descoped.web</groupId>
+    <groupId>io.descoped.cdi</groupId>
     <artifactId>descoped-cdi-project</artifactId>
     <packaging>pom</packaging>
     <name>Descoped CDI Modules</name>
 
     <modules>
-
+        <module>weld-cdi</module>
+        <module>descoped-weld-cdi</module>
     </modules>
 
 </project>

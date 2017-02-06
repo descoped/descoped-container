@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<configuration debug="false" scan="false">
+<configuration>
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -27,12 +27,10 @@
     </appender>
 
 
-    <logger name="org.jboss.weld" level="INFO"/>
     <logger name="io.descoped" level="TRACE"/>
-    <logger name="org.jnp" level="INFO"/>
-    <logger name="ch.qos.logback" level="OFF" additivity="false"/>
+    <logger name="org.jboss.weld" level="INFO"/>
 
-    <root level="TRACE">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>

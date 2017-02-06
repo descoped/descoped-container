@@ -37,6 +37,10 @@ public class CdiContainerModule implements DescopedPrimitive {
     @Override
     public void start() {
         cdiContainer.boot();
+//        ContextControl cc = BeanProvider.getContextualReference(ContextControl.class);
+//        log.trace("-----------------------> ContextControl: {}", cc);
+//        cc.startContext(ApplicationScoped.class);
+//        cc.startContext(RequestScoped.class);
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
         cdiContainer.getContextControl().startContext(RequestScoped.class); // todo: only required for testing when using SPI
         descopedContainer.start();
