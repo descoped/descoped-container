@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 @Ignore
 @RunWith(CdiTestRunner.class)
 //@TestControl(logHandler = ConsoleAppender.class)
+//@TestControl(startScopes = {ApplicationScoped.class, RequestScoped.class})
 public class DescopedWeldTest {
 
     private static final Logger log = LoggerFactory.getLogger(DescopedWeldTest.class);

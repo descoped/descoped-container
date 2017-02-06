@@ -40,32 +40,38 @@
             <groupId>io.descoped</groupId>
             <artifactId>descoped-container</artifactId>
             <version>${project.version}</version>
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.apache.deltaspike.cdictrl</groupId>-->
-                    <!--<artifactId>deltaspike-cdictrl-weld</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+            <!--
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-weld</artifactId>
+                </exclusion>
+            </exclusions>
+            -->
         </dependency>
 
         <dependency>
             <groupId>io.descoped.support</groupId>
             <artifactId>descoped-jndi-jboss-naming</artifactId>
             <version>${project.version}</version>
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.apache.deltaspike.cdictrl</groupId>-->
-                    <!--<artifactId>deltaspike-cdictrl-weld</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+            <!--
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-weld</artifactId>
+                </exclusion>
+            </exclusions>
+            -->
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.apache.deltaspike.cdictrl</groupId>-->
-            <!--<artifactId>deltaspike-cdictrl-api</artifactId>-->
-            <!--<version>${deltaspike.version}</version>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
+        <!--
+        <dependency>
+            <groupId>io.descoped.cdi</groupId>
+            <artifactId>descoped-cdi-weld</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        -->
 
         <dependency>
             <groupId>org.apache.deltaspike.cdictrl</groupId>
