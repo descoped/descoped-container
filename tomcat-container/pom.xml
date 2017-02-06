@@ -8,15 +8,21 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>descoped-hystrix</artifactId>
+    <groupId>io.descoped.web</groupId>
+    <artifactId>descoped-tomcat-container</artifactId>
     <packaging>jar</packaging>
-    <name>Descoped Hystrix</name>
+    <name>Descoped Tomcat Container</name>
     <url>http://www.descoped.io</url>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <tomcat.version>8.0.28</tomcat.version>
+
         <maven.javadoc.skip>true</maven.javadoc.skip>
+        <owb.version>1.7.0</owb.version>
+
         <location.to.index.dir>/tmp/jandex</location.to.index.dir>
     </properties>
 
@@ -33,18 +39,53 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- hystrix-->
         <dependency>
-            <groupId>com.netflix.hystrix</groupId>
-            <artifactId>hystrix-core</artifactId>
+            <groupId>io.descoped.web</groupId>
+            <artifactId>descoped-server-container</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
 
-        <!-- KevinSawicki URL HTTP -->
+        <!-- https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat -->
+        <!-- tomcat -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper-el</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jsp-api</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
 
         <dependency>
-            <groupId>com.github.kevinsawicki</groupId>
-            <artifactId>http-request</artifactId>
+            <groupId>org.jboss</groupId>
+            <artifactId>jandex</artifactId>
+            <version>2.0.3.Final</version>
+            <scope>compile</scope>
         </dependency>
+
 
         <!-- Log -->
 
@@ -80,13 +121,6 @@
         <!-- Test -->
 
         <dependency>
-            <groupId>io.descoped</groupId>
-            <artifactId>descoped-undertow-container</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.deltaspike.modules</groupId>
             <artifactId>deltaspike-test-control-module-api</artifactId>
         </dependency>
@@ -95,7 +129,6 @@
             <groupId>org.apache.deltaspike.modules</groupId>
             <artifactId>deltaspike-test-control-module-impl</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>junit</groupId>
@@ -178,6 +211,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

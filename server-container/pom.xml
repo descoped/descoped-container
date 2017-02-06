@@ -8,6 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <groupId>io.descoped.web</groupId>
     <artifactId>descoped-server-container</artifactId>
     <packaging>jar</packaging>
     <name>Descoped Server Container</name>

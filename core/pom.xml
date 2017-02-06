@@ -8,7 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>descoped-core</artifactId>
+    <artifactId>descoped-container</artifactId>
     <packaging>jar</packaging>
     <name>Descoped Container Core</name>
     <url>http://www.descoped.io</url>

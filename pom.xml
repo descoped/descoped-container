@@ -92,14 +92,14 @@
     </dependencyManagement>
 
     <modules>
-        <module>descoped-core</module>
-        <module>descoped-server-container</module>
-        <module>descoped-undertow-container</module>
-        <module>descoped-jetty-container</module>
-        <module>descoped-tomcat-container</module>
-        <module>descoped-grizzly-container</module>
-        <module>descoped-rest-jersey</module>
-        <module>descoped-hystrix</module>
+        <module>core</module>
+        <module>server-container</module>
+        <module>undertow-container</module>
+        <module>jetty-container</module>
+        <module>tomcat-container</module>
+        <module>grizzly-container</module>
+        <module>rest-jersey</module>
+        <module>hystrix</module>
     </modules>
 
 </project>

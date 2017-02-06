@@ -8,6 +8,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <groupId>io.descoped.web</groupId>
     <artifactId>descoped-jetty-container</artifactId>
     <packaging>jar</packaging>
     <name>Descoped Jetty Container</name>
@@ -38,7 +39,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.descoped</groupId>
+            <groupId>io.descoped.web</groupId>
             <artifactId>descoped-server-container</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
