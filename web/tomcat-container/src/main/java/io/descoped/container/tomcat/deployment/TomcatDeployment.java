@@ -13,11 +13,16 @@ import org.apache.catalina.startup.Constants;
 import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.StandardRoot;
+import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Created by oranheim on 03/02/2017.
@@ -36,10 +41,25 @@ public class TomcatDeployment implements Deployment {
         TomcatContainer server = (TomcatContainer) container;
         Tomcat tomcat = server.builder();
 
-        tomcat.setBaseDir("./target/");
+        tomcat.setBaseDir("./target");
+        {
+            Path target = Paths.get("./target").resolve("webapps/ROOT");
+            try {
+                Files.createDirectories(target);
+            } catch (IOException e) {
+                throw new DescopedServerException(e);
+            }
+        }
         tomcat.getServer().setParentClassLoader(ClassLoaders.tccl());
 
         StandardContext context = webapp.getStandardContext();
+
+        StandardJarScanner standardJarScanner = new StandardJarScanner();
+        standardJarScanner.setScanBootstrapClassPath(false);
+        standardJarScanner.setScanClassPath(false);
+        standardJarScanner.setScanAllDirectories(false);
+        context.setJarScanner(standardJarScanner);
+
         context.addLifecycleListener(tomcat.getDefaultWebXmlListener());
 
         ContextConfig contextConfig = new ContextConfig();
@@ -49,7 +69,7 @@ public class TomcatDeployment implements Deployment {
         try {
             String webAppResources = new File("src/main/resources/webapp").getAbsolutePath();
             log.trace("ContextPath: {} -- WebAppResources: {}", server.getContextPath(), webAppResources);
-            Context resourceContext = tomcat.addWebapp(server.getContextPath(), webAppResources);
+            Context resourceContext = tomcat.addWebapp(webapp.getStandardContext().getPath(), webAppResources);
 //            tomcat.addContext("/MyWebApp/images", "/tmp/images/");
 
             WebResourceRoot resources = new StandardRoot(resourceContext);
@@ -58,6 +78,7 @@ public class TomcatDeployment implements Deployment {
         } catch (ServletException e) {
             throw new DescopedServerException(e);
         }
+
 
 
         tomcat.getHost().addChild(context);

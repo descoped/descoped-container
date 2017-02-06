@@ -60,6 +60,7 @@ public class TomcatWebApp implements WebApp<TomcatWebApp> {
     @Override
     public TomcatWebApp contextPath(String contextPath) {
         infoBuilder.keyValue("contextPath", contextPath);
+        if ("/".equals(contextPath)) contextPath = "";
         webAppContext.setPath(contextPath);
         return this;
     }
