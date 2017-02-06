@@ -24,6 +24,7 @@ public class JndiService implements DescopedPrimitive {
 
     public static final String INITIAL_CONTEXT_FACTORY = "org.jnp.interfaces.NamingContextFactory";
     public static final String JNP_INTERFACES = "org.jboss.naming:org.jnp.interfaces";
+    public static final String COMP = "comp/env";
     public static final String JBOSS = "jboss";
     public static final String JDBC = "jdbc";
     private static final Logger log = LoggerFactory.getLogger(JndiService.class);
@@ -60,6 +61,7 @@ public class JndiService implements DescopedPrimitive {
     public void start() {
         try {
             namingBean.start();
+//            namingBean.getNamingInstance().createSubcontext(new NamingParser().parse(COMP));
             namingBean.getNamingInstance().createSubcontext(new NamingParser().parse(JBOSS));
             namingBean.getNamingInstance().createSubcontext(new NamingParser().parse(JDBC));
 

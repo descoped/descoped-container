@@ -5,13 +5,19 @@ import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.spi.SpiInstanceFactory;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.naming.InitialContext;
+import java.io.Serializable;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by oranheim on 06/02/2017.
@@ -20,24 +26,36 @@ import org.slf4j.LoggerFactory;
 public class JndiFactoryTest {
 
     private static final Logger log = LoggerFactory.getLogger(JndiFactoryTest.class);
-    private DescopedContainer container;
+    private static DescopedContainer container;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUp() throws Exception {
         InstanceFactory<DescopedPrimitive> factory = DefaultInstanceFactory.get(SpiInstanceFactory.class);
         container = new DescopedContainer<>(factory);
         container.start();
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterClass
+    public static void tearDown() throws Exception {
         container.stop();
         container = null;
     }
 
-    @Test
-    public void testJndiFactory() throws Exception {
-        log.trace("Hello");
+    public static class Foo implements Serializable {
+        String bar = "Baz";
     }
 
+    @Test
+    public void test_0_CreateJndiBinding() throws Exception {
+        InitialContext ic = new InitialContext();
+        ic.bind("java:/foo", new Foo());
+    }
+
+    @Test
+    public void test_1_LookupJndiBinding() throws Exception {
+        InitialContext ic = new InitialContext();
+        Foo foo = (Foo) ic.lookup("java:/foo");
+        assertNotNull(foo);
+        assertEquals("Baz", foo.bar);
+    }
 }
