@@ -23,9 +23,9 @@ import static org.junit.Assert.assertNotNull;
  * Created by oranheim on 06/02/2017.
  */
 @RunWith(JUnit4.class)
-public class JndiFactoryTest {
+public class JndiServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(JndiFactoryTest.class);
+    private static final Logger log = LoggerFactory.getLogger(JndiServiceTest.class);
     private static DescopedContainer container;
 
     @BeforeClass
