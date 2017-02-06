@@ -96,6 +96,7 @@
         <module>cdi</module>
         <module>web</module>
         <module>rest</module>
+        <module>support</module>
         <module>hystrix</module>
     </modules>
 
