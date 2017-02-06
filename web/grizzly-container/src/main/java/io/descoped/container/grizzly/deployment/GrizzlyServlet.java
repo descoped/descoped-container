@@ -2,6 +2,7 @@ package io.descoped.container.grizzly.deployment;
 
 import io.descoped.container.deployment.spi.Servlet;
 import io.descoped.container.deployment.spi.WebApp;
+import org.glassfish.grizzly.servlet.ServletRegistration;
 
 /**
  * Created by oranheim on 03/02/2017.
@@ -12,18 +13,18 @@ public class GrizzlyServlet implements Servlet<GrizzlyWebApp> {
     private final String servletName;
     private final Class<? extends javax.servlet.Servlet> servlet;
     protected static ThreadLocal<Integer> servletCount = ThreadLocal.withInitial(() -> 0);
+    private final ServletRegistration servletHolder;
 
     public GrizzlyServlet(WebApp<GrizzlyWebApp> owner, String servletName, Class<? extends javax.servlet.Servlet> servlet) {
         this.owner = owner;
+        this.servletName = servletName;
+        this.servlet = servlet;
+
         owner().infoBuilder.key("addServlet" + servletCount.get())
                 .keyValue("name", servletName)
                 .keyValue("servlet", servlet.getName())
-//                .keyValue("mapping", owner().getWebAppContext().getContextPath())
                 ;
-        this.servletName = servletName;
-        this.servlet = servlet;
-//        this.servletHolder = owner().getWebAppContext().addServlet(this.servlet, owner().getWebAppContext().getContextPath());
-//        servletHolder.setDisplayName(this.servletName);
+        servletHolder = owner().getWebAppContext().addServlet(servletName, servlet);
     }
 
     private GrizzlyWebApp owner() {
@@ -39,8 +40,8 @@ public class GrizzlyServlet implements Servlet<GrizzlyWebApp> {
 
     @Override
     public Servlet<GrizzlyWebApp> addMapping(String mapping) {
-        //owner().infoBuilder.keyValue("mapping", mapping);
-        // do nothing - already set in servletHolder
+        owner().infoBuilder.keyValue("mapping", mapping);
+        servletHolder.addMapping(mapping);
         return this;
     }
 
@@ -50,28 +51,29 @@ public class GrizzlyServlet implements Servlet<GrizzlyWebApp> {
                 .keyValue("name", name)
                 .keyValue("value", value)
                 .up();
-//        servletHolder.setInitParameter(name, value);
+        servletHolder.setInitParameter(name, value);
         return this;
     }
 
     @Override
     public Servlet<GrizzlyWebApp> setAsyncSupported(boolean asyncSupported) {
         owner().infoBuilder.keyValue("asyncSupported", String.valueOf(asyncSupported));
-//        servletHolder.setAsyncSupported(asyncSupported);
+        servletHolder.setAsyncSupported(asyncSupported);
         return this;
     }
 
     @Override
     public Servlet<GrizzlyWebApp> setLoadOnStartup(int loadOnStartup) {
         owner().infoBuilder.keyValue("loadOnStartup", String.valueOf(loadOnStartup));
-//        servletHolder.setInitOrder(loadOnStartup);
+        servletHolder.setLoadOnStartup(loadOnStartup);
         return this;
     }
 
     @Override
     public Servlet<GrizzlyWebApp> setEnabled(boolean enabled) {
-        owner().infoBuilder.keyValue("enabled", String.valueOf(enabled));
+//        owner().infoBuilder.keyValue("enabled", String.valueOf(enabled));
 //        servletHolder.setEnabled(enabled);
+        // do nothing - grizzly doesn't support enabled
         return this;
     }
 }

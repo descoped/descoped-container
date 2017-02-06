@@ -66,7 +66,6 @@ public class GrizzlyContainerTest {
 
     @Test
     public void testDefaultContainer() throws Exception {
-        if (true) return;
         given()
                 .port(defaultContainer.getPort())
                 .contentType(ContentType.HTML.withCharset("UTF-8"))
