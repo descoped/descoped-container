@@ -93,12 +93,9 @@
 
     <modules>
         <module>core</module>
-        <module>server-container</module>
-        <module>undertow-container</module>
-        <module>jetty-container</module>
-        <module>tomcat-container</module>
-        <module>grizzly-container</module>
-        <module>rest-jersey</module>
+        <module>cdi</module>
+        <module>web</module>
+        <module>rest</module>
         <module>hystrix</module>
     </modules>
 

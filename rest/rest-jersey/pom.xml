@@ -2,16 +2,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.descoped</groupId>
-        <artifactId>descoped-core-project</artifactId>
+        <groupId>io.descoped.web</groupId>
+        <artifactId>descoped-rest-project</artifactId>
         <version>1.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>io.descoped.web</groupId>
     <artifactId>descoped-rest-jersey</artifactId>
     <packaging>jar</packaging>
-    <name>Descoped REST Jersey</name>
+    <name>Descoped REST Jersey Container</name>
     <url>http://www.descoped.io</url>
 
     <properties>
