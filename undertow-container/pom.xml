@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>io.descoped.web</groupId>
-    <artifactId>undertow-container</artifactId>
+    <artifactId>descoped-undertow-container</artifactId>
     <packaging>jar</packaging>
     <name>Descoped Undertow Container</name>
     <url>http://www.descoped.io</url>
@@ -41,14 +41,14 @@
     <dependencies>
         <dependency>
             <groupId>io.descoped.web</groupId>
-            <artifactId>server-container</artifactId>
+            <artifactId>descoped-server-container</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>io.descoped.web</groupId>
-            <artifactId>rest-jersey</artifactId>
+            <artifactId>descoped-rest-jersey</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
