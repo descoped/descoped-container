@@ -2,6 +2,8 @@ package io.descoped.container.tomcat.deployment;
 
 import io.descoped.container.deployment.spi.Servlet;
 import io.descoped.container.deployment.spi.WebApp;
+import org.apache.catalina.Wrapper;
+import org.apache.catalina.startup.Tomcat;
 
 /**
  * Created by oranheim on 03/02/2017.
@@ -12,18 +14,17 @@ public class TomcatServlet implements Servlet<TomcatWebApp> {
     private final String servletName;
     private final Class<? extends javax.servlet.Servlet> servlet;
     protected static ThreadLocal<Integer> servletCount = ThreadLocal.withInitial(() -> 0);
+    private final Wrapper servletWrapper;
 
     public TomcatServlet(WebApp<TomcatWebApp> owner, String servletName, Class<? extends javax.servlet.Servlet> servlet) {
         this.owner = owner;
+        this.servletName = servletName;
+        this.servlet = servlet;
         owner().infoBuilder.key("addServlet" + servletCount.get())
                 .keyValue("name", servletName)
                 .keyValue("servlet", servlet.getName())
-//                .keyValue("mapping", owner().getWebAppContext().getContextPath())
                 ;
-        this.servletName = servletName;
-        this.servlet = servlet;
-//        this.servletHolder = owner().getWebAppContext().addServlet(this.servlet, owner().getWebAppContext().getContextPath());
-//        servletHolder.setDisplayName(this.servletName);
+        servletWrapper = Tomcat.addServlet(owner().getStandardContext(), this.servletName, this.servlet.getName());
     }
 
     private TomcatWebApp owner() {
@@ -37,10 +38,14 @@ public class TomcatServlet implements Servlet<TomcatWebApp> {
         return owner();
     }
 
+    public Wrapper getServletWrapper() {
+        return servletWrapper;
+    }
+
     @Override
     public Servlet<TomcatWebApp> addMapping(String mapping) {
-        //owner().infoBuilder.keyValue("mapping", mapping);
-        // do nothing - already set in servletHolder
+        owner().infoBuilder.keyValue("mapping", mapping);
+        servletWrapper.addMapping(mapping);
         return this;
     }
 
@@ -50,28 +55,28 @@ public class TomcatServlet implements Servlet<TomcatWebApp> {
                 .keyValue("name", name)
                 .keyValue("value", value)
                 .up();
-//        servletHolder.setInitParameter(name, value);
+        servletWrapper.addInitParameter(name, value);
         return this;
     }
 
     @Override
     public Servlet<TomcatWebApp> setAsyncSupported(boolean asyncSupported) {
         owner().infoBuilder.keyValue("asyncSupported", String.valueOf(asyncSupported));
-//        servletHolder.setAsyncSupported(asyncSupported);
+        servletWrapper.setAsyncSupported(asyncSupported);
         return this;
     }
 
     @Override
     public Servlet<TomcatWebApp> setLoadOnStartup(int loadOnStartup) {
         owner().infoBuilder.keyValue("loadOnStartup", String.valueOf(loadOnStartup));
-//        servletHolder.setInitOrder(loadOnStartup);
+        servletWrapper.setLoadOnStartup(loadOnStartup);
         return this;
     }
 
     @Override
     public Servlet<TomcatWebApp> setEnabled(boolean enabled) {
         owner().infoBuilder.keyValue("enabled", String.valueOf(enabled));
-//        servletHolder.setEnabled(enabled);
+        servletWrapper.setEnabled(enabled);
         return this;
     }
 }

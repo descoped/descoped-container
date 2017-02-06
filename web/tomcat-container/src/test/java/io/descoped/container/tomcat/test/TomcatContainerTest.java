@@ -52,7 +52,7 @@ public class TomcatContainerTest {
                     .addFilterUrlMapping("/*", DispatcherType.REQUEST)
                     .up()
                 ;
-//        log.trace("webAppContext: {}", webapp.getWebAppContext().dump());
+//        log.trace("webAppContext: {}", webapp.getStandardContext().dump());
         log.trace("webApp config: {}", webapp.info());
         deployment.register(webapp);
         defaultContainer.deploy(deployment);
@@ -66,7 +66,7 @@ public class TomcatContainerTest {
 
     @Test
     public void testDefaultContainer() throws Exception {
-        if (true) return;
+//        if (true) return;
         given()
                 .port(defaultContainer.getPort())
                 .contentType(ContentType.HTML.withCharset("UTF-8"))

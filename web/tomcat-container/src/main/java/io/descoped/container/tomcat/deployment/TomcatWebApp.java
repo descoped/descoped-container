@@ -4,6 +4,8 @@ import io.descoped.container.deployment.spi.Filter;
 import io.descoped.container.deployment.spi.Servlet;
 import io.descoped.container.deployment.spi.WebApp;
 import io.descoped.container.info.InfoBuilder;
+import org.apache.catalina.core.StandardContext;
+import org.apache.catalina.core.StandardWrapper;
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -14,47 +16,58 @@ import java.util.List;
  */
 public class TomcatWebApp implements WebApp<TomcatWebApp> {
 
-//    private WebAppContext webAppContext;
-    private List<String> welcomePages = new ArrayList<>();
     protected static ThreadLocal<Integer> listenerCount = ThreadLocal.withInitial(() -> 0);
     protected InfoBuilder infoBuilder = InfoBuilder.builder();
+    private final StandardContext webAppContext;
+    private final StandardWrapper wrapper;
+    private final List<TomcatServlet> servletList = new ArrayList<>();
+
+    /*
+      Usefull ref:  http://www.artificialworlds.net/blog/2015/02/05/programmatic-equivalents-of-web-xml-sections-for-tomcat/
+     */
 
     public TomcatWebApp() {
         TomcatWebApp.listenerCount.remove();
         TomcatServlet.servletCount.remove();
         TomcatFilter.filterCount.remove();
-
-//        webAppContext = new WebAppContext();
+        
+        webAppContext = new StandardContext();
 //        webAppContext.setClassLoader(ClassLoaders.tccl());
 //        webAppContext.setResourceBase(".");
+//        wrapper = new StandardWrapper();
+        wrapper = (StandardWrapper) webAppContext.createWrapper();
     }
 
-//    public WebAppContext getWebAppContext() {
-//        return webAppContext;
-//    }
+    public StandardContext getStandardContext() {
+        return webAppContext;
+    }
+
+    public StandardWrapper getStandardWrapper() {
+        return wrapper;
+    }
+
+    public List<TomcatServlet> getServlets() {
+        return servletList;
+    }
 
     @Override
     public TomcatWebApp name(String name) {
         infoBuilder.keyValue("name", name);
-//        webAppContext.setDisplayName(name);
+        webAppContext.setName(name);
         return this;
     }
 
     @Override
     public TomcatWebApp contextPath(String contextPath) {
         infoBuilder.keyValue("contextPath", contextPath);
-//        webAppContext.setContextPath(contextPath);
+        webAppContext.setPath(contextPath);
         return this;
     }
 
     @Override
     public TomcatWebApp addListener(Class<? extends EventListener> listenerClass) {
         infoBuilder.keyValue("addListener" + listenerCount.get(), listenerClass.getName()); listenerCount.set(listenerCount.get().intValue()+1);
-//        try {
-//            webAppContext.addEventListener(listenerClass.newInstance());
-//        } catch (IllegalAccessException | InstantiationException e) {
-//            throw new DescopedServerException(e);
-//        }
+        webAppContext.addApplicationListener(listenerClass.getName());
         return this;
     }
 
@@ -65,21 +78,21 @@ public class TomcatWebApp implements WebApp<TomcatWebApp> {
 
     @Override
     public Servlet<TomcatWebApp> addServlet(String servletName, Class<? extends javax.servlet.Servlet> servlet) {
-        return new TomcatServlet(this, servletName, servlet);
+        TomcatServlet servletHolder = new TomcatServlet(this, servletName, servlet);
+        servletList.add(servletHolder);
+        return servletHolder;
     }
 
     @Override
     public TomcatWebApp setEagerFilterInit(boolean eagerFilterInit) {
-        //infoBuilder.keyValue("eagerFilterInit", String.valueOf(eagerFilterInit));
-        // do nothing - not supported jetty
+        // do nothing - not supported tomcat
         return this;
     }
 
     @Override
     public TomcatWebApp addWelcomePage(String welcomePage) {
         infoBuilder.keyValue("welcomePage", welcomePage);
-        welcomePages.add(welcomePage);
-//        webAppContext.setWelcomeFiles(welcomePages.toArray(new String[welcomePages.size()]));
+        webAppContext.addWelcomeFile(welcomePage);
         return this;
     }
 

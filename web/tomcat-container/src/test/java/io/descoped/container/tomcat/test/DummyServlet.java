@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by oranheim on 03/02/2017.
  */
-@WebServlet(urlPatterns = { "/test" })
+@WebServlet(name = "DummyServlet", urlPatterns = { "/test" })
 public class DummyServlet extends HttpServlet {
 
     @Override

@@ -17,12 +17,13 @@ public class JettyServlet implements Servlet<JettyWebApp> {
 
     public JettyServlet(WebApp<JettyWebApp> owner, String servletName, Class<? extends javax.servlet.Servlet> servlet) {
         this.owner = owner;
+        this.servletName = servletName;
+        this.servlet = servlet;
+
         owner().infoBuilder.key("addServlet" + servletCount.get())
                 .keyValue("name", servletName)
                 .keyValue("servlet", servlet.getName())
                 .keyValue("mapping", owner().getWebAppContext().getContextPath());
-        this.servletName = servletName;
-        this.servlet = servlet;
         this.servletHolder = owner().getWebAppContext().addServlet(this.servlet, owner().getWebAppContext().getContextPath());
         servletHolder.setDisplayName(this.servletName);
     }

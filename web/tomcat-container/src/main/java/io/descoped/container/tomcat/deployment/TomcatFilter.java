@@ -2,6 +2,8 @@ package io.descoped.container.tomcat.deployment;
 
 import io.descoped.container.deployment.spi.Filter;
 import io.descoped.container.deployment.spi.WebApp;
+import org.apache.tomcat.util.descriptor.web.FilterDef;
+import org.apache.tomcat.util.descriptor.web.FilterMap;
 
 import javax.servlet.DispatcherType;
 
@@ -14,6 +16,7 @@ public class TomcatFilter implements Filter<TomcatWebApp> {
     private final String filterName;
     private final Class<? extends javax.servlet.Filter> filter;
     protected static ThreadLocal<Integer> filterCount = ThreadLocal.withInitial(() -> 0);
+    private final FilterDef filterDef;
 
     public TomcatFilter(WebApp<TomcatWebApp> owner, String filterName, Class<? extends javax.servlet.Filter> filter) {
         this.owner = owner;
@@ -22,6 +25,13 @@ public class TomcatFilter implements Filter<TomcatWebApp> {
                 .keyValue("filter", filter.getName());
         this.filterName = filterName;
         this.filter = filter;
+        filterDef = new FilterDef();
+        filterDef.setFilterName(filterName);
+        try {
+            filterDef.setFilter(filter.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+        }
+        owner().getStandardContext().addFilterDef(filterDef);
     }
 
     private TomcatWebApp owner() {
@@ -43,10 +53,11 @@ public class TomcatFilter implements Filter<TomcatWebApp> {
                 .keyValue("mapping", mapping)
                 .keyValue("dispatcher", String.valueOf(dispatcher))
                 .up();
-//        FilterHolder filterHolder = new FilterHolder(filter);
-//        filterHolder.setName(filterName);
-//        filterHolder.setInitParameter(filterName, mapping);
-//        owner().getWebAppContext().addFilter(filterHolder, mapping, EnumSet.of(dispatcher));
+        FilterMap filterMap = new FilterMap();
+        filterMap.setFilterName(filterName);
+        filterMap.addURLPattern(mapping);
+        filterMap.setDispatcher(dispatcher.name());
+        owner().getStandardContext().addFilterMap(filterMap);
         return this;
     }
 
@@ -57,8 +68,11 @@ public class TomcatFilter implements Filter<TomcatWebApp> {
                 .keyValue("mapping", mapping)
                 .keyValue("dispatcher", String.valueOf(dispatcher))
                 .up();
-//        FilterHolder filterHolder = owner().getWebAppContext().addFilter(this.filter, mapping, EnumSet.of(dispatcher));
-//        filterHolder.setName(filterName);
+        FilterMap filterMap = new FilterMap();
+        filterMap.setFilterName(filterName);
+        filterMap.addServletName(filterName); // todo: this must be investigated
+        filterMap.setDispatcher(dispatcher.name());
+        owner().getStandardContext().addFilterMap(filterMap);
         return this;
     }
 }
