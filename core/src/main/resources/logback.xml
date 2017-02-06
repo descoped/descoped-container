@@ -11,7 +11,7 @@
 
     <!--Daily rolling file appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>logs/server.log</File>
+        <File>target/logs/server.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>target/logs/descoped-server-%d{yyyy-MM-dd}.log</FileNamePattern>
             <maxHistory>5</maxHistory>
