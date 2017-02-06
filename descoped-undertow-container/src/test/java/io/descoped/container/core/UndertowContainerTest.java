@@ -22,9 +22,9 @@ import static org.junit.Assert.assertNotEquals;
  */
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
-public class ContainerTest {
+public class UndertowContainerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ContainerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(UndertowContainerTest.class);
 
     @Inject
     @WebServer

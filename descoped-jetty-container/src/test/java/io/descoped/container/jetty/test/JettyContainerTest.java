@@ -30,9 +30,9 @@ import static org.hamcrest.CoreMatchers.containsString;
  */
 @RunWith(CdiTestRunner.class)
 @TestControl(logHandler = ConsoleAppender.class)
-public class ContainerTest {
+public class JettyContainerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(ContainerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(JettyContainerTest.class);
 
     @Inject
     @WebServer

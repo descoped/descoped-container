@@ -19,9 +19,9 @@ import static org.mockito.Mockito.when;
 /**
  * Created by oranheim on 23/01/2017.
  */
-public class DeploymentTest {
+public class TomcatDeploymentTest {
 
-    private static final Logger log = LoggerFactory.getLogger(DeploymentTest.class);
+    private static final Logger log = LoggerFactory.getLogger(TomcatDeploymentTest.class);
 
     @Test
     public void testFluentAPI() throws Exception {
