@@ -19,6 +19,13 @@ import java.util.Set;
 
 /**
  * Created by oranheim on 06/02/2017.
+ *
+ * Todo:
+ * Check with CdiTestControl how come it won't boot correct due to a RequestScope not started because of custom CdiContainer.
+ * Does deltaspike test utils depend on anything specific?
+ *
+ * This class must be in sync:
+ * https://github.com/apache/deltaspike/tree/master/deltaspike/cdictrl/impl-weld/src/main/java/org/apache/deltaspike/cdise/weld
  */
 @SuppressWarnings("UnusedDeclaration")
 public class DescopedWeldContainerControl implements CdiContainer {
@@ -99,15 +106,9 @@ public class DescopedWeldContainerControl implements CdiContainer {
             ctxCtrlBean = (Bean<ContextControl>) beanManager.resolve(beans);
 
             ctxCtrlCreationalContext = getBeanManager().createCreationalContext(ctxCtrlBean);
-            LOG.info("o-------------------> ctxCtrlBean: " + ctxCtrlBean.getBeanClass());
 
-            try {
-                ctxCtrl = (ContextControl)
-                        getBeanManager().getReference(ctxCtrlBean, ContextControl.class, ctxCtrlCreationalContext);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw e;
-            }
+            ctxCtrl = (ContextControl)
+                    getBeanManager().getReference(ctxCtrlBean, ContextControl.class, ctxCtrlCreationalContext);
         }
         return ctxCtrl;
     }

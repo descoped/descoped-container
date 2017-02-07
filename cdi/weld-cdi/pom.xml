@@ -38,11 +38,11 @@
             <artifactId>cdi-api</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>javax.interceptor</groupId>
-            <artifactId>javax.interceptor-api</artifactId>
-            <version>1.2</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>javax.interceptor</groupId>-->
+            <!--<artifactId>javax.interceptor-api</artifactId>-->
+            <!--<version>1.2</version>-->
+        <!--</dependency>-->
 
         <!-- DeltaSpike Deps -->
 
@@ -57,16 +57,16 @@
             <scope>compile</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-security-module-api</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.deltaspike.modules</groupId>-->
+            <!--<artifactId>deltaspike-security-module-api</artifactId>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.apache.deltaspike.modules</groupId>
-            <artifactId>deltaspike-security-module-impl</artifactId>
-            <scope>compile</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.deltaspike.modules</groupId>-->
+            <!--<artifactId>deltaspike-security-module-impl</artifactId>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
 
         <!-- Weld -->
 
@@ -85,30 +85,10 @@
         <!-- Log -->
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
+            <groupId>io.descoped</groupId>
+            <artifactId>descoped-logger</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Test -->

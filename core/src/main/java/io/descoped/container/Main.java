@@ -6,9 +6,9 @@ import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.spi.SpiInstanceFactory;
+import io.descoped.logger.logback.handler.LogbackBridgeHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -29,9 +29,7 @@ public class Main {
     }
 
     private static void installLogger() {
-        LogManager.getLogManager().reset();
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();
+        LogbackBridgeHandler.installJavaUtilLoggerBridgeHandler();
         LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
     }
 
@@ -51,7 +49,7 @@ public class Main {
         descopedContainer = new DescopedContainer<>(instanceFactory);
         try {
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                log.debug("ShutdownHook triggered..");
+                log.warn("ShutdownHook triggered..");
                 stop();
             }));
             descopedContainer.start();
@@ -76,7 +74,7 @@ public class Main {
             descopedContainer = null;
             instanceFactory = null;
         }
-        log.trace("Leaving.. Bye!");
+        log.info("Leaving.. Bye!");
     }
 
 }

@@ -17,6 +17,9 @@ import java.util.Map;
 
 /**
  * Created by oranheim on 06/02/2017.
+ *
+ * This class must be in sync:
+ * https://github.com/apache/deltaspike/tree/master/deltaspike/cdictrl/impl-weld/src/main/java/org/apache/deltaspike/cdise/weld
  */
 @Dependent
 @SuppressWarnings("UnusedDeclaration")
