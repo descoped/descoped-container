@@ -1,8 +1,5 @@
 package io.descoped.container.util;
 
-import io.descoped.container.stage.DaemonTestProjectStageHolder;
-import org.apache.deltaspike.core.api.projectstage.ProjectStage;
-import org.apache.deltaspike.core.util.ProjectStageProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,11 +140,6 @@ public class CommonUtil {
             list.add((T) item);
         }
         return list;
-    }
-
-    public static boolean isDaemonTestProjectStage() {
-        ProjectStage stage = ProjectStageProducer.getInstance().getProjectStage();
-        return !DaemonTestProjectStageHolder.DaemonTest.equals(stage);
     }
 
 

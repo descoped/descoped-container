@@ -1,9 +1,10 @@
-package io.descoped.container.module;
+package io.descoped.container.core;
 
-import io.descoped.container.log.ConsoleAppender;
+import io.descoped.container.cdi.factory.CdiContainerModule;
+import io.descoped.container.cdi.log.ConsoleAppender;
+import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.factory.InstanceHandler;
-import io.descoped.container.module.spi.CdiContainerModule;
 import io.descoped.container.module.spi.SpiInstanceFactory;
 import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.junit.Test;

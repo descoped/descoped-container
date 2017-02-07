@@ -4,6 +4,7 @@ import io.descoped.container.exception.DescopedServerException;
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.PrimitiveModule;
 import io.descoped.container.module.factory.BaseInstanceFactory;
+import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.Instance;
 import io.descoped.container.module.factory.InstanceHandler;
 
@@ -13,6 +14,10 @@ import java.util.*;
  * Created by oranheim on 31/01/2017.
  */
 public class SpiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanceFactory<T> {
+
+    public static void init() {
+        DefaultInstanceFactory.register(SpiInstanceFactory.class, new SpiInstanceFactory<>(DescopedPrimitive.class));
+    }
 
     private volatile Map<Class<T>, T> weakInstanceMap = new WeakHashMap<>();
 

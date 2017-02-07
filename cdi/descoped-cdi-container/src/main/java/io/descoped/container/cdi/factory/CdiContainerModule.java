@@ -1,9 +1,8 @@
-package io.descoped.container.module.spi;
+package io.descoped.container.cdi.factory;
 
 import io.descoped.container.module.DescopedContainer;
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.PrimitiveModule;
-import io.descoped.container.module.cdi.CdiInstanceFactory;
 import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.InstanceFactory;
 import org.apache.deltaspike.cdise.api.CdiContainer;
@@ -37,10 +36,6 @@ public class CdiContainerModule implements DescopedPrimitive {
     @Override
     public void start() {
         cdiContainer.boot();
-//        ContextControl cc = BeanProvider.getContextualReference(ContextControl.class);
-//        log.trace("-----------------------> ContextControl: {}", cc);
-//        cc.startContext(ApplicationScoped.class);
-//        cc.startContext(RequestScoped.class);
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
         cdiContainer.getContextControl().startContext(RequestScoped.class); // todo: only required for testing when using SPI
         descopedContainer.start();

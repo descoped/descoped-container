@@ -1,12 +1,10 @@
 package io.descoped.container.core;
 
-import io.descoped.container.log.ConsoleAppender;
 import io.descoped.container.module.DescopedContainer;
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.spi.SpiInstanceFactory;
-import org.apache.deltaspike.testcontrol.api.TestControl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,9 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
-//@Ignore
 @RunWith(JUnit4.class)
-@TestControl(logHandler = ConsoleAppender.class)
 public class DescopedSpiContainerTest {
 
     private static final Logger log = LoggerFactory.getLogger(DescopedSpiContainerTest.class);
@@ -44,22 +40,6 @@ public class DescopedSpiContainerTest {
 
     @Test
     public void testDiscovery() throws Exception {
-
     }
-
-//    @Test
-//    public void testRestTest() throws Exception {
-//        given()
-////            .port(descopedContainer.getPort())
-//            .contentType(ContentType.XML.withCharset("UTF-8"))
-//                .log().everything()
-//            .expect()
-//                .statusCode(HttpURLConnection.HTTP_OK)
-//                .log().everything()
-//            .when()
-//                .get("/rest/test/")
-//            ;
-//    }
-
 
 }

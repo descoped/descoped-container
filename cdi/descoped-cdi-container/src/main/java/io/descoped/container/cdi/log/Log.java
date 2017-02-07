@@ -1,4 +1,4 @@
-package io.descoped.container.log;
+package io.descoped.container.cdi.log;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;

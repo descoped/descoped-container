@@ -1,7 +1,8 @@
-package io.descoped.container.module;
+package io.descoped.container.core;
 
-import io.descoped.container.log.ConsoleAppender;
-import io.descoped.container.module.cdi.CdiInstanceFactory;
+import io.descoped.container.cdi.factory.CdiInstanceFactory;
+import io.descoped.container.cdi.log.ConsoleAppender;
+import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.InstanceFactory;
 import io.descoped.container.module.factory.InstanceHandler;

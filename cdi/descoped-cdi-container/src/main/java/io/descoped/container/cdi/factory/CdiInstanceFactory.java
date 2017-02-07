@@ -1,11 +1,12 @@
-package io.descoped.container.module.cdi;
+package io.descoped.container.cdi.factory;
 
+import io.descoped.container.cdi.util.CdiUtil;
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.PrimitiveModule;
 import io.descoped.container.module.factory.BaseInstanceFactory;
+import io.descoped.container.module.factory.DefaultInstanceFactory;
 import io.descoped.container.module.factory.Instance;
 import io.descoped.container.module.factory.InstanceHandler;
-import io.descoped.container.util.CdiUtil;
 import io.descoped.container.util.CommonUtil;
 
 import java.util.ArrayList;
@@ -15,6 +16,10 @@ import java.util.List;
  * Created by oranheim on 30/01/2017.
  */
 public class CdiInstanceFactory<T extends DescopedPrimitive> extends BaseInstanceFactory<T> {
+
+    public static void init() {
+        DefaultInstanceFactory.register(CdiInstanceFactory.class, new CdiInstanceFactory<>(DescopedPrimitive.class));
+    }
 
     public CdiInstanceFactory(Class<? extends T> factoryClass) {
         super(factoryClass);

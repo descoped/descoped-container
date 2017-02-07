@@ -1,4 +1,4 @@
-package io.descoped.container.log;
+package io.descoped.container.cdi.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

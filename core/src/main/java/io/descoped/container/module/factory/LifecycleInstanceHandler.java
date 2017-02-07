@@ -1,7 +1,5 @@
 package io.descoped.container.module.factory;
 
-import org.jboss.weld.bean.proxy.ProxyObject;
-
 /**
  * Created by oranheim on 01/02/2017.
  */
@@ -9,8 +7,22 @@ abstract public class LifecycleInstanceHandler<T> implements InstanceHandler<T> 
 
     private boolean running = false;
 
+    private Class<?> resolveWeldProxyObjectClass() {
+        try {
+            Class<?> clazz = Class.forName("org.jboss.weld.bean.proxy.ProxyObject");
+            return clazz;
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    private boolean isAssignableFrom(Class<?> isAssignableFromClass, T instance) {
+        return (isAssignableFromClass != null && instance != null ? isAssignableFromClass.isAssignableFrom(instance.getClass()) : false);
+    }
+
     private boolean isProxyClass(T primitive) {
-        return ProxyObject.class.isAssignableFrom(primitive.getClass());
+        Class<?> proxyObjectClass = resolveWeldProxyObjectClass();
+        return (proxyObjectClass != null ? isAssignableFrom(proxyObjectClass, primitive) : false);
     }
 
     private Class<T> normalizeProxyClass(T primitive) {

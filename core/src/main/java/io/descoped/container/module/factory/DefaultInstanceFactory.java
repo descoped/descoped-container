@@ -1,9 +1,10 @@
 package io.descoped.container.module.factory;
 
+import io.descoped.container.exception.DescopedServerException;
 import io.descoped.container.module.DescopedPrimitive;
-import io.descoped.container.module.cdi.CdiInstanceFactory;
-import io.descoped.container.module.spi.SpiInstanceFactory;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,28 +15,24 @@ final public class DefaultInstanceFactory {
 
     private static final Map<Class<? extends InstanceFactory>, InstanceFactory<DescopedPrimitive>> INSTANCES = new ConcurrentHashMap<>();
 
-    private static final void register(Class<? extends InstanceFactory> factoryClass, InstanceFactory<DescopedPrimitive> factory) {
+    public static final void register(Class<? extends InstanceFactory> factoryClass, InstanceFactory<DescopedPrimitive> factory) {
         INSTANCES.put(factoryClass, factory);
     }
 
-    private static final void init() {
-        register(SpiInstanceFactory.class, new SpiInstanceFactory<>(DescopedPrimitive.class));
-        register(CdiInstanceFactory.class, new CdiInstanceFactory<>(DescopedPrimitive.class));
-    }
-
-    static {
-        init();
-    }
-
     public static final InstanceFactory<DescopedPrimitive> get(Class<? extends InstanceFactory> factoryClass) {
-        if (INSTANCES.isEmpty()) {
-            init();
+        if (!INSTANCES.containsKey(factoryClass)) {
+            try {
+                Method staticFactoryInitMethod = factoryClass.getDeclaredMethod("init", null);
+                staticFactoryInitMethod.invoke(null, null);
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                throw new DescopedServerException("Unable to initialize: " + factoryClass);
+            }
         }
         return INSTANCES.get(factoryClass);
     }
 
     public static final <T extends DescopedPrimitive> InstanceHandler<T> findInstance(Class<T> clazz) {
-        for(Map.Entry<Class<? extends InstanceFactory>, InstanceFactory<DescopedPrimitive>> entry : INSTANCES.entrySet()) {
+        for (Map.Entry<Class<? extends InstanceFactory>, InstanceFactory<DescopedPrimitive>> entry : INSTANCES.entrySet()) {
             InstanceHandler<DescopedPrimitive> instanceHandler = entry.getValue().find((Class<DescopedPrimitive>) clazz);
             if (instanceHandler != null) {
                 return (InstanceHandler<T>) instanceHandler;

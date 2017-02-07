@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-
     <!--<statusListener class="ch.qos.logback.core.status.NopStatusListener" />-->
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%highlight(%d{HH:mm:ss.SSS}) %highlight([%thread]) %highlight(%-5level) %highlight(%logger{50}) %highlight(- %msg%n)</pattern>
         </encoder>
     </appender>
 
@@ -28,11 +28,9 @@
     </appender>
 
 
-    <logger name="io.descoped" level="TRACE"/>
-    <logger name="org.jboss.weld" level="INFO"/>
-    <logger name="org.glassfish.jersey.internal.Errors" level="TRACE"/>
+    <logger name="io.descoped" level="INFO"/>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>

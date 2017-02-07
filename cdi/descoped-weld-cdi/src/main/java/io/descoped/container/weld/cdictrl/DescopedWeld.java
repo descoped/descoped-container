@@ -1,7 +1,5 @@
 package io.descoped.container.weld.cdictrl;
 
-//import io.descoped.support.jta.DescopedTransactionServices;
-
 import org.jboss.weld.bootstrap.api.CDI11Bootstrap;
 import org.jboss.weld.bootstrap.api.Service;
 import org.jboss.weld.bootstrap.spi.Deployment;

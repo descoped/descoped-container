@@ -1,4 +1,4 @@
-package io.descoped.container.stage;
+package io.descoped.container.cdi.stage;
 
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 import org.apache.deltaspike.core.api.projectstage.ProjectStageHolder;

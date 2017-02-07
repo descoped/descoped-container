@@ -1,6 +1,9 @@
-package io.descoped.container.util;
+package io.descoped.container.cdi.util;
 
+import io.descoped.container.cdi.stage.DaemonTestProjectStageHolder;
+import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 import org.apache.deltaspike.core.api.provider.BeanManagerProvider;
+import org.apache.deltaspike.core.util.ProjectStageProducer;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
@@ -43,5 +46,11 @@ public class CdiUtil {
         T managedInstance = (T) beanManager.getReference(bean, beanClass, creationalContext);
         return managedInstance;
     }
+
+    public static boolean isDaemonTestProjectStage() {
+        ProjectStage stage = ProjectStageProducer.getInstance().getProjectStage();
+        return !DaemonTestProjectStageHolder.DaemonTest.equals(stage);
+    }
+
 
 }

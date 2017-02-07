@@ -20,6 +20,7 @@ public final class Bootstrap {
 //        LOG.info(String.format("%s [%s] INFO  Descoped bootstrap..", time, Thread.currentThread().getName()));
         System.out.println(String.format("%s [%s] INFO  Descoped bootstrap..", time, Thread.currentThread().getName()));
 
+        if (true) return;
         Path currentPath = Paths.get("").toAbsolutePath();
         String filename = currentPath.toString() + "/src/main/resources/logging.properties";
         if (new File(filename).exists()) {

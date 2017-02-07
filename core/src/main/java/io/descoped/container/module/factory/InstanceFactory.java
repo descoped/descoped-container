@@ -30,4 +30,5 @@ public interface InstanceFactory<T> {
     static Logger LOGGER(Class<?> instanceFactoryClass) {
         return LoggerFactory.getLogger(instanceFactoryClass);
     }
+
 }

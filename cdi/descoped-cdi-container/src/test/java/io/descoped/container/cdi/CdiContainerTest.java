@@ -15,19 +15,20 @@ import java.util.logging.LogManager;
 /**
  * Created by oranheim on 07/02/2017.
  */
-//@RunWith(CdiTestRunner.class)
-public class CdiTest {
+public class CdiContainerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(CdiTest.class);
+    private static final Logger log = LoggerFactory.getLogger(CdiContainerTest.class);
     private static CdiContainer cdiContainer;
 
-    @BeforeClass
-    public static void before() throws Exception {
+    static {
         LogManager.getLogManager().reset();
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
         //LogManager.getLogManager().getLogger("").setLevel(Level.INFO);
+    }
 
+    @BeforeClass
+    public static void before() throws Exception {
         cdiContainer = CdiContainerLoader.getCdiContainer();
         cdiContainer.boot();
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
@@ -35,6 +36,7 @@ public class CdiTest {
 
     @AfterClass
     public static void after() throws Exception {
+        cdiContainer.getContextControl().stopContext(ApplicationScoped.class);
         cdiContainer.shutdown();
         cdiContainer = null;
     }
