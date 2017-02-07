@@ -24,6 +24,9 @@ final public class DefaultInstanceFactory {
             try {
                 Method staticFactoryInitMethod = factoryClass.getDeclaredMethod("init", null);
                 staticFactoryInitMethod.invoke(null, null);
+                if (!INSTANCES.containsKey(factoryClass)) {
+                    throw new DescopedServerException("Something went wrong in " + factoryClass + ".init()! Make sure DefaultInstanceFactory.register(factoryClass, factory) is invoked from this method!");
+                }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 throw new DescopedServerException("Unable to initialize: " + factoryClass);
             }

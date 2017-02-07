@@ -43,7 +43,7 @@ public class DescopedCdiContainerTest {
 
     @Test
     public void testDiscovery() throws Exception {
-
+        // do nothing
     }
 
 }

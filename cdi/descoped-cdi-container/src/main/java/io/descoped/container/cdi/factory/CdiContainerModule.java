@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 
 /**
  * Created by oranheim on 28/01/2017.
@@ -37,7 +36,6 @@ public class CdiContainerModule implements DescopedPrimitive {
     public void start() {
         cdiContainer.boot();
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
-        cdiContainer.getContextControl().startContext(RequestScoped.class); // todo: only required for testing when using SPI
         descopedContainer.start();
     }
 
