@@ -34,6 +34,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>io.descoped.cdi</groupId>
             <artifactId>cdi-weld</artifactId>
             <version>${project.version}</version>

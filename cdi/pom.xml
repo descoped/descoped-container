@@ -17,6 +17,7 @@
     <modules>
         <module>weld-cdi</module>
         <module>descoped-weld-cdi</module>
+        <module>descoped-cdi-container</module>
     </modules>
 
 </project>

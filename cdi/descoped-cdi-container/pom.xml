@@ -1,0 +1,290 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.descoped.cdi</groupId>
+        <artifactId>descoped-cdi-project</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>descoped-cdi-container</artifactId>
+    <packaging>jar</packaging>
+    <name>Descoped CDI Container</name>
+    <url>http://www.descoped.io</url>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <owb.version>1.7.1</owb.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-web-api</artifactId>
+                <version>${javaee.web.api}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- DeltaSpike -->
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-impl</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-security-module-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-security-module-impl</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Log -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <!-- Test -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>weld</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <!-- Weld CDI -->
+                <dependency>
+                    <groupId>io.descoped.cdi</groupId>
+                    <artifactId>cdi-weld</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-weld</artifactId>
+                    <version>${deltaspike.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+
+                <!-- Test -->
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.modules</groupId>
+                    <artifactId>deltaspike-test-control-module-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.modules</groupId>
+                    <artifactId>deltaspike-test-control-module-impl</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>descoped-cdi-weld</id>
+            <dependencies>
+                <!-- Weld CDI -->
+                <dependency>
+                    <groupId>io.descoped.cdi</groupId>
+                    <artifactId>cdi-weld</artifactId>
+                    <version>${project.version}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.deltaspike.cdictrl</groupId>
+                            <artifactId>deltaspike-cdictrl-weld</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.jboss.weld.se</groupId>
+                    <artifactId>weld-se-core</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <!-- replaces deltaspike-cdictrl-weld -->
+                    <groupId>io.descoped.cdi</groupId>
+                    <artifactId>descoped-cdi-weld</artifactId>
+                    <version>${project.version}</version>
+                    <scope>runtime</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.deltaspike.cdictrl</groupId>
+                            <artifactId>deltaspike-cdictrl-weld</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-api</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+
+                <!-- Test -->
+                <dependency>
+                    <groupId>org.apache.deltaspike.modules</groupId>
+                    <artifactId>deltaspike-test-control-module-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.modules</groupId>
+                    <artifactId>deltaspike-test-control-module-impl</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>owb</id>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                    <version>1</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                    <version>1.2</version>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>javax.el-api</artifactId>
+                    <version>3.0.0</version>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.interceptor</groupId>
+                    <artifactId>javax.interceptor-api</artifactId>
+                    <version>1.2</version>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                    <version>1.2</version>
+                    <scope>compile</scope>
+                </dependency>
+
+                <!-- OWB: http://openwebbeans.apache.org/download.html -->
+
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-spi</artifactId>
+                    <version>${owb.version}</version>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-impl</artifactId>
+                    <version>${owb.version}</version>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-owb</artifactId>
+                    <version>${deltaspike.version}</version>
+                    <scope>runtime</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.deltaspike.test</groupId>
+                            <artifactId>deltaspike-cdictrl-tck</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.apache.deltaspike.test</groupId>
+                            <artifactId>test-utils</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <!-- Test -->
+                <dependency>
+                    <groupId>org.apache.deltaspike.modules</groupId>
+                    <artifactId>deltaspike-test-control-module-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.modules</groupId>
+                    <artifactId>deltaspike-test-control-module-impl</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
