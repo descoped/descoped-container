@@ -36,6 +36,7 @@ public class CdiContainerModule implements DescopedPrimitive {
     public void start() {
         cdiContainer.boot();
         cdiContainer.getContextControl().startContext(ApplicationScoped.class);
+//        cdiContainer.getContextControl().startContext(RequestScoped.class);  // todo: JTA requires RequestScope to be started!?
         descopedContainer.start();
     }
 
