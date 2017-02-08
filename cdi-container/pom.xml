@@ -1,0 +1,356 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.descoped</groupId>
+        <artifactId>descoped-container-project</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <groupId>io.descoped.cdi</groupId>
+    <artifactId>descoped-cdi-container</artifactId>
+    <version>1.0.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Descoped CDI Container</name>
+    <url>http://www.descoped.io</url>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <owb.version>1.7.1</owb.version>
+        <undertow.version>1.2.11.Final</undertow.version>
+        <location.to.index.dir>/tmp/jandex</location.to.index.dir>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.descoped</groupId>
+                <artifactId>descoped-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.descoped</groupId>
+            <artifactId>descoped-container</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jandex</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-impl</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Log -->
+
+        <dependency>
+            <groupId>io.descoped</groupId>
+            <artifactId>descoped-logger</artifactId>
+        </dependency>
+
+        <!-- Test -->
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-test-control-module-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-test-control-module-impl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>weld</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.descoped</groupId>
+                        <artifactId>weld-cdi-bom</artifactId>
+                        <version>${project.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>javax.el-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.interceptor</groupId>
+                    <artifactId>javax.interceptor-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.jboss.weld.se</groupId>
+                    <artifactId>weld-se-core</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-weld</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <!--
+            The Descoped Weld CdiCtrl module causes an exception:
+            'org.jboss.weld.context.ContextNotActiveException: WELD-001303: No active contexts for scope type javax.enterprise.context.RequestScoped'
+            due to a bug in CdiTestRunner. It works fine with JUnit4 runner and using SPI loader
+         -->
+        <profile>
+            <id>weld-cdictrl</id>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.descoped</groupId>
+                        <artifactId>weld-cdictrl-bom</artifactId>
+                        <version>${project.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>javax.el-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.interceptor</groupId>
+                    <artifactId>javax.interceptor-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.jboss.weld.se</groupId>
+                    <artifactId>weld-se-core</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.descoped.cdi</groupId>
+                    <artifactId>descoped-cdictrl-weld</artifactId>
+                    <version>${project.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>owb</id>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.descoped</groupId>
+                        <artifactId>owb-cdi-bom</artifactId>
+                        <version>${project.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>javax.el-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.interceptor</groupId>
+                    <artifactId>javax.interceptor-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-spi</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-impl</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-owb</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.apache.deltaspike.test</groupId>
+                            <artifactId>deltaspike-cdictrl-tck</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.apache.deltaspike.test</groupId>
+                            <artifactId>test-utils</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>jandex</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jboss.jandex</groupId>
+                        <artifactId>jandex-maven-plugin</artifactId>
+                        <version>1.0.5</version>
+                        <executions>
+                            <execution>
+                                <id>make-index</id>
+                                <goals>
+                                    <goal>jandex</goal>
+                                </goals>
+                                <!-- phase is 'process-classes by default' -->
+                                <configuration>
+                                    <!-- Nothing needed here for simple cases -->
+                                    <fileSets>
+                                        <fileSet>
+                                            <directory>${project.build.directory}/somedir</directory>
+                                        </fileSet>
+                                    </fileSets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>dev</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.descoped.mojo</groupId>
+                        <artifactId>web-devmode-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

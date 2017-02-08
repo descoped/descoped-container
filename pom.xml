@@ -8,7 +8,7 @@
         <version>3-SNAPSHOT</version>
     </parent>
 
-    <artifactId>descoped-core-project</artifactId>
+    <artifactId>descoped-container-project</artifactId>
     <packaging>pom</packaging>
     <version>1.0.2-SNAPSHOT</version>
     <name>Descoped Core Project</name>
@@ -92,12 +92,10 @@
     </dependencyManagement>
 
     <modules>
-        <module>core</module>
-        <module>cdi</module>
-        <module>web</module>
-        <module>rest</module>
-        <!--<module>support</module>-->
-        <module>hystrix</module>
+        <module>spec</module>
+        <module>spi-container</module>
+        <module>weld-cdictrl</module>
+        <module>cdi-container</module>
     </modules>
 
 </project>

@@ -1,0 +1,241 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.descoped</groupId>
+        <artifactId>parent-bom</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>descoped-bom</artifactId>
+    <packaging>pom</packaging>
+    <name>Descoped Bill-of-Material (BOM)</name>
+    <url>http://www.descoped.io</url>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss</groupId>
+                <artifactId>jandex</artifactId>
+                <version>${jandex.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.deltaspike.core</groupId>
+                <artifactId>deltaspike-core-api</artifactId>
+                <version>${deltaspike.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.deltaspike.core</groupId>
+                <artifactId>deltaspike-core-impl</artifactId>
+                <version>${deltaspike.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.descoped</groupId>
+            <artifactId>descoped-logger</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <!-- The profiles below are just for reference and is not inherited in successor projects -->
+
+    <profiles>
+        <profile>
+            <id>weld-cdi-bom</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.descoped</groupId>
+                        <artifactId>weld-cdi-bom</artifactId>
+                        <version>${project.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>javax.el-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.interceptor</groupId>
+                    <artifactId>javax.interceptor-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.jboss.weld.se</groupId>
+                    <artifactId>weld-se-core</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-weld</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>weld-cdictrl-bom</id>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.descoped</groupId>
+                        <artifactId>weld-cdictrl-bom</artifactId>
+                        <version>${project.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>javax.el-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.interceptor</groupId>
+                    <artifactId>javax.interceptor-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.jboss.weld.se</groupId>
+                    <artifactId>weld-se-core</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>io.descoped.cdi</groupId>
+                    <artifactId>descoped-cdictrl-weld</artifactId>
+                    <version>${project.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>owb-cdi-bom</id>
+
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.descoped</groupId>
+                        <artifactId>owb-cdi-bom</artifactId>
+                        <version>${project.version}</version>
+                        <type>pom</type>
+                        <scope>import</scope>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+
+            <dependencies>
+                <dependency>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>javax.el-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.interceptor</groupId>
+                    <artifactId>javax.interceptor-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-spi</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-impl</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.deltaspike.cdictrl</groupId>
+                    <artifactId>deltaspike-cdictrl-owb</artifactId>
+                </dependency>
+            </dependencies>
+
+        </profile>
+    </profiles>
+
+</project>
+
