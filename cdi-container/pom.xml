@@ -20,9 +20,6 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-        <owb.version>1.7.1</owb.version>
-        <undertow.version>1.2.11.Final</undertow.version>
         <location.to.index.dir>/tmp/jandex</location.to.index.dir>
     </properties>
 

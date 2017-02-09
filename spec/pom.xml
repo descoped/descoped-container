@@ -18,7 +18,7 @@
     <!-- External Descoped module version should be configured here -->
 
     <properties>
-        <descoped.logger.version>1.0.2-SNAPSHOT</descoped.logger.version>
+        <descoped.logger.version>1.0.2</descoped.logger.version>
     </properties>
 
     <dependencyManagement>
