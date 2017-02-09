@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.descoped</groupId>
         <artifactId>descoped-container-project</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -81,7 +81,7 @@
         <dependency>
             <groupId>io.descoped</groupId>
             <artifactId>descoped-logger</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
 
