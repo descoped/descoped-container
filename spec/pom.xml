@@ -16,10 +16,6 @@
 
     <!-- External Descoped module version should be configured here -->
 
-    <properties>
-        <descoped.logger.version>1.0.2</descoped.logger.version>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -32,7 +28,7 @@
             <dependency>
                 <groupId>io.descoped</groupId>
                 <artifactId>descoped-logger</artifactId>
-                <version>1.0.3-SNAPSHOT</version>
+                <version>${descoped.logger.version}</version>
                 <scope>compile</scope>
             </dependency>
         </dependencies>

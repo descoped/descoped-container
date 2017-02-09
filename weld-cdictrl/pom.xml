@@ -81,7 +81,7 @@
         <dependency>
             <groupId>io.descoped</groupId>
             <artifactId>descoped-logger</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>${descoped.logger.version}</version>
             <scope>compile</scope>
         </dependency>
 

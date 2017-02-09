@@ -50,7 +50,10 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.javadoc.skip>true</maven.javadoc.skip>
+
+        <descoped.logger.version>1.0.2</descoped.logger.version>
     </properties>
+
 
     <repositories>
         <repository>

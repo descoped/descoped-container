@@ -4,7 +4,7 @@
 
 The Descoped Embedded Server is a tiny web server that bootstraps Weld Cdi Container, Undertow and adds basic support for making a web application.
 
-# Getting started
+## Getting started
 
 ## Maven dependency
 
@@ -63,7 +63,7 @@ A random http port of 8080 + random(150) will be designated for each running ins
 
 
 
-# Examples
+## Examples
 
 ```java
 @RunWith(CdiTestRunner.class)
