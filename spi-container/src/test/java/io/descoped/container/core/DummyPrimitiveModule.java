@@ -15,21 +15,17 @@ public class DummyPrimitiveModule implements DescopedPrimitive {
 
     @Override
     public void init() {
-
     }
 
     @Override
     public void start() {
-
     }
 
     @Override
     public void stop() {
-
     }
 
     @Override
     public void destroy() {
-
     }
 }

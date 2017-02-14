@@ -72,6 +72,7 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                         ((LifecycleInstanceHandler) primitive).setRunning(true);
                     }
                 } catch (Exception e) {
+                    log.error("Failed to start: " + primitive.getType(), e);
                     throw new DescopedServerException(e);
                 }
             }
@@ -112,9 +113,8 @@ public class DescopedContainer<T extends DescopedPrimitive> {
                         instanceFactory.remove(primitiveEntry.getKey());
                     }
                 } catch (Exception e) {
-//                    e.printStackTrace();
-//                    throw new DescopedServerException(e);
                     log.error("Error during shutdown of DescopedContainer!", e);
+//                    throw new DescopedServerException(e);
                 }
                 count++;
             }

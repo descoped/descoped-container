@@ -66,7 +66,8 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
                 primitiveInstance.get().init();
                 LOG().trace("Invoked {}.init()", primitive.getKey());
             } catch (Exception e) {
-                throw new IllegalStateException("Error resolving bean: " + primitiveInstance.getType() + " in factory: " + getClass(), e);
+                LOG().error("Fail to init: " + primitive.getKey(), e);
+                throw new IllegalStateException("Error initializing bean: " + primitiveInstance.getType() + " in factory: " + getClass(), e);
             }
         }
 
@@ -106,7 +107,7 @@ abstract public class BaseInstanceFactory<T extends DescopedPrimitive> implement
             instance.get().destroy();
             LOG().trace("Invoked {}.destroy()", primitive);
         } catch (Exception e) {
-            LOG().error("Error invoking destroy method on: " + instance.getType(), e);
+            LOG().error("Failed to destroy: " + instance.getType(), e);
         }
         instances.remove(primitive);
         instance.release();
