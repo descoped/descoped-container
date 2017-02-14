@@ -1,6 +1,5 @@
 package io.descoped.container.core;
 
-import io.descoped.container.exception.DescopedServerException;
 import io.descoped.container.module.DescopedContainer;
 import io.descoped.container.module.DescopedPrimitive;
 import io.descoped.container.module.factory.DefaultInstanceFactory;
@@ -39,7 +38,7 @@ public class DescopedSpiContainerTest {
         assertEquals(0, descopedContainer.serviceCount());
     }
 
-    @Test(expected = DescopedServerException.class)
+    @Test
     public void testDiscovery() throws Exception {
     }
 
