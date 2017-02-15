@@ -4,13 +4,13 @@
     <parent>
         <groupId>io.descoped</groupId>
         <artifactId>descoped-container-project</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>io.descoped.cdi</groupId>
     <artifactId>descoped-cdi-container</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Descoped CDI Container</name>
