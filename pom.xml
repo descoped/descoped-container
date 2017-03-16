@@ -73,7 +73,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>descoped-snapshots</id>
-            <name>Musific Public Maven Repository Group</name>
+            <name>Descoped Public Maven Repository Group</name>
             <url>https://repository.descoped.io/repository/descoped-snapshots/</url>
             <releases>
                 <enabled>true</enabled>
