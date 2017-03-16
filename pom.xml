@@ -4,7 +4,7 @@
     <parent>
         <groupId>io.descoped</groupId>
         <artifactId>parent</artifactId>
-        <version>3</version>
+        <version>5</version>
     </parent>
 
     <artifactId>descoped-container-project</artifactId>
@@ -30,12 +30,12 @@
         <repository>
             <id>descoped</id>
             <name>Descoped Releases</name>
-            <url>https://repository.musific.com/nexus/content/repositories/descoped/</url>
+            <url>https://repository.descoped.io/repository/descoped/</url>
         </repository>
         <snapshotRepository>
             <id>descoped-snapshots</id>
             <name>Descoped Snapshots</name>
-            <url>https://repository.musific.com/nexus/content/repositories/descoped-snapshots/</url>
+            <url>https://repository.descoped.io/repository/descoped-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -51,15 +51,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.javadoc.skip>true</maven.javadoc.skip>
 
-        <descoped.logger.version>1.0.2</descoped.logger.version>
+        <descoped.logger.version>1.0.3</descoped.logger.version>
     </properties>
-
 
     <repositories>
         <repository>
-            <id>musific-public-repository-group</id>
-            <name>Musific Public Maven Repository Group</name>
-            <url>https://repository.musific.com/nexus/content/groups/public/</url>
+            <id>descoped</id>
+            <name>Descoped Public Maven Repository Group</name>
+            <url>https://repository.descoped.io/repository/descoped/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
@@ -73,9 +72,9 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>musific-public-repository</id>
+            <id>descoped-snapshots</id>
             <name>Musific Public Maven Repository Group</name>
-            <url>https://repository.musific.com/nexus/content/groups/public/</url>
+            <url>https://repository.descoped.io/repository/descoped-snapshots/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
