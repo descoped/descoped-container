@@ -7,8 +7,9 @@ jdk:
 - oraclejdk8
 install: echo 'Run Maven Tests'
 script:
-  - sonar-scanner  -Dsonar.login=$SONAR_TOKEN
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar --settings .travis/settings.xml -Dmaven.javadoc.skip=true -B -V
+- sonar-scanner  -Dsonar.login=$SONAR_TOKEN
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar --settings
+  .travis/settings.xml -Dmaven.javadoc.skip=true -B -V
 after_success: mvn deploy --settings .travis/settings.xml -DskipTests -B -V
 branches:
   only:
@@ -23,4 +24,4 @@ env:
 addons:
   sonarqube:
     token:
-      secure: X7ezplKY7Yb8GSolW90usP7FWBrTLD5OUJ+TaLALjNfGuo49Jr+nFv/Jr33aD1QaW8/9gBGuC3EJPB9c5bp1USR0Pitkuglv87CA+yNghenTxsM5GUx0wFeAbRkuZGmPF1ZiHbOAx0UAe791pITKYmiCwLxTjUV4t3qjq+84nYiHx1JuAq7zHG4UnhkdJOSIwWfgw0S7RPkE8zNp0jpXK4/G+fNlMlAS68M14WHo0XPWedss+GE7IiBa00mWyUqBMD5YtxtkLpHJjaCV5H40fAqCeTL/OHmcncyUZjfJ5X+4nR9L+V8A8QHfH6KnY85dZee4uPCzny/BJ6ZIphjab5T0dcbEdpzzMTA8Mbp2CBywCqcaE+nyrEnlEXsEDtqLdMBY7d11gaGRr3FfNQvK5jm0RSYe+b9gdMsJB0oEmD4UUJCSTomFYlZaUmJ48hoY6tiWWrJLPfZXPuqdhWH/azwfE3Y4mx1ADHm6jiAaoY8tuOQtshmdZaq+skiTi4sT6Akh62EdKhAQUADQjmiobaxqtTjyHiue6ISK3dYyMIHDbsPhVmBWtvUcWtv5kaW6N09l+/8V+Lbh4OkU3t53ZZ8fGjW+cftDOWC8lO1tUdeugfO3EM/TjTPH4t/2aZrQ7Yx4AGrnrwU9GkIUR36MFEp9OY38NHXCnM614lk15JE=
+      secure: sHi0e6RHe6zflq65jSAlitBCiN/eyQ3riazBrNDXwxsihdvtpe/PSpB54CqM3QHW21foBpnhHqan9iL0y1AKikiNlu3KT6Al2z+qVOn00VlZFzi2ZkTp+XSQXzZ5r5jgxqn1YDVOaad2GtO1SPUjTvrNMUbdlb0x2NP9vlDAh+ZHfLM1zdTxZ/ui3mhRKNF+WfIsmwzuudy//sc4q48i1z46/cs3nO0/Wexwb/+Tu6tUdtzqoI4kaNw+6PCDgqte9Sl/Z7sqleleQdmuWEhCxUCbpD2yLo9Lr3/0AzFMWdIgIrfhgDv3IZkpRGykKSDAQSC/l9abliLoXsC18iZeklvPQaZyTFHcuv9tZFlo0NliKSv8Hjf6AJj6dzjYcl24++9vmzZuiOsNpfbMF2DKzKUXqVKByUSnbecs1I5LgyVNz6ztEJ3bRT1tLoiMZ7zsclwKF0lAqJT+Q7emAbj318tKgyK6Bqtlf5OoT4+3uKV3Dx0iKA3RCnEMMaWfRZBjJVutY5Je/fWRL5C3CDBPfk0fAIalgxnUOrzsdHDGjhZ5kaFGBUWvdIoheacwrKHXWblkHF2b82Lto/CTKiucAjPf82nvWaZe8WTgd3JEE4+/N36sJuDAHPQFtUmBI339UVBMS/L8J4onT3+capY9aBHAeEP2xqjhYQr3IFk8PU0=
