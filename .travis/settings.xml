@@ -33,6 +33,9 @@
                 <sonar.host.url>
                     https://sonar.musific.com
                 </sonar.host.url>
+                <sonar.login>oranheim</sonar.login>
+                <sonar.password>${env.SONAR_USERNAME}</sonar.password>
+                <sonar.password>${env.SONAR_PASSWORD}</sonar.password>
             </properties>
         </profile>
     </profiles>
