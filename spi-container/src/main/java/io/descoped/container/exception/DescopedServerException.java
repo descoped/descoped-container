@@ -4,7 +4,9 @@ package io.descoped.container.exception;
  * Created by oranheim on 13/12/2016.
  */
 public class DescopedServerException extends RuntimeException {
+
     public DescopedServerException() {
+        super();
     }
 
     public DescopedServerException(String message) {
@@ -22,4 +24,5 @@ public class DescopedServerException extends RuntimeException {
     public DescopedServerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
 }

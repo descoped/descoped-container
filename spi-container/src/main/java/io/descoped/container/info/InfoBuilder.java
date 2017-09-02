@@ -1,8 +1,5 @@
 package io.descoped.container.info;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,7 +9,7 @@ import java.util.List;
 public class InfoBuilder {
 
     private static final ThreadLocal<StringBuilder> stringBuilderLocal = ThreadLocal.withInitial(() -> new StringBuilder());
-    private static final Logger log = LoggerFactory.getLogger(InfoBuilder.class);
+//    private static final Logger log = LoggerFactory.getLogger(InfoBuilder.class);
     private TreeNode<KeyValue> root = new TreeNode<>();
     private TreeNode<KeyValue> current;
 
@@ -32,7 +29,7 @@ public class InfoBuilder {
     }
 
     public InfoBuilder keyValue(String key, String value) {
-        TreeNode<KeyValue> keyValueNode = current.add(new KeyValue(key, value));
+        current.add(new KeyValue(key, value));
         return this;
     }
 

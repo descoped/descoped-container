@@ -18,6 +18,9 @@ import java.util.stream.Collectors;
  */
 public class CdiUtil {
 
+    private CdiUtil() {
+    }
+
     public static List<Class<?>> classesFor(Class<?> clazz) {
         BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
         Set<Bean<?>> beans = beanManager.getBeans(clazz);

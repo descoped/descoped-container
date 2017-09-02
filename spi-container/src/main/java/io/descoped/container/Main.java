@@ -64,7 +64,7 @@ public class Main {
             Thread.currentThread().join();
             System.in.read();
         } catch (Exception e) {
-            e.printStackTrace();
+            //Do nothing
         }
     }
 
