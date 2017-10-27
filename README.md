@@ -1,6 +1,6 @@
 # Descoped Container
 
-Demo for Vibeke!
+<h2>Demo for Vibeke!</h2>
 
 [![Build Status](https://travis-ci.org/descoped/descoped-container.svg?branch=master)](https://travis-ci.org/descoped/descoped-container)
 
