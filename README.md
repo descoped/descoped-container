@@ -1,4 +1,4 @@
-# Descoped Embedded Server
+# Descoped Container
 
 [![Build Status](https://travis-ci.org/descoped/descoped-container.svg?branch=master)](https://travis-ci.org/descoped/descoped-container)
 
