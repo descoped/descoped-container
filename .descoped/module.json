@@ -1,0 +1,36 @@
+{
+  "id": "descoped-container",
+  "name": "Container",
+  "pages": [
+    {
+      "group": "default",
+      "uri": "README.md"
+    }
+  ],
+  "sub-modules": [
+    {
+      "id": "spi-container",
+      "name": "SPI",
+      "pages": [
+        {
+          "group": "default",
+          "uri": "README.md"
+        }
+      ]
+    },
+    {
+      "id": "cdi-container",
+      "name": "CDI",
+      "pages": [
+        {
+          "group": "default",
+          "uri": "README.md"
+        }
+      ]
+    },
+    {
+      "id": "spec",
+      "name": "BOM - Bill of Material"
+    }
+  ]
+}
