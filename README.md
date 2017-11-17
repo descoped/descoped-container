@@ -6,8 +6,6 @@ The Descoped Embedded Server is a tiny web server that bootstraps Weld Cdi Conta
 
 ## Getting started
 
-Hello world
-
 ## Maven dependency
 
 ```xml
